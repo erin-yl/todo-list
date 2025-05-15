@@ -31,8 +31,12 @@ class Project {
     return [...this.todos]; // Return a copy to prevent direct modification
   }
 
-  getTodosByCompletion(completedStatus) {
-    return this.todos.filter(todo => todo.completed === completedStatus);
+  getTodosByPriority(priorityLevel) {
+    return this.todos.filter(todo => todo.priority === priorityLevel);
+  }
+
+  getTodosByCompletion(completionStatus) {
+    return this.todos.filter(todo => todo.completed === completionStatus);
   }
 
   getTodosByTag(tag) {
