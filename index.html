@@ -60,8 +60,9 @@
           </select>
         </div>
         <div>
-          <label for="todo-tag">Tags</label>
-          <input type="text" id="todo-tag-input" name="tag">
+          <label for="todo-tags">Tags</label>
+          <input type="text" id="todo-tags-input" name="tags" placeholder="e.g., learning, health, fun">
+          <span class="help-text">Separate tags with commas</span>
         </div>
         <button type="submit" id="save-todo-btn">Save to-do</button>
       </form>
@@ -82,5 +83,13 @@
       </form>
     </div>
   </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/date-fns@2.30.0/cdn.min.js"></script>
+  <script src="src/todo.js"></script>
+  <script src="src/project.js"></script>
+  <script src="src/storage.js"></script>
+  <script src="src/appLogic.js"></script>
+  <script src="src/domController.js"></script>
+  <script src="src/index.js"></script>
 </body>
 </html>
