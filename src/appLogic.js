@@ -122,7 +122,7 @@ const appLogic = (() => {
       if (todo) {
         if (updatedDetails.tagsString !== undefined) {
           todo.setTagsFromString(updatedDetails.tagsString);
-          // Avoid passing tagsString directly to todo.updateDetails if it expects an array
+          // Avoid passing tagsString since todo.updateDetails expects tags as an array
           const { tagsString, ...otherDetails } = updatedDetails;
           todo.updateDetails(otherDetails);
         } else {
