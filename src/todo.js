@@ -45,7 +45,7 @@ class Todo {
     this.tags = this.tags.filter(tag => tag !== trimmedTagToRemove);
   }
 
-  // Helper to get a string representation of tags for display or input
+  // Helper to get a string representation of tags
   getTagsString() {
     return this.tags.join(', ');
   }
