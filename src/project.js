@@ -4,7 +4,7 @@ class Project {
   constructor(name) {
     this.id = `project-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`; // Unique ID
     this.name = name;
-    this.todos = []; // Array to store Todo objects
+    this.todos = [];
   }
 
   addTodo(todoItem) {
@@ -12,7 +12,7 @@ class Project {
       if (!this.todos.find(todo => todo.id === todoItem.id)) {
         this.todos.push(todoItem);
       } else {
-        console.warn(`Todo with ID ${todoItem.id} already exists in project ${this.name}.`);
+        console.warn(`To-do with ID ${todoItem.id} already exists in project ${this.name}.`);
       }
     } else {
       console.error("Invalid item added to project. Expected a Todo object.", todoItem);

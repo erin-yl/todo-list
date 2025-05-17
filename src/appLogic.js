@@ -101,7 +101,7 @@ const appLogic = (() => {
       saveProjects();
       return newTodo;
     }
-    console.warn("Project not found for adding todo:", projectId);
+    console.warn("Project not found for adding to-do:", projectId);
     return null;
   }
 
