@@ -12,7 +12,7 @@ class Project {
       if (!this.todos.find(todo => todo.id === todoItem.id)) {
         this.todos.push(todoItem);
       } else {
-        console.warn(`To-do with ID ${todoItem.id} already exists in project ${this.name}.`);
+        console.warn(`Task with ID ${todoItem.id} already exists in project ${this.name}.`);
       }
     } else {
       console.error("Invalid item added to project. Expected a Todo object.", todoItem);
