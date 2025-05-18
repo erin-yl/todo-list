@@ -5,7 +5,7 @@ module.exports = {
   mode: 'development',
   entry: './src/index.js',
   output: {
-    filename: 'main.[contenthash].js', // Add hash for cache busting
+    filename: 'main.js',
     path: path.resolve(__dirname, 'dist'), // Output directory
     clean: true, // Clean the dist folder before each build
   },

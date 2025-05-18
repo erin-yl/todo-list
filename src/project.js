@@ -1,5 +1,7 @@
 // Project module that manages a collection of todo items
 
+import Todo from './todo.js';
+
 class Project {
   constructor(name) {
     this.id = `project-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`; // Unique ID

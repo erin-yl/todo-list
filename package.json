@@ -2,7 +2,13 @@
   "name": "todo-list",
   "version": "1.0.0",
   "description": "A simple and intuitive to-do list application that helps users stay organized. It allows you to: - Add new tasks - Edit task details - Remove completed tasks - Keep track of your daily goals",
+  "private": true,
   "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "webpack --mode production",
+    "start": "webpack serve --mode development"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/erin-yl/todo-list.git"

@@ -1,5 +1,9 @@
 // App controller module that handles the core logic
 
+import Project from './project.js';
+import Todo from './todo.js';
+import storage from './storage.js';
+
 const appLogic = (() => {
   let projects = [];
   let currentProject = null;
@@ -101,7 +105,7 @@ const appLogic = (() => {
       saveProjects();
       return newTodo;
     }
-    console.warn("Project not found for adding to-do:", projectId);
+    console.warn("Project not found for adding task:", projectId);
     return null;
   }
 
