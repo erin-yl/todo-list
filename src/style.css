@@ -1,0 +1,255 @@
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
+* {
+  margin: 0;
+}
+
+body {
+  font-family: "Poppins", serif;
+  color: #212428;
+  margin: 4vw auto;
+  max-width: 1280px;
+}
+
+.container {
+  width: 92vw;
+  max-width: 1200px;
+  margin: 20px auto;
+  background: #fafafa;
+  padding: 20px;
+}
+
+h1 {
+  font-weight: 600;
+  font-size: 1.5em;
+  letter-spacing: .4px;
+}
+
+.app-layout {
+  display: flex;
+  gap: 24px;
+}
+
+.projects-sidebar {
+  flex-basis: 250px;
+  padding: 16px;
+  background-color: #e9ecef;
+  border-radius: 4px;
+}
+
+
+.projects-sidebar h2 {
+  margin-top: 0;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+#projects-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#projects-list li {
+  padding: 8px;
+  margin-bottom: 5px;
+  background-color: #f8f9fa;
+  border: 1px solid #dee2e6;
+  border-radius: 3px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+#projects-list li.active,
+#projects-list li:hover {
+  background-color: #007bff;
+  color: white;
+}
+
+#add-project-btn, #add-todo-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 15px;
+  text-align: center;
+}
+
+#add-project-btn:hover, #add-todo-btn:hover {
+  background-color: #218838;
+}
+
+.todos-view {
+  flex-grow: 1; /* Takes remaining space */
+  padding: 15px;
+}
+
+.todos-view h2 {
+  margin-top: 0;
+  border-bottom: 1px solid #ccc;
+  padding-bottom: 10px;
+}
+
+.todos-controls {
+  margin-bottom: 15px;
+}
+
+#todos-list {
+  list-style-type: none;
+  padding: 0;
+}
+
+#todos-list li {
+  background: #fdfdfd;
+  border: 1px solid #eee;
+  padding: 10px 15px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+#todos-list li .todo-info {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+#todos-list li .todo-title {
+  font-weight: bold;
+}
+
+#todos-list li .todo-due-date {
+  font-size: 0.9em;
+  color: #666;
+}
+
+#todos-list li .todo-actions button {
+  margin-left: 8px;
+  padding: 5px 8px;
+  cursor: pointer;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+
+#todos-list li .todo-actions .edit-todo-btn {
+  background-color: #ffc107;
+}
+#todos-list li .todo-actions .delete-todo-btn {
+  background-color: #dc3545;
+  color: white;
+}
+
+/* Priority colors (add to todo list items later via JS) */
+.priority-low { border-left: 5px solid green; }
+.priority-medium { border-left: 5px solid orange; }
+.priority-high { border-left: 5px solid red; }
+
+.todo-completed .todo-title {
+  text-decoration: line-through;
+  color: #888;
+}
+
+
+/* Modal Styles */
+.modal {
+  display: none; /* Hidden by default */
+  position: fixed;
+  z-index: 1000;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgba(0,0,0,0.5); /* Dim background */
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 10% auto;
+  padding: 25px;
+  border: 1px solid #888;
+  width: 80%;
+  max-width: 500px;
+  border-radius: 8px;
+  position: relative;
+}
+
+.modal-content h3 {
+  margin-top: 0;
+  color: #333;
+}
+
+.modal-content label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: bold;
+}
+
+.modal-content input[type="text"],
+.modal-content input[type="date"],
+.modal-content textarea,
+.modal-content select {
+  width: calc(100% - 22px); /* Account for padding/border */
+  padding: 10px;
+  margin-bottom: 15px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-sizing: border-box;
+}
+
+.modal-content textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
+.modal-content button[type="submit"] {
+  background-color: #007bff;
+  color: white;
+  padding: 10px 15px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.modal-content button[type="submit"]:hover {
+  background-color: #0056b3;
+}
+
+.close-btn {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+  position: absolute;
+  top: 10px;
+  right: 20px;
+}
+
+.close-btn:hover,
+.close-btn:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.todo-tags-display {
+  margin-top: 5px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+}
+
+.tag-label {
+  background-color: #6c757d;
+  color: white;
+  padding: 2px 6px;
+  font-size: 0.75em;
+  border-radius: 3px;
+}
