@@ -13,5 +13,9 @@ export default defineConfig([
     files: ["**/*.{js,mjs,cjs}"],
     languageOptions: { globals: globals.browser },
   },
+  {
+    files: ["webpack.config.js"],
+    languageOptions: { globals: globals.node },
+  },
   eslintConfigPrettier,
 ]);
