@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
@@ -7,7 +7,10 @@
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet">
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
+    rel="stylesheet"
+  />
 </head>
 <body>
   <div class="container">
@@ -32,54 +35,86 @@
     </main>
   </div>
 
-  <div id="todo-modal" class="modal">
+  <div id="todo-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="todo-modal-title">
     <div class="modal-content">
       <span class="close-btn" id="close-todo-modal">&times;</span>
       <h3 id="todo-modal-title">Add task</h3>
-      <form id="todo-form">
+      <form id="todo-form" novalidate>
         <input type="hidden" id="todo-id" name="todo-id">
-        <div>
-          <label for="todo-title">Task name*</label>
-          <input type="text" id="todo-title-input" name="title" required>
-          <span class="help-text">*Required</span>
-        </div>
-        <div>
-          <label for="todo-description">Description</label>
-          <textarea id="todo-description-input" name="description"></textarea>
-        </div>
-        <div>
-          <label for="todo-dueDate">Due date*</label>
-          <input type="date" id="todo-dueDate-input" name="dueDate" required>
-          <span class="help-text">*Required</span>
-        </div>
-        <div>
-          <label for="todo-priority">Priority</label>
-          <select id="todo-priority-input" name="priority">
-            <option value="low">Low</option>
-            <option value="medium" selected>Medium</option>
-            <option value="high">High</option>
-          </select>
-        </div>
-        <div>
-          <label for="todo-tags">Tags</label>
-          <input type="text" id="todo-tags-input" name="tags" placeholder="e.g., learning, health, fun">
-          <span class="help-text">Separate tags with commas</span>
-        </div>
+        <fieldset>
+          <legend>Task details</legend>
+        
+          <div>
+            <label for="todo-title-input">Task name*</label>
+            <input
+              type="text" 
+              id="todo-title-input" 
+              name="title" 
+              required 
+              aria-required="true"
+            />
+            <span class="help-text">*Required</span>
+          </div>
+          <div>
+            <label for="todo-description-input">Description</label>
+            <textarea id="todo-description-input" name="description"></textarea>
+          </div>
+          <div>
+            <label for="todo-dueDate-input">Due date*</label>
+            <input
+              type="date"
+              id="todo-dueDate-input"
+              name="dueDate"
+              required
+            />
+            <span class="help-text">*Required</span>
+          </div>
+          <div>
+            <label for="todo-priority-input">Priority</label>
+            <select id="todo-priority-input" name="priority">
+              <option value="low">Low</option>
+              <option value="medium" selected>Medium</option>
+              <option value="high">High</option>
+            </select>
+          </div>
+          <div>
+            <label for="todo-tags-input">Tags</label>
+            <input
+              type="text"
+              id="todo-tags-input"
+              name="tags"
+              placeholder="e.g., learning, health, fun"
+            />
+            <span class="help-text">Separate tags with commas</span>
+          </div>
+        </fieldset>
+
         <button type="submit" id="save-todo-btn">Save task</button>
       </form>
     </div>
   </div>
 
-  <div id="project-modal" class="modal">
+  <div id="project-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
     <div class="modal-content">
       <span class="close-btn" id="close-project-modal">&times;</span>
-      <h3>Add new project</h3>
-      <form id="project-form">
-        <div>
-          <label for="project-name">Project name</label>
-          <input type="text" id="project-name-input" name="projectName" required>
-          <span class="help-text">*Required</span>
-        </div>
+      <h3 id="project-modal-title">Add new project</h3>
+      <form id="project-form" novalidate>
+        <fieldset>
+          <legend>Project details</legend>
+        
+          <div>
+            <label for="project-name-input">Project name</label>
+            <input
+              type="text"
+              id="project-name-input"
+              name="projectName"
+              required
+              aria-required="true"
+            />
+            <span class="help-text">*Required</span>
+          </div>
+        </fieldset>
+
         <button type="submit" id="save-project-btn">Save project</button>
       </form>
     </div>

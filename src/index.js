@@ -1,8 +1,8 @@
-import appLogic from './appLogic.js';
-import domController from './domController.js';
+import appLogic from "./appLogic.js";
+import domController from "./domController.js";
 import "./style.css";
 
-document.addEventListener('DOMContentLoaded', () => {
+document.addEventListener("DOMContentLoaded", () => {
   domController.initializeUI();
   refreshProjectsList();
 
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', () => {
   if (initialProject) {
     domController.renderTodos(initialProject);
   } else {
-    domController.updateProjectTitle('No projects found. Please create one.');
+    domController.updateProjectTitle("No projects found. Please create one.");
     domController.renderTodos(null); // Clears the todo list and shows appropriate message
   }
 
@@ -18,7 +18,10 @@ document.addEventListener('DOMContentLoaded', () => {
   function refreshProjectsList() {
     const projects = appLogic.getAllProjects();
     const currentProject = appLogic.getCurrentProject();
-    domController.renderProjects(projects, currentProject ? currentProject.id : null);
+    domController.renderProjects(
+      projects,
+      currentProject ? currentProject.id : null,
+    );
   }
 
   function refreshTodosList() {
@@ -34,16 +37,16 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Project event listeners
-  domController.elements.addProjectBtn.addEventListener('click', () => {
+  domController.elements.addProjectBtn.addEventListener("click", () => {
     domController.openProjectModal();
   });
 
-  domController.elements.closeProjectModalBtn.addEventListener('click', () => {
+  domController.elements.closeProjectModalBtn.addEventListener("click", () => {
     domController.closeProjectModal();
   });
 
   // Project form submission
-  domController.elements.projectForm.addEventListener('submit', (e) => {
+  domController.elements.projectForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const projectData = domController.getProjectFormData();
     if (projectData) {
@@ -54,14 +57,16 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshTodosList();
         domController.closeProjectModal();
       } else {
-        alert("Unable to create project. The name might already exist or is invalid.");
+        alert(
+          "Unable to create project. The name might already exist or is invalid.",
+        );
       }
     }
   });
 
   // Actions on a project
-  domController.elements.projectsListUL.addEventListener('click', (e) => {
-    if (e.target.tagName === 'LI' && e.target.dataset.projectId) {
+  domController.elements.projectsListUL.addEventListener("click", (e) => {
+    if (e.target.tagName === "LI" && e.target.dataset.projectId) {
       const projectId = e.target.dataset.projectId;
       appLogic.setCurrentProject(projectId);
       refreshProjectsList();
@@ -70,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // To-do event listeners
-  domController.elements.addTodoBtn.addEventListener('click', () => {
+  domController.elements.addTodoBtn.addEventListener("click", () => {
     const currentProject = appLogic.getCurrentProject();
     if (currentProject) {
       domController.openTodoModal(null, currentProject.id);
@@ -79,18 +84,24 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   });
 
-  domController.elements.closeTodoModalBtn.addEventListener('click', () => {
+  domController.elements.closeTodoModalBtn.addEventListener("click", () => {
     domController.closeTodoModal();
   });
 
   // To-do form submission
-  domController.elements.todoForm.addEventListener('submit', (e) => {
+  domController.elements.todoForm.addEventListener("submit", (e) => {
     e.preventDefault();
     const todoData = domController.getTodoFormData();
     if (todoData) {
-      if (todoData.id) { // Editing existing todo
-        appLogic.updateTodoInProject(todoData.currentProjectId, todoData.id, todoData);
-      } else { // Adding new todo
+      if (todoData.id) {
+        // Editing existing todo
+        appLogic.updateTodoInProject(
+          todoData.currentProjectId,
+          todoData.id,
+          todoData,
+        );
+      } else {
+        // Adding new todo
         appLogic.addTodoToProject(todoData.currentProjectId, todoData);
       }
       refreshTodosList();
@@ -99,33 +110,35 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Actions on to-do items
-  domController.elements.todosListUL.addEventListener('click', (e) => {
+  domController.elements.todosListUL.addEventListener("click", (e) => {
     const target = e.target;
-    const todoId = target.closest('li')?.dataset.todoId;
+    const todoId = target.closest("li")?.dataset.todoId;
     const currentProject = appLogic.getCurrentProject();
 
     if (!todoId || !currentProject) return;
 
     const projectId = currentProject.id;
 
-    if (target.classList.contains('delete-todo-btn')) {
-      if (confirm('You will permanently delete this task.')) {
+    if (target.classList.contains("delete-todo-btn")) {
+      if (confirm("You will permanently delete this task.")) {
         appLogic.removeTodoFromProject(projectId, todoId);
         refreshTodosList();
       }
-    } else if (target.classList.contains('edit-todo-btn')) {
-      const todoToEdit = appLogic.findProjectById(projectId)?.getTodoById(todoId);
+    } else if (target.classList.contains("edit-todo-btn")) {
+      const todoToEdit = appLogic
+        .findProjectById(projectId)
+        ?.getTodoById(todoId);
       if (todoToEdit) {
         domController.openTodoModal(todoToEdit, projectId);
       }
-    } else if (target.classList.contains('todo-checkbox')) {
+    } else if (target.classList.contains("todo-checkbox")) {
       appLogic.toggleTodoComplete(projectId, todoId);
       refreshTodosList();
     }
   });
 
   // Close modals if clicked outside
-  window.addEventListener('click', (e) => {
+  window.addEventListener("click", (e) => {
     if (e.target === domController.elements.projectModal) {
       domController.closeProjectModal();
     }

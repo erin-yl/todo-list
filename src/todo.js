@@ -1,7 +1,14 @@
 // Todo item module that manages todo objects
 
 class Todo {
-  constructor(title, description, dueDate, priority, tags = [], completed = false) {
+  constructor(
+    title,
+    description,
+    dueDate,
+    priority,
+    tags = [],
+    completed = false,
+  ) {
     this.id = `todo-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`; // Unique ID
     this.title = title;
     this.description = description;
@@ -16,7 +23,7 @@ class Todo {
   }
 
   updatePriority(newPriority) {
-    if (['low', 'medium', 'high'].includes(newPriority)) {
+    if (["low", "medium", "high"].includes(newPriority)) {
       this.priority = newPriority;
     } else {
       console.warn("Invalid priority value:", newPriority);
@@ -29,7 +36,9 @@ class Todo {
     if (details.dueDate) this.dueDate = new Date(details.dueDate);
     if (details.priority) this.updatePriority(details.priority);
     if (details.tags && Array.isArray(details.tags)) {
-      this.tags = details.tags.map(tag => tag.trim()).filter(tag => tag.length > 0);
+      this.tags = details.tags
+        .map((tag) => tag.trim())
+        .filter((tag) => tag.length > 0);
     }
   }
 
@@ -42,20 +51,21 @@ class Todo {
 
   removeTag(tagToRemove) {
     const trimmedTagToRemove = tagToRemove.trim();
-    this.tags = this.tags.filter(tag => tag !== trimmedTagToRemove);
+    this.tags = this.tags.filter((tag) => tag !== trimmedTagToRemove);
   }
 
   // Helper to get a string representation of tags
   getTagsString() {
-    return this.tags.join(', ');
+    return this.tags.join(", ");
   }
 
   // Helper to set tags from a comma-separated string
   setTagsFromString(tagsString) {
-    if (typeof tagsString === 'string') {
-      this.tags = tagsString.split(',')
-        .map(tag => tag.trim())
-        .filter(tag => tag.length > 0);
+    if (typeof tagsString === "string") {
+      this.tags = tagsString
+        .split(",")
+        .map((tag) => tag.trim())
+        .filter((tag) => tag.length > 0);
     }
   }
 }

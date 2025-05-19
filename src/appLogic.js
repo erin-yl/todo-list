@@ -1,25 +1,25 @@
 // App controller module that handles the core logic
 
-import Project from './project.js';
-import Todo from './todo.js';
-import storage from './storage.js';
+import Project from "./project.js";
+import Todo from "./todo.js";
+import storage from "./storage.js";
 
 const appLogic = (() => {
   let projects = [];
   let currentProject = null;
 
   function rehydrateProjects(plainProjects) {
-    return plainProjects.map(plainProject => {
+    return plainProjects.map((plainProject) => {
       const project = new Project(plainProject.name); // Create new instances of project class
       project.id = plainProject.id;
-      project.todos = plainProject.todos.map(plainTodo => {
-        const todo = new Todo(  // Create new instances of todo class
+      project.todos = plainProject.todos.map((plainTodo) => {
+        const todo = new Todo( // Create new instances of todo class
           plainTodo.title,
           plainTodo.description,
           new Date(plainTodo.dueDate),
-          plainTodo.priority || 'medium',
+          plainTodo.priority || "medium",
           plainTodo.tags || [],
-          plainTodo.completed
+          plainTodo.completed,
         );
         todo.id = plainTodo.id;
         return todo;
@@ -48,7 +48,10 @@ const appLogic = (() => {
 
   // Project management
   function addProject(name) {
-    if (name && !projects.find(p => p.name.toLowerCase() === name.toLowerCase())) {
+    if (
+      name &&
+      !projects.find((p) => p.name.toLowerCase() === name.toLowerCase())
+    ) {
       const newProject = new Project(name);
       projects.push(newProject);
       saveProjects();
@@ -59,7 +62,7 @@ const appLogic = (() => {
   }
 
   function removeProject(projectId) {
-    const projectIndex = projects.findIndex(p => p.id === projectId);
+    const projectIndex = projects.findIndex((p) => p.id === projectId);
     if (projectIndex > -1) {
       const removedProject = projects.splice(projectIndex, 1)[0];
       if (currentProject && currentProject.id === projectId) {
@@ -72,7 +75,7 @@ const appLogic = (() => {
   }
 
   function findProjectById(projectId) {
-    return projects.find(p => p.id === projectId);
+    return projects.find((p) => p.id === projectId);
   }
 
   function getAllProjects() {
@@ -127,6 +130,7 @@ const appLogic = (() => {
         if (updatedDetails.tagsString !== undefined) {
           todo.setTagsFromString(updatedDetails.tagsString);
           // Avoid passing tagsString since todo.updateDetails expects tags as an array
+          // eslint-disable-next-line no-unused-vars
           const { tagsString, ...otherDetails } = updatedDetails;
           todo.updateDetails(otherDetails);
         } else {
@@ -153,27 +157,30 @@ const appLogic = (() => {
   }
 
   function getAllTodosAcrossProjects() {
-    return projects.reduce((acc, project) => acc.concat(project.getAllTodos()), []);
+    return projects.reduce(
+      (acc, project) => acc.concat(project.getAllTodos()),
+      [],
+    );
   }
 
   function filterTodosByTagAcrossProjects(tag) {
     const allTodos = getAllTodosAcrossProjects();
     const trimmedTag = tag.trim().toLowerCase();
     if (!trimmedTag) return allTodos;
-    return allTodos.filter(todo =>
-      todo.tags.some(t => t.toLowerCase() === trimmedTag)
+    return allTodos.filter((todo) =>
+      todo.tags.some((t) => t.toLowerCase() === trimmedTag),
     );
   }
 
   function filterTodosByPriorityAcrossProjects(priorityLevel) {
     const allTodos = getAllTodosAcrossProjects();
-    return allTodos.filter(todo => todo.priority === priorityLevel);
+    return allTodos.filter((todo) => todo.priority === priorityLevel);
   }
 
   function getAllUniqueTagsAcrossProjects() {
     const allTags = new Set();
-    projects.forEach(project => {
-      project.getUniqueTags().forEach(tag => allTags.add(tag));
+    projects.forEach((project) => {
+      project.getUniqueTags().forEach((tag) => allTags.add(tag));
     });
     return Array.from(allTags).sort();
   }
@@ -194,7 +201,7 @@ const appLogic = (() => {
     getAllTodosAcrossProjects,
     filterTodosByTagAcrossProjects,
     filterTodosByPriorityAcrossProjects,
-    getAllUniqueTagsAcrossProjects
+    getAllUniqueTagsAcrossProjects,
   };
 })();
 
