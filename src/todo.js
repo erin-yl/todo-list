@@ -12,8 +12,16 @@ class Todo {
     this.id = `todo-${Date.now()}-${Math.random().toString(36).slice(2, 11)}`; // Unique ID
     this.title = title;
     this.description = description;
-    this.dueDate = dueDate instanceof Date ? dueDate : new Date(dueDate);
-    this.priority = priority; // 'low', 'medium', 'high'
+
+    // Store null if empty or invalid
+    if (dueDate && String(dueDate).trim() !== '') {
+      const parsedDate = new Date(dueDate);
+      this.dueDate = !isNaN(parsedDate.valueOf()) ? parsedDate : null;
+    } else {
+      this.dueDate = null;
+    }
+    
+    this.priority = priority;
     this.tags = Array.isArray(tags) ? tags : [];
     this.completed = completed;
   }
@@ -33,7 +41,14 @@ class Todo {
   updateDetails(details) {
     if (details.title) this.title = details.title;
     if (details.description) this.description = details.description;
-    if (details.dueDate) this.dueDate = new Date(details.dueDate);
+    
+    if (details.dueDate && String(details.dueDate).trim() !== '') {
+      const parsedDate = new Date(details.dueDate);
+      this.dueDate = !isNaN(parsedDate.valueOf()) ? parsedDate : null;
+    } else {
+      this.dueDate = null;
+    }
+    
     if (details.priority) this.updatePriority(details.priority);
     if (details.tags && Array.isArray(details.tags)) {
       this.tags = details.tags

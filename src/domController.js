@@ -38,14 +38,11 @@ const domController = (() => {
   }
 
   function formatDateForDisplay(date) {
-    if (!date) return "No date";
-    try {
-      const dateObj = date instanceof Date ? date : parseISO(String(date));
-      return format(dateObj, "MMM dd, yyyy");
-    } catch (error) {
-      console.warn("Error formatting date:", date, error);
-      return "Invalid date";
+    if (!date || (date instanceof Date && isNaN(date.valueOf()))) {
+      return "No date set";
     }
+    const dateObj = date instanceof Date ? date : parseISO(String(date));
+    return isNaN(dateObj.valueOf()) ? "No date set" : format(dateObj, 'MMM dd, yyyy');
   }
 
   // Project rendering
@@ -81,7 +78,7 @@ const domController = (() => {
     if (!project || !project.todos || project.todos.length === 0) {
       currentProjectTitle.textContent = project
         ? project.name
-        : "Select a Project";
+        : "Select a project";
       const li = document.createElement("li");
       li.textContent = "No tasks in this project yet. Add one!";
       li.classList.add("no-items");
