@@ -16,8 +16,8 @@ const appLogic = (() => {
         const todo = new Todo( // Create new instances of todo class
           plainTodo.title,
           plainTodo.description,
-          new Date(plainTodo.dueDate),
-          plainTodo.priority || "medium",
+          plainTodo.dueDate,
+          plainTodo.priority,
           plainTodo.tags || [],
           plainTodo.completed,
         );
@@ -28,17 +28,33 @@ const appLogic = (() => {
     });
   }
 
+  function createSampleData() {
+    console.log("Creating sample data...");
+    const workProject = new Project("Work");
+    workProject.addTodo(new Todo("Finish Q2 report", "Compile required data and finalize the conclusion.", new Date(2025, 4, 26), "high", ["report"], false));
+    workProject.addTodo(new Todo("Team meeting prep", "Prepare agenda and slides for Monday's team meeting.", new Date(2025, 5, 6), "medium", ["meeting"], false));
+    workProject.addTodo(new Todo("Client follow-up", "Call John Doe regarding project Alpha.", "", "medium", ["client"], true));
+
+    const personalProject = new Project("Personal");
+    personalProject.addTodo(new Todo("Grocery shopping", "Milk, eggs, chicken, fruits.", new Date(2025, 4, 20), "low", ["home", "shopping"], false));
+    personalProject.addTodo(new Todo("Book doctor appointment", "Annual check-up.", new Date(2025, 5, 10), "high", ["health"], false));
+
+    const learningProject = new Project("Learning");
+    learningProject.addTodo(new Todo("Webpack Deep Dive", "Understand loaders and plugins.", new Date(2025, 4, 30), "medium", ["dev"], true));
+    learningProject.addTodo(new Todo("Read 'The Pragmatic Programmer'", "Chapter 3-5", "", "low", ["reading", "dev"], false));
+
+    projects = [workProject, personalProject, learningProject];
+    currentProject = workProject;
+    saveProjects();
+  }
+
   function loadProjects() {
     const loadedData = storage.loadData();
     if (loadedData && loadedData.length > 0) {
       projects = rehydrateProjects(loadedData);
       currentProject = projects[0] || null;
     } else {
-      // Create a default project if nothing is loaded
-      const defaultProject = new Project("Default");
-      projects = [defaultProject];
-      currentProject = defaultProject;
-      saveProjects();
+      createSampleData();
     }
   }
 
