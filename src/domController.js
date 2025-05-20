@@ -9,6 +9,7 @@ const domController = (() => {
   const currentProjectTitle = document.getElementById("current-project-title");
   const addTodoBtn = document.getElementById("add-todo-btn");
   const todosListUL = document.getElementById("todos-list");
+  const notificationArea = document.getElementById("notification-area");
 
   // Project modal
   const projectModal = document.getElementById("project-modal");
@@ -19,7 +20,6 @@ const domController = (() => {
   // Todo modal
   const todoModal = document.getElementById("todo-modal");
   const todoForm = document.getElementById("todo-form");
-  const todoModalTitle = document.getElementById("todo-modal-title");
   const todoIdInput = document.getElementById("todo-id"); // Hidden input for editing
   const todoTitleInput = document.getElementById("todo-title-input");
   const todoDescriptionInput = document.getElementById("todo-description-input",
@@ -27,7 +27,6 @@ const domController = (() => {
   const todoDueDateInput = document.getElementById("todo-dueDate-input");
   const todoPriorityInput = document.getElementById("todo-priority-input");
   const todoTagsInput = document.getElementById("todo-tags-input");
-  const saveTodoBtn = document.getElementById("save-todo-btn");
   const closeTodoModalBtn = document.getElementById("close-todo-modal");
 
   // Helper functions to remove all child nodes
@@ -42,7 +41,7 @@ const domController = (() => {
       return "No date set";
     }
     const dateObj = date instanceof Date ? date : parseISO(String(date));
-    return isNaN(dateObj.valueOf()) ? "No date set" : format(dateObj, 'MMM dd, yyyy');
+    return isNaN(dateObj.valueOf()) ? "No date set" : format(dateObj, "MMM dd, yyyy");
   }
 
   // Project rendering
@@ -137,12 +136,12 @@ const domController = (() => {
       actionsDiv.classList.add("todo-actions");
 
       const editBtn = document.createElement("button");
-      editBtn.textContent = "Edit task";
+      editBtn.textContent = "Edit";
       editBtn.classList.add("edit-todo-btn");
       editBtn.dataset.todoId = todo.id;
 
       const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "Delete task";
+      deleteBtn.textContent = "Delete";
       deleteBtn.classList.add("delete-todo-btn");
       deleteBtn.dataset.todoId = todo.id;
 
@@ -171,8 +170,6 @@ const domController = (() => {
     todoIdInput.value = ""; // Clear hidden ID field
 
     if (todoToEdit) {
-      todoModalTitle.textContent = "Edit task";
-      saveTodoBtn.textContent = "Save changes";
       todoIdInput.value = todoToEdit.id;
       todoTitleInput.value = todoToEdit.title;
       todoDescriptionInput.value = todoToEdit.description;
@@ -182,9 +179,6 @@ const domController = (() => {
         : "";
       todoPriorityInput.value = todoToEdit.priority;
       todoTagsInput.value = todoToEdit.tags ? todoToEdit.getTagsString() : "";
-    } else {
-      todoModalTitle.textContent = "Add task";
-      saveTodoBtn.textContent = "Save task";
     }
     todoForm.dataset.currentProjectId = currentProjectId; // Store current project ID for form submission
     todoModal.style.display = "block";
@@ -199,7 +193,7 @@ const domController = (() => {
   function getProjectFormData() {
     const name = projectNameInput.value.trim();
     if (!name) {
-      alert("Project name is required.");
+      domController.showNotification("Project name is required.", "warning");
       return null;
     }
     return { name };
@@ -208,14 +202,14 @@ const domController = (() => {
   function getTodoFormData() {
     const title = todoTitleInput.value.trim();
     const description = todoDescriptionInput.value.trim();
-    const dueDate = todoDueDateInput.value; // String 'YYYY-MM-DD'
+    const dueDate = todoDueDateInput.value;
     const priority = todoPriorityInput.value;
     const tagsString = todoTagsInput.value.trim(); // Comma-separated string
     const id = todoIdInput.value; // For editing
     const currentProjectId = todoForm.dataset.currentProjectId;
 
     if (!title) {
-      alert("Task name is required.");
+      domController.showNotification("Task name is required.", "warning");
       return null;
     }
 
@@ -230,12 +224,32 @@ const domController = (() => {
     };
   }
 
+  function showNotification(message, type = "info") { // types: info, success, error, warning
+    if (!notificationArea) {
+      console.warn("Notification area not found. Message:", message);
+      alert(message); // Fallback to alert
+      return;
+    }
+    const notification = document.createElement("div");
+    notification.classList.add("notification", type);
+    notification.textContent = message;
+
+    notificationArea.appendChild(notification);
+
+    // Remove notification from DOM after animation completes
+    notification.addEventListener("animationend", (e) => {
+      if (e.animationName === "fadeOutNotification") {
+        notification.remove();
+      }
+    });
+  }
+
   // Initial state
   function initializeUI() {
     updateProjectTitle("Loading projects...");
     clearElement(todosListUL);
     const li = document.createElement("li");
-    li.textContent = "Select or create a project to see your tasks.";
+    li.textContent = "Select or add a project to see your tasks.";
     todosListUL.appendChild(li);
     addTodoBtn.style.display = "none";
   }
@@ -251,6 +265,7 @@ const domController = (() => {
     getProjectFormData,
     getTodoFormData,
     clearElement,
+    showNotification,
     initializeUI,
     elements: {
       projectModal,

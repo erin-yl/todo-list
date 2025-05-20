@@ -14,7 +14,7 @@ class Todo {
     this.description = description;
 
     // Store null if empty or invalid
-    if (dueDate && String(dueDate).trim() !== '') {
+    if (dueDate && String(dueDate).trim() !== "") {
       const parsedDate = new Date(dueDate);
       this.dueDate = !isNaN(parsedDate.valueOf()) ? parsedDate : null;
     } else {
@@ -42,7 +42,7 @@ class Todo {
     if (details.title) this.title = details.title;
     if (details.description) this.description = details.description;
     
-    if (details.dueDate && String(details.dueDate).trim() !== '') {
+    if (details.dueDate && String(details.dueDate).trim() !== "") {
       const parsedDate = new Date(details.dueDate);
       this.dueDate = !isNaN(parsedDate.valueOf()) ? parsedDate : null;
     } else {

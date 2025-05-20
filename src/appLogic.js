@@ -41,7 +41,7 @@ const appLogic = (() => {
 
     const learningProject = new Project("Learning");
     learningProject.addTodo(new Todo("Webpack Deep Dive", "Understand loaders and plugins.", new Date(2025, 4, 30), "medium", ["dev"], true));
-    learningProject.addTodo(new Todo("Read 'The Pragmatic Programmer'", "Chapter 3-5", "", "low", ["reading", "dev"], false));
+    learningProject.addTodo(new Todo("Read The Pragmatic Programmer", "Chapter 3-5", "", "low", ["reading", "dev"], false));
 
     projects = [workProject, personalProject, learningProject];
     currentProject = workProject;

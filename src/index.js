@@ -10,7 +10,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (initialProject) {
     domController.renderTodos(initialProject);
   } else {
-    domController.updateProjectTitle("No projects found. Please create one.");
+    domController.updateProjectTitle("No projects found. Please add one.");
     domController.renderTodos(null); // Clears the todo list and shows appropriate message
   }
 
@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", () => {
       domController.renderTodos(updatedCurrentProject);
     } else {
       domController.renderTodos(null); // No project selected, clear todos view
-      domController.updateProjectTitle("Select project");
+      domController.updateProjectTitle("Select a project");
     }
   }
 
@@ -55,11 +55,10 @@ document.addEventListener("DOMContentLoaded", () => {
         appLogic.setCurrentProject(newProject.id);
         refreshProjectsList();
         refreshTodosList();
+        domController.showNotification("Project added.", "success");
         domController.closeProjectModal();
       } else {
-        alert(
-          "Unable to create project. The name might already exist or is invalid.",
-        );
+        domController.showNotification("Unable to create project. The project name already exists.", "error");
       }
     }
   });
@@ -80,7 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentProject) {
       domController.openTodoModal(null, currentProject.id);
     } else {
-      alert("Please select a project before adding a task.");
+      domController.showNotification("Please select a project before adding a task." , "warning");
     }
   });
 
@@ -100,9 +99,11 @@ document.addEventListener("DOMContentLoaded", () => {
           todoData.id,
           todoData,
         );
+        domController.showNotification("Task updated.", "success");
       } else {
         // Adding new todo
         appLogic.addTodoToProject(todoData.currentProjectId, todoData);
+        domController.showNotification("Task added.", "success");
       }
       refreshTodosList();
       domController.closeTodoModal();
@@ -120,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const projectId = currentProject.id;
 
     if (target.classList.contains("delete-todo-btn")) {
-      if (confirm("You will permanently delete this task.")) {
+      if (confirm(`You will permanently delete the ${target.getAttribute("title")} task.`)) {
         appLogic.removeTodoFromProject(projectId, todoId);
         refreshTodosList();
       }
@@ -157,7 +158,7 @@ document.addEventListener("DOMContentLoaded", () => {
     refreshProjectsList();
     refreshTodosList();
   } else {
-    domController.updateProjectTitle("Add project");
+    domController.updateProjectTitle("Add a project");
     domController.renderTodos(null);
   }
 });
