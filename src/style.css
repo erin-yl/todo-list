@@ -47,6 +47,22 @@ h1 {
   padding-bottom: 10px;
 }
 
+.form-input.is-invalid,
+.form-select.is-invalid {
+  border-color: #dc3545; /* Red for error */
+}
+.form-input:focus, .form-select:focus{
+  border-color: #007bff;
+  box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25);
+}
+
+.error-message {
+  display: block;
+  color: #dc3545;
+  font-size: 0.8em;
+  margin-top: 4px;
+}
+
 #projects-list {
   list-style-type: none;
   padding: 0;
