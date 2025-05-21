@@ -121,7 +121,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const projectId = currentProject.id;
 
     if (target.classList.contains("delete-todo-btn")) {
-      if (confirm(`You will permanently delete the ${target.getAttribute("title")} task.`)) {
+      if (confirm(`You will permanently delete this task.`)) {
         appLogic.removeTodoFromProject(projectId, todoId);
         refreshTodosList();
       }
