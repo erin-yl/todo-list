@@ -58,7 +58,7 @@ document.addEventListener("DOMContentLoaded", () => {
         domController.showNotification("Project added.", "success");
         domController.closeProjectModal();
       } else {
-        domController.showNotification("Unable to create project. The project name already exists.", "error");
+        domController.showNotification("Unable to create project. Project name already exists.", "error");
       }
     }
   });

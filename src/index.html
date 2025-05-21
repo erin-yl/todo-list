@@ -16,19 +16,22 @@
   <div class="container">
     <header>
       <h1>To-Do List</h1>
+      <div class="global-search-container">
+        <input type="search" id="search-todos-input" placeholder="Search all tasks" class="form-input">
+      </div>
     </header>
 
     <main class="app-layout">
       <aside class="projects-sidebar">
         <h2>Projects</h2>
         <ul id="projects-list"></ul>
-        <button id="add-project-btn">Add a project</button>
+        <button id="add-project-btn" class="primary-btn">Add a project</button>
       </aside>
 
       <section class="todos-view">
         <h2 id="current-project-title">Select a project</h2>
         <div class="todos-controls">
-          <button id="add-todo-btn">Add a task</button>
+          <button id="add-todo-btn" class="primary-btn">Add a task</button>
         </div>
         <ul id="todos-list"></ul>
       </section>

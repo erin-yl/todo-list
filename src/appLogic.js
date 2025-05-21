@@ -29,7 +29,6 @@ const appLogic = (() => {
   }
 
   function createSampleData() {
-    console.log("Creating sample data...");
     const workProject = new Project("Work");
     workProject.addTodo(new Todo("Finish Q2 report", "Compile required data and finalize the conclusion.", new Date(2025, 4, 26), "high", ["report"], false));
     workProject.addTodo(new Todo("Team meeting prep", "Prepare agenda and slides for Monday's team meeting.", new Date(2025, 5, 6), "medium", ["meeting"], false));
@@ -73,7 +72,6 @@ const appLogic = (() => {
       saveProjects();
       return newProject;
     }
-    console.warn("Project name already exists:", name);
     return null;
   }
 
@@ -124,7 +122,6 @@ const appLogic = (() => {
       saveProjects();
       return newTodo;
     }
-    console.warn("Project not found for adding task:", projectId);
     return null;
   }
 
