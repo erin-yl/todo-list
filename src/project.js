@@ -10,21 +10,12 @@ class Project {
   }
 
   addTodo(todoItem) {
-    if (todoItem instanceof Todo) {
-      if (!this.todos.find((todo) => todo.id === todoItem.id)) {
-        this.todos.push(todoItem);
-      } else {
-        console.warn(
-          `Task with ID ${todoItem.id} already exists in project ${this.name}.`,
-        );
-      }
-    } else {
-      console.error(
-        "Invalid item added to project. Expected a Todo object.",
-        todoItem,
-      );
-    }
-  }
+    if (!(todoItem instanceof Todo)) return false;
+    if (this.todos.some((todo) => todo.id === todoItem.id)) return false;
+  
+    this.todos.push(todoItem);
+    return true;
+  }  
 
   removeTodo(todoId) {
     this.todos = this.todos.filter((todo) => todo.id !== todoId);
