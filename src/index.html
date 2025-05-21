@@ -50,7 +50,7 @@
               name="title" 
               aria-required="true"
             />
-            <span class="help-text">*Required</span>
+            <span class="help-message">*Required</span>
             <span class="error-message"></span>
           </div>
           <div>
@@ -81,7 +81,7 @@
               name="tags"
               placeholder="e.g., learning, health, fun"
             />
-            <span class="help-text">Separate tags with commas</span>
+            <span class="help-message">Separate tags with commas</span>
           </div>
         </fieldset>
 
@@ -95,6 +95,7 @@
       <span class="close-btn" id="close-project-modal">&times;</span>
       <h3 id="project-modal-title">Project details</h3>
       <form id="project-form" novalidate>
+        <input type="hidden" id="project-id" name="project-id">
         <fieldset>
           <div>
             <label for="project-name-input">Project name*</label>
@@ -104,7 +105,7 @@
               name="projectName"
               aria-required="true"
             />
-            <span class="help-text">*Required</span>
+            <span class="help-message">*Required</span>
             <span class="error-message"></span>
           </div>
         </fieldset>

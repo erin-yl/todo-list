@@ -14,13 +14,14 @@ const domController = (() => {
   // Project modal
   const projectModal = document.getElementById("project-modal");
   const projectForm = document.getElementById("project-form");
+  const projectIdInput = document.getElementById("project-id"); // Hidden input for project editing
   const projectNameInput = document.getElementById("project-name-input");
   const closeProjectModalBtn = document.getElementById("close-project-modal");
 
   // Todo modal
   const todoModal = document.getElementById("todo-modal");
   const todoForm = document.getElementById("todo-form");
-  const todoIdInput = document.getElementById("todo-id"); // Hidden input for editing
+  const todoIdInput = document.getElementById("todo-id"); // Hidden input for todo editing
   const todoTitleInput = document.getElementById("todo-title-input");
   const todoDescriptionInput = document.getElementById("todo-description-input",
   );
@@ -191,12 +192,16 @@ const domController = (() => {
 
   // Form data getters
   function getProjectFormData() {
+    clearFormErrors(projectForm);
+    let isValid = true;
     const name = projectNameInput.value.trim();
+    const id = projectIdInput.value;
+
     if (!name) {
-      domController.showNotification("Project name is required.", "warning");
-      return null;
+      showFieldError(projectNameInput, "Project name is required.");
+      isValid = false;
     }
-    return { name };
+    return isValid ? { id, name } : null;
   }
 
   function getTodoFormData() {
@@ -223,6 +228,30 @@ const domController = (() => {
       currentProjectId,
     };
   }
+
+  // Form validation
+  function clearFormErrors(formElement) {
+    formElement.querySelectorAll(".form-input, .form-select").forEach(input => {
+      input.classList.remove("is-invalid");
+    });
+    formElement.querySelectorAll(".error-message").forEach(span => {
+      span.textContent = "";
+    });
+  }
+
+  function showFieldError(inputElement, message) {
+    inputElement.classList.add("is-invalid");
+
+    const helpSpan = inputElement.parentElement.querySelector(".help-message");
+    if (helpSpan) {
+      helpSpan.remove();
+    }    
+
+    const errorSpan = inputElement.parentElement.querySelector(".error-message");
+    if (errorSpan) {
+      errorSpan.textContent = message;
+    }
+  }  
 
   function showNotification(message, type = "info") { // types: info, success, error, warning
     if (!notificationArea) {
