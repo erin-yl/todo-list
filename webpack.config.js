@@ -6,7 +6,7 @@ module.exports = {
   entry: "./src/index.js",
   output: {
     filename: "main.js",
-    path: path.resolve(__dirname, "dist"), // Output directory
+    path: path.resolve(__dirname, "dist"),
     clean: true, // Clean the dist folder before each build
   },
   devtool: "inline-source-map",
@@ -18,8 +18,8 @@ module.exports = {
   module: {
     rules: [
       {
-        test: /\.js$/, // Apply this rule to .js files
-        exclude: /node_modules/, // Don't transpile node_modules
+        test: /\.js$/,
+        exclude: /node_modules/,
         use: {
           loader: "babel-loader", // Use Babel to transpile JavaScript
           options: {
@@ -35,8 +35,8 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      template: "./src/index.html", // Use your existing HTML file as a template
-      filename: "index.html", // Output filename in dist
+      template: "./src/index.html",
+      filename: "index.html",
       inject: "body", // Inject the script tag at the end of the body
     }),
   ],

@@ -37,6 +37,12 @@
     "webpack-dev-server": "^5.2.1"
   },
   "dependencies": {
+    "browserslist": "^4.24.5",
     "date-fns": "^4.1.0"
-  }
+  },
+  "browserslist": [
+    "> 0.2%",
+    "last 2 versions",
+    "not dead"
+  ]
 }
