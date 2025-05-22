@@ -1,6 +1,6 @@
 // Display controller module that handles DOM manipulations
 
-import { format, parseISO } from "date-fns";
+import { format, parse } from "date-fns";
 
 const domController = (() => {
   // DOM element selectors
@@ -38,10 +38,8 @@ const domController = (() => {
   }
 
   function formatDateForDisplay(date) {
-    if (!date || (date instanceof Date && isNaN(date.valueOf()))) {
-      return "No date set";
-    }
-    const dateObj = date instanceof Date ? date : parseISO(String(date));
+    if (!date) return "No date set";
+    const dateObj = parse(date, "yyyy-MM-dd", new Date());
     return isNaN(dateObj.valueOf()) ? "No date set" : format(dateObj, "MMM dd, yyyy");
   }
 
@@ -80,7 +78,7 @@ const domController = (() => {
         ? project.name
         : "Select a project";
       const li = document.createElement("li");
-      li.textContent = "No tasks in this project yet. Add one!";
+      li.textContent = "No tasks in this project yet.";
       li.classList.add("no-items");
       todosListUL.appendChild(li);
       addTodoBtn.style.display = project ? "block" : "none"; // Show add todo if project selected
@@ -174,14 +172,11 @@ const domController = (() => {
       todoIdInput.value = todoToEdit.id;
       todoTitleInput.value = todoToEdit.title;
       todoDescriptionInput.value = todoToEdit.description;
-      // Ensure dueDate is formatted correctly for the date input
-      todoDueDateInput.value = todoToEdit.dueDate
-        ? format(new Date(todoToEdit.dueDate), "yyyy-MM-dd")
-        : "";
+      todoDueDateInput.value = todoToEdit.dueDate || "";
       todoPriorityInput.value = todoToEdit.priority;
       todoTagsInput.value = todoToEdit.tags ? todoToEdit.getTagsString() : "";
     }
-    todoForm.dataset.currentProjectId = currentProjectId; // Store current project ID for form submission
+    todoForm.dataset.currentProjectId = currentProjectId;
     todoModal.style.display = "block";
     todoTitleInput.focus();
   }
@@ -197,7 +192,7 @@ const domController = (() => {
     const name = projectNameInput.value.trim();
     const id = projectIdInput.value;
 
-    if (!name) {
+    if (projectNameInput.validity.valueMissing) {
       showFieldError(projectNameInput, "Project name is required.");
       isValid = false;
     }
@@ -205,34 +200,38 @@ const domController = (() => {
   }
 
   function getTodoFormData() {
+    clearFormErrors(todoForm);
+    let isValid = true;
     const title = todoTitleInput.value.trim();
     const description = todoDescriptionInput.value.trim();
     const dueDate = todoDueDateInput.value;
     const priority = todoPriorityInput.value;
     const tagsString = todoTagsInput.value.trim(); // Comma-separated string
-    const id = todoIdInput.value; // For editing
+    const id = todoIdInput.value;
     const currentProjectId = todoForm.dataset.currentProjectId;
 
-    if (!title) {
-      domController.showNotification("Task name is required.", "warning");
-      return null;
+    if (todoTitleInput.validity.valueMissing) {
+      showFieldError(todoTitleInput, "Task name is required.");
+      isValid = false;
     }
 
-    return {
-      id,
-      title,
-      description,
-      dueDate,
-      priority,
-      tagsString,
-      currentProjectId,
-    };
+    return isValid 
+      ? {
+          id,
+          title,
+          description,
+          dueDate,
+          priority,
+          tagsString,
+          currentProjectId
+        } 
+      : null;
   }
 
   // Form validation
   function clearFormErrors(formElement) {
     formElement.querySelectorAll(".form-input, .form-select").forEach(input => {
-      input.classList.remove("is-invalid");
+      input.setCustomValidity("");
     });
     formElement.querySelectorAll(".error-message").forEach(span => {
       span.textContent = "";
@@ -240,25 +239,17 @@ const domController = (() => {
   }
 
   function showFieldError(inputElement, message) {
-    inputElement.classList.add("is-invalid");
-
     const helpSpan = inputElement.parentElement.querySelector(".help-message");
+    const errorSpan = inputElement.parentElement.querySelector(".error-message");
+    
+    inputElement.setCustomValidity(message);
+    errorSpan.textContent = message;
     if (helpSpan) {
       helpSpan.remove();
-    }    
-
-    const errorSpan = inputElement.parentElement.querySelector(".error-message");
-    if (errorSpan) {
-      errorSpan.textContent = message;
     }
   }  
 
   function showNotification(message, type = "info") { // types: info, success, error, warning
-    if (!notificationArea) {
-      console.warn("Notification area not found. Message:", message);
-      alert(message); // Fallback to alert
-      return;
-    }
     const notification = document.createElement("div");
     notification.classList.add("notification", type);
     notification.textContent = message;

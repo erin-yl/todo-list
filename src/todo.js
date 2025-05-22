@@ -1,5 +1,7 @@
 // Todo item module that manages todo objects
 
+import { format, parse } from "date-fns";
+
 class Todo {
   constructor(
     title,
@@ -13,12 +15,20 @@ class Todo {
     this.title = title;
     this.description = description;
 
-    // Store null if empty or invalid
-    if (dueDate && String(dueDate).trim() !== "") {
-      const parsedDate = new Date(dueDate);
-      this.dueDate = !isNaN(parsedDate.valueOf()) ? parsedDate : null;
-    } else {
-      this.dueDate = null;
+    // Handle date as local dates
+    this.dueDate = null;
+    if (dueDate) {
+      let dateToProcess;
+      if (dueDate instanceof Date) {
+        // For sample data using Date objects
+        dateToProcess = dueDate;
+      } else if (typeof dueDate === "string") {
+        // For HTML form inputs
+        dateToProcess = parse(dueDate.trim(), "yyyy-MM-dd", new Date());
+      } 
+      if (dateToProcess && !isNaN(dateToProcess.valueOf())) {
+        this.dueDate = format(dateToProcess, "yyyy-MM-dd"); // Store consistently
+      }
     }
     
     this.priority = priority;
@@ -30,26 +40,27 @@ class Todo {
     this.completed = !this.completed;
   }
 
-  updatePriority(newPriority) {
-    if (["low", "medium", "high"].includes(newPriority)) {
-      this.priority = newPriority;
-    } else {
-      console.warn("Invalid priority value:", newPriority);
-    }
-  }
-
   updateDetails(details) {
     if (details.title) this.title = details.title;
     if (details.description) this.description = details.description;
-    
-    if (details.dueDate && String(details.dueDate).trim() !== "") {
-      const parsedDate = new Date(details.dueDate);
-      this.dueDate = !isNaN(parsedDate.valueOf()) ? parsedDate : null;
-    } else {
-      this.dueDate = null;
+
+    if (details.dueDate !== undefined) {
+      if (details.dueDate && typeof details.dueDate === "string") {
+        const parsedDate = parse(details.dueDate.trim(), "yyyy-MM-dd", new Date());
+        this.dueDate = !isNaN(parsedDate.valueOf())
+          ? format(parsedDate, "yyyy-MM-dd")
+          : null;
+      } else {
+        this.dueDate = null;
+      }
     }
     
-    if (details.priority) this.updatePriority(details.priority);
+    if (details.priority) {
+      if (["low", "medium", "high"].includes(details.priority)) {
+        this.priority = details.priority;
+      }
+    }
+
     if (details.tags && Array.isArray(details.tags)) {
       this.tags = details.tags
         .map((tag) => tag.trim())
