@@ -70,33 +70,42 @@ const domController = (() => {
   }
 
   // To-do rendering
-  function renderTodos(project) {
+  function renderTodos(projectOrSearchResults) {
     clearElement(todosListUL);
 
-    if (!project || !project.todos || project.todos.length === 0) {
-      currentProjectTitle.textContent = project
-        ? project.name
-        : "Select a project";
+    const isGlobalSearch = projectOrSearchResults && projectOrSearchResults.isGlobalSearch === true;
+    const todos = projectOrSearchResults ? projectOrSearchResults.todos : [];
+    const displayName = projectOrSearchResults ? projectOrSearchResults.name : "Select a Project";
+
+    updateProjectTitle(displayName);
+
+    if (!todos || todos.length === 0) {
       const li = document.createElement("li");
-      li.textContent = "No tasks in this project yet.";
+      if (isGlobalSearch) {
+        li.textContent = "No tasks found matching your search.";
+      } else if (projectOrSearchResults) {
+        li.textContent = "No tasks in this project yet.";
+      } else {
+        li.textContent = "Select a project or enter a search term.";
+      }
       li.classList.add("no-items");
       todosListUL.appendChild(li);
-      addTodoBtn.style.display = project ? "block" : "none"; // Show add todo if project selected
+
       return;
     }
 
-    updateProjectTitle(project.name);
-    addTodoBtn.style.display = "block";
-
-    project.todos.forEach((todo) => {
+    todos.forEach(todo => {
       const li = document.createElement("li");
       li.dataset.todoId = todo.id;
+
+      if (isGlobalSearch && todo.originalProjectId) {
+        li.dataset.originalProjectId = todo.originalProjectId;
+      }
       li.classList.add(`priority-${todo.priority}`);
       if (todo.completed) {
         li.classList.add("todo-completed");
       }
 
-      // Checkbox for completion
       const checkbox = document.createElement("input");
       checkbox.type = "checkbox";
       checkbox.checked = todo.completed;
@@ -117,6 +126,14 @@ const domController = (() => {
       todoInfoDiv.appendChild(checkbox);
       todoInfoDiv.appendChild(titleSpan);
       todoInfoDiv.appendChild(dueDateSpan);
+
+      // Project name display in global search result
+      if (isGlobalSearch && todo.projectName) {
+        const projectLabelSpan = document.createElement("span");
+        projectLabelSpan.classList.add("todo-project-label");
+        projectLabelSpan.textContent = `(Project: ${todo.projectName})`;
+        todoInfoDiv.appendChild(projectLabelSpan);
+      }
 
       // Tags display
       if (todo.tags && todo.tags.length > 0) {
@@ -215,16 +232,16 @@ const domController = (() => {
       isValid = false;
     }
 
-    return isValid 
+    return isValid
       ? {
-          id,
-          title,
-          description,
-          dueDate,
-          priority,
-          tagsString,
-          currentProjectId
-        } 
+        id,
+        title,
+        description,
+        dueDate,
+        priority,
+        tagsString,
+        currentProjectId
+      }
       : null;
   }
 
@@ -241,13 +258,13 @@ const domController = (() => {
   function showFieldError(inputElement, message) {
     const helpSpan = inputElement.parentElement.querySelector(".help-message");
     const errorSpan = inputElement.parentElement.querySelector(".error-message");
-    
+
     inputElement.setCustomValidity(message);
     errorSpan.textContent = message;
     if (helpSpan) {
       helpSpan.remove();
     }
-  }  
+  }
 
   function showNotification(message, type = "info") { // types: info, success, error, warning
     const notification = document.createElement("div");

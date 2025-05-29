@@ -176,6 +176,20 @@ const appLogic = (() => {
     );
   }
 
+  function getAllTodosInSearch() {
+    const allTodosInSearch = [];
+    projects.forEach(project => {
+      project.getAllTodos().forEach(todo => {
+        allTodosInSearch.push({
+          ...todo,
+          originalProjectId: project.id,
+          projectName: project.name
+        });
+      });
+    });
+    return allTodosInSearch;
+  }
+
   function filterTodosByTagAcrossProjects(tag) {
     const allTodos = getAllTodosAcrossProjects();
     const trimmedTag = tag.trim().toLowerCase();
@@ -212,6 +226,7 @@ const appLogic = (() => {
     updateTodoInProject,
     toggleTodoComplete,
     getAllTodosAcrossProjects,
+    getAllTodosInSearch,
     filterTodosByTagAcrossProjects,
     filterTodosByPriorityAcrossProjects,
     getAllUniqueTagsAcrossProjects,
