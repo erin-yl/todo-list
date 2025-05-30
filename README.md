@@ -1,7 +1,9 @@
 # To-Do List App
-A simple and intuitive to-do list application that helps users stay organized. It allows you to:
+A task manager to help users stay organized.
 
-- Add and categorize new tasks
-- Edit task details with user-friendly error handling
+## Features
+- Add and categorize tasks
+- Edit task details with error handling
 - Remove completed tasks
-- Filter tasks based on priority and tags
+- Search by task names
+- Filter tasks by priority and tags
