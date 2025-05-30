@@ -3,38 +3,102 @@ import domController from "./domController.js";
 import "./style.css";
 
 document.addEventListener("DOMContentLoaded", () => {
+  let currentSearchTerm = "";
+  let currentPriorityFilter = "all";
+  let currentTagFilter = null;
+  // let currentSortCriteria = { field: "dueDate", direction: "asc" };
+
+  const searchInput = document.getElementById("search-todos-input");
+  const priorityFilterSelect = document.getElementById("priority-filter");
+
+  function updateAndRenderTodos() {
+    let todosToDisplay = [];
+    let viewTitle = "";
+    const currentProjectFromSidebar = appLogic.getCurrentProject(); // Project selected in sidebar
+
+    // Determine the base list of todos
+    if (currentSearchTerm && currentSearchTerm.trim() !== "") {
+      // Active global search
+      viewTitle = `Search Results for "${currentSearchTerm}"`;
+      const allTodosWithProjectInfo = appLogic.getAllTodosWithProjectInfo();
+      todosToDisplay = appLogic.searchTodosInList(allTodosWithProjectInfo, currentSearchTerm);
+
+      // Apply global filters/sort to search results
+      if (currentPriorityFilter !== "all") {
+        todosToDisplay = todosToDisplay.filter(todo => todo.priority === currentPriorityFilter);
+      }
+      if (currentTagFilter) {
+        const lowerTagFilter = currentTagFilter.toLowerCase();
+        todosToDisplay = todosToDisplay.filter(todo =>
+          todo.tags.some(t => t.toLowerCase() === lowerTagFilter)
+        );
+      }
+      // TODO: Apply global sort: todosToDisplay = appLogic.sortTodos(todosToDisplay, ...);
+
+      domController.renderTodos({
+        name: viewTitle,
+        todos: todosToDisplay,
+        isGlobalSearch: true
+      });
+    } else {
+      // If no global search, display current project"s todos
+      if (currentProjectFromSidebar) {
+        const projectData = appLogic.findProjectById(currentProjectFromSidebar.id);
+        if (projectData) {
+          viewTitle = projectData.name;
+          todosToDisplay = projectData.getAllTodos();
+
+          // Apply project-specific filters/sort
+          if (currentPriorityFilter !== "all") {
+            todosToDisplay = todosToDisplay.filter(todo => todo.priority === currentPriorityFilter);
+          }
+          if (currentTagFilter) {
+            todosToDisplay = todosToDisplay.filter(todo =>
+              projectData.getTodosByTag(currentTagFilter)
+                .some(t => t.id === todo.id)
+            );
+          }
+          // TODO: Apply project-specific sort: todosToDisplay = appLogic.sortTodos(todosToDisplay, ...);
+
+          domController.renderTodos({ ...projectData, todos: todosToDisplay, isGlobalSearch: false });
+        } else {
+          domController.renderTodos(null);
+          viewTitle = "Project not found";
+        }
+      } else {
+        domController.renderTodos(null);
+        viewTitle = "Select a Project";
+      }
+    }
+    domController.updateProjectTitle(viewTitle);
+
+    // addTodoBtn is visible if a project is selected, regardless of search
+    domController.elements.addTodoBtn.style.display = currentProjectFromSidebar ? "block" : "none";
+  }
+
+  // Initial Setup
   domController.initializeUI();
   refreshProjectsList();
+  updateAndRenderTodos();
 
-  const initialProject = appLogic.getCurrentProject();
-  if (initialProject) {
-    domController.renderTodos(initialProject);
-  } else {
-    domController.updateProjectTitle("No projects found. Please add one.");
-    domController.renderTodos(null); // Clears the todo list and shows appropriate message
+  if (searchInput) {
+    searchInput.addEventListener("input", (e) => {
+      currentSearchTerm = e.target.value;
+      updateAndRenderTodos();
+    });
   }
 
-  // Helper functions for refreshing UI
-  function refreshProjectsList() {
-    const projects = appLogic.getAllProjects();
-    const currentProject = appLogic.getCurrentProject();
-    domController.renderProjects(
-      projects,
-      currentProject ? currentProject.id : null,
-    );
-  }
-
-  function refreshTodosList() {
-    const currentProject = appLogic.getCurrentProject();
-    if (currentProject) {
-      // Get the project from appLogic to ensure it has the latest todos
-      const updatedCurrentProject = appLogic.findProjectById(currentProject.id);
-      domController.renderTodos(updatedCurrentProject);
-    } else {
-      domController.renderTodos(null); // No project selected, clear todos view
-      domController.updateProjectTitle("Select a project");
-    }
-  }
+  // function refreshTodosList() {
+  //   const currentProject = appLogic.getCurrentProject();
+  //   if (currentProject) {
+  //     // Get the project from appLogic to ensure it has the latest todos
+  //     const updatedCurrentProject = appLogic.findProjectById(currentProject.id);
+  //     domController.renderTodos(updatedCurrentProject);
+  //   } else {
+  //     domController.renderTodos(null); // No project selected, clear todos view
+  //     domController.updateProjectTitle("Select a project");
+  //   }
+  // }
 
   // Project event listeners
   domController.elements.addProjectBtn.addEventListener("click", () => {
@@ -54,7 +118,7 @@ document.addEventListener("DOMContentLoaded", () => {
       if (newProject) {
         appLogic.setCurrentProject(newProject.id);
         refreshProjectsList();
-        refreshTodosList();
+        updateAndRenderTodos();
         domController.showNotification("Project added.", "success");
         domController.closeProjectModal();
       } else {
@@ -65,11 +129,23 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Actions on a project
   domController.elements.projectsListUL.addEventListener("click", (e) => {
-    if (e.target.tagName === "LI" && e.target.dataset.projectId) {
-      const projectId = e.target.dataset.projectId;
-      appLogic.setCurrentProject(projectId);
-      refreshProjectsList();
-      refreshTodosList();
+    const projectLi = e.target.closest("li[data-project-id]");
+    if (!projectLi) return;
+    const projectId = projectLi.dataset.projectId;
+
+    if (e.target.classList.contains("edit-project-btn")) { /* ... */ }
+    else if (e.target.classList.contains("delete-project-btn")) { /* ... */ }
+    else if (e.target.closest(".project-name") || e.target === projectLi) {
+      if (appLogic.getCurrentProject()?.id !== projectId || (currentSearchTerm && currentSearchTerm.trim() !== "")) {
+        appLogic.setCurrentProject(projectId);
+        refreshProjectsList();
+        currentSearchTerm = "";
+        if (searchInput) searchInput.value = "";
+        currentPriorityFilter = "all";
+        if (priorityFilterSelect) priorityFilterSelect.value = "all";
+        currentTagFilter = null;
+        updateAndRenderTodos();
+      }
     }
   });
 
@@ -79,7 +155,7 @@ document.addEventListener("DOMContentLoaded", () => {
     if (currentProject) {
       domController.openTodoModal(null, currentProject.id);
     } else {
-      domController.showNotification("Please select a project before adding a task." , "warning");
+      domController.showNotification("Please select a project to add a task.", "warning");
     }
   });
 
@@ -92,49 +168,61 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const todoData = domController.getTodoFormData();
     if (todoData) {
-      if (todoData.id) {
-        // Editing existing todo
-        appLogic.updateTodoInProject(
-          todoData.currentProjectId,
-          todoData.id,
-          todoData,
-        );
-        domController.showNotification("Task updated.", "success");
-      } else {
-        // Adding new todo
-        appLogic.addTodoToProject(todoData.currentProjectId, todoData);
-        domController.showNotification("Task added.", "success");
+      let success = false;
+      if (todoData.id) { // Editing existing todo
+        if (appLogic.updateTodoInProject(todoData.currentProjectId, todoData.id, todoData)) {
+          success = true;
+        }
+      } else { // Adding new todo
+        if (appLogic.addTodoToProject(todoData.currentProjectId, todoData)) {
+          success = true;
+        }
       }
-      refreshTodosList();
-      domController.closeTodoModal();
+
+      if (success) {
+        updateAndRenderTodos();
+        domController.closeTodoModal();
+        domController.showNotification(todoData.id ? "Task updated." : "Task added.", "success");
+      } else {
+        domController.showNotification("Unable to save task.", "error");
+      }
     }
   });
 
-  // Actions on to-do items
+  // Actions on todo items
   domController.elements.todosListUL.addEventListener("click", (e) => {
     const target = e.target;
-    const todoId = target.closest("li")?.dataset.todoId;
-    const currentProject = appLogic.getCurrentProject();
+    const todoLi = target.closest("li[data-todo-id]");
+    if (!todoLi) return;
 
-    if (!todoId || !currentProject) return;
+    const todoId = todoLi.dataset.todoId;
+    // Determine the project ID
+    let projectIdForAction = todoLi.dataset.originalProjectId; // From global search
+    if (!projectIdForAction) {
+      const currentProject = appLogic.getCurrentProject();
+      if (currentProject) {
+        projectIdForAction = currentProject.id;
+      }
+    }
 
-    const projectId = currentProject.id;
+    if (!todoId || !projectIdForAction) return;
 
     if (target.classList.contains("delete-todo-btn")) {
-      if (confirm(`You will permanently delete this task.`)) {
-        appLogic.removeTodoFromProject(projectId, todoId);
-        refreshTodosList();
+      if (confirm("You will permanently delete this task.")) {
+        appLogic.removeTodoFromProject(projectIdForAction, todoId);
+        domController.showNotification("Task deleted.", "success");
+        updateAndRenderTodos();
       }
     } else if (target.classList.contains("edit-todo-btn")) {
       const todoToEdit = appLogic
-        .findProjectById(projectId)
+        .findProjectById(projectIdForAction)
         ?.getTodoById(todoId);
       if (todoToEdit) {
-        domController.openTodoModal(todoToEdit, projectId);
+        domController.openTodoModal(todoToEdit, projectIdForAction);
       }
     } else if (target.classList.contains("todo-checkbox")) {
-      appLogic.toggleTodoComplete(projectId, todoId);
-      refreshTodosList();
+      appLogic.toggleTodoComplete(projectIdForAction, todoId);
+      updateAndRenderTodos();
     }
   });
 
@@ -150,15 +238,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // Initial render based on loaded data
   if (appLogic.getCurrentProject()) {
-    refreshTodosList();
+    updateAndRenderTodos();
   } else if (appLogic.getAllProjects().length > 0) {
     // If no current project but projects exist, select the first one
     const firstProject = appLogic.getAllProjects()[0];
     appLogic.setCurrentProject(firstProject.id);
     refreshProjectsList();
-    refreshTodosList();
+    updateAndRenderTodos();
   } else {
     domController.updateProjectTitle("Add a project");
     domController.renderTodos(null);
   }
+
+  // Helper functions for refreshing UI
+  function refreshProjectsList() {
+    const projects = appLogic.getAllProjects();
+    const currentProject = appLogic.getCurrentProject();
+    domController.renderProjects(
+      projects,
+      currentProject ? currentProject.id : null,
+    );
+  }
+
+  updateAndRenderTodos();
 });

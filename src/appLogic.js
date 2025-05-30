@@ -109,7 +109,7 @@ const appLogic = (() => {
     return false;
   }
 
-  // To-do management
+  // Todo management
   function addTodoToProject(projectId, todoDetails) {
     const project = findProjectById(projectId);
     if (project) {
@@ -176,18 +176,29 @@ const appLogic = (() => {
     );
   }
 
-  function getAllTodosInSearch() {
-    const allTodosInSearch = [];
+  function searchTodosInList(todos, searchTerm) {
+    if (!searchTerm || searchTerm.trim() === "") {
+      return todos;
+    }
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return todos.filter(todo =>
+      todo.title.toLowerCase().includes(lowerSearchTerm) ||
+      todo.description.toLowerCase().includes(lowerSearchTerm)
+    );
+  }
+
+  function getAllTodosWithProjectInfo() {
+    const allTodosWithProjectInfo = [];
     projects.forEach(project => {
       project.getAllTodos().forEach(todo => {
-        allTodosInSearch.push({
+        allTodosWithProjectInfo.push({
           ...todo,
           originalProjectId: project.id,
           projectName: project.name
         });
       });
     });
-    return allTodosInSearch;
+    return allTodosWithProjectInfo;
   }
 
   function filterTodosByTagAcrossProjects(tag) {
@@ -226,7 +237,8 @@ const appLogic = (() => {
     updateTodoInProject,
     toggleTodoComplete,
     getAllTodosAcrossProjects,
-    getAllTodosInSearch,
+    searchTodosInList,
+    getAllTodosWithProjectInfo,
     filterTodosByTagAcrossProjects,
     filterTodosByPriorityAcrossProjects,
     getAllUniqueTagsAcrossProjects,
