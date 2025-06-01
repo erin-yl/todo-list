@@ -114,15 +114,27 @@ document.addEventListener("DOMContentLoaded", () => {
     e.preventDefault();
     const projectData = domController.getProjectFormData();
     if (projectData) {
-      const newProject = appLogic.addProject(projectData.name);
-      if (newProject) {
-        appLogic.setCurrentProject(newProject.id);
+      let result;
+      let action = "created";
+      if (projectData.id) { // Editing existing project
+        result = appLogic.updateProject(projectData.id, projectData.name);
+        action = "updated";
+        if (result && result.error === "duplicate") {
+          domController.showNotification(`Project name "${projectData.name}" already exists.`, "error");
+          return;
+        }
+      } else { // Adding new project
+        result = appLogic.addProject(projectData.name);
+      }
+
+      if (result && !result.error) {
+        if (action === "created") appLogic.setCurrentProject(result.id);
         refreshProjectsList();
-        updateAndRenderTodos();
-        domController.showNotification("Project added.", "success");
+        updateAndRenderTodos(); // Refresh todos if current project changed or name updated
         domController.closeProjectModal();
-      } else {
-        domController.showNotification("Unable to create project. Project name already exists.", "error");
+        domController.showNotification(`Project "${result.name}" ${action}!`, "success");
+      } else if (action === "created") { // only show generic error if addProject failed without specific error obj
+        domController.showNotification("Failed to create project. Name might be invalid.", "error");
       }
     }
   });
@@ -131,18 +143,37 @@ document.addEventListener("DOMContentLoaded", () => {
   domController.elements.projectsListUL.addEventListener("click", (e) => {
     const projectLi = e.target.closest("li[data-project-id]");
     if (!projectLi) return;
-    const projectId = projectLi.dataset.projectId;
 
-    if (e.target.classList.contains("edit-project-btn")) { /* ... */ }
-    else if (e.target.classList.contains("delete-project-btn")) { /* ... */ }
-    else if (e.target.closest(".project-name") || e.target === projectLi) {
-      if (appLogic.getCurrentProject()?.id !== projectId || (currentSearchTerm && currentSearchTerm.trim() !== "")) {
+    const projectId = projectLi.dataset.projectId;
+    if (e.target.classList.contains('edit-project-btn')) {
+      const projectToEdit = appLogic.findProjectById(projectId);
+      if (projectToEdit) {
+        domController.openProjectModal(projectToEdit);
+      }
+    } else if (e.target.classList.contains('delete-project-btn')) {
+      const projectToDelete = appLogic.findProjectById(projectId);
+      if (projectToDelete && confirm(`You will permanently delete project "${projectToDelete.name}" and all its tasks.`)) {
+        const result = appLogic.removeProject(projectId);
+        if (result.success) {
+          domController.showNotification(`Project "${result.removedProjectName}" deleted.`, 'success');
+          refreshProjectsList();
+          // If the current project was deleted, updateAndRenderTodos will handle it based on new currentProject from appLogic
+          updateAndRenderTodos();
+        } else if (result.error === "last_project") {
+          domController.showNotification("Unable to delete the last project. Create another one or clear its tasks.", "warning");
+        } else {
+          domController.showNotification("Unable to delete project.", "error");
+        }
+      }
+    } else if (e.target.closest('.project-name') || e.target === projectLi) { // Click on name or li itself
+      if (appLogic.getCurrentProject()?.id !== projectId) {
         appLogic.setCurrentProject(projectId);
         refreshProjectsList();
-        currentSearchTerm = "";
-        if (searchInput) searchInput.value = "";
-        currentPriorityFilter = "all";
-        if (priorityFilterSelect) priorityFilterSelect.value = "all";
+        // Reset filters when changing project
+        currentSearchTerm = '';
+        if (searchInput) searchInput.value = '';
+        currentPriorityFilter = 'all';
+        if (priorityFilterSelect) priorityFilterSelect.value = 'all';
         currentTagFilter = null;
         updateAndRenderTodos();
       }
@@ -184,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
         domController.closeTodoModal();
         domController.showNotification(todoData.id ? "Task updated." : "Task added.", "success");
       } else {
-        domController.showNotification("Unable to save task.", "error");
+        domController.showNotification("Unable to update task.", "error");
       }
     }
   });
@@ -208,7 +239,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!todoId || !projectIdForAction) return;
 
     if (target.classList.contains("delete-todo-btn")) {
-      if (confirm("You will permanently delete this task.")) {
+      const project = appLogic.findProjectById(projectIdForAction);
+      const todoToDelete = project.getTodoById(todoId);
+      if (confirm(`You will permanently delete task "${todoToDelete.title}".`)) {
         appLogic.removeTodoFromProject(projectIdForAction, todoId);
         domController.showNotification("Task deleted.", "success");
         updateAndRenderTodos();

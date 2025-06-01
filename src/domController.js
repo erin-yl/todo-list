@@ -16,6 +16,7 @@ const domController = (() => {
   const projectForm = document.getElementById("project-form");
   const projectIdInput = document.getElementById("project-id"); // Hidden input for project editing
   const projectNameInput = document.getElementById("project-name-input");
+  const saveProjectBtn = document.getElementById("save-project-btn");
   const closeProjectModalBtn = document.getElementById("close-project-modal");
 
   // Todo modal
@@ -56,8 +57,32 @@ const domController = (() => {
 
     projects.forEach((project) => {
       const li = document.createElement("li");
-      li.textContent = project.name;
       li.dataset.projectId = project.id;
+
+      const nameSpan = document.createElement("span");
+      nameSpan.classList.add("project-name");
+      nameSpan.textContent = project.name;
+      li.appendChild(nameSpan);
+
+      const actionsDiv = document.createElement("div");
+      actionsDiv.classList.add("project-actions");
+
+      const editBtn = document.createElement("button");
+      editBtn.innerHTML = "Edit";
+      editBtn.classList.add("edit-project-btn");
+      editBtn.dataset.projectId = project.id;
+      editBtn.title = "Edit project";
+
+      const deleteBtn = document.createElement("button");
+      deleteBtn.innerHTML = "Delete";
+      deleteBtn.classList.add("delete-project-btn");
+      deleteBtn.dataset.projectId = project.id;
+      deleteBtn.title = "Delete project";
+
+      actionsDiv.appendChild(editBtn);
+      actionsDiv.appendChild(deleteBtn);
+      li.appendChild(actionsDiv);
+
       if (project.id === currentProjectId) {
         li.classList.add("active");
       }
@@ -171,8 +196,16 @@ const domController = (() => {
   }
 
   // Modal handling
-  function openProjectModal() {
+  function openProjectModal(projectToEdit = null) {
+    clearFormErrors(projectForm);
     projectForm.reset();
+    projectIdInput.value = ""; // Clear hidden ID field
+    saveProjectBtn.textContent = "Save Project";
+
+    if (projectToEdit) {
+      projectIdInput.value = projectToEdit.id;
+      projectNameInput.value = projectToEdit.name;
+    }
     projectModal.style.display = "block";
     projectNameInput.focus();
   }
@@ -182,6 +215,7 @@ const domController = (() => {
   }
 
   function openTodoModal(todoToEdit = null, currentProjectId) {
+    clearFormErrors(todoForm);
     todoForm.reset();
     todoIdInput.value = ""; // Clear hidden ID field
 

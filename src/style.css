@@ -303,6 +303,39 @@ h1 {
   border-radius: 3px;
 }
 
+.tag-filter-area {
+  margin-bottom: 15px;
+  padding: 5px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+.tag-filter-item {
+  background-color: #e9ecef;
+  padding: 4px 8px;
+  border-radius: 12px; /* Pill shape */
+  font-size: 0.85em;
+  cursor: pointer;
+  border: 1px solid #dee2e6;
+  transition: background-color 0.2s, color 0.2s;
+}
+.tag-filter-item:hover {
+  background-color: #ced4da;
+}
+.tag-filter-item.active {
+  background-color: #007bff;
+  color: white;
+  border-color: #0056b3;
+}
+.tag-filter-clear {
+  font-size: 0.8em;
+  color: #007bff;
+  cursor: pointer;
+  text-decoration: underline;
+  margin-left: 10px;
+}
+
 .notification-area {
   position: fixed;
   top: 20px;

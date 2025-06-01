@@ -75,17 +75,33 @@ const appLogic = (() => {
     return null;
   }
 
+  function updateProject(projectId, newName) {
+    const projectToUpdate = findProjectById(projectId);
+    if (!projectToUpdate) {
+      return null;
+    }
+    if (projects.some(p => p.id !== projectId && p.name.toLowerCase() === newName.toLowerCase())) {
+      return { error: "duplicate", project: projectToUpdate };
+    }
+    projectToUpdate.name = newName;
+    saveProjects();
+    return projectToUpdate;
+  }
+
   function removeProject(projectId) {
-    const projectIndex = projects.findIndex((p) => p.id === projectId);
+    const projectIndex = projects.findIndex(p => p.id === projectId);
     if (projectIndex > -1) {
+      if (projects.length === 1) {
+        return { error: "last_project" };
+      }
       const removedProject = projects.splice(projectIndex, 1)[0];
       if (currentProject && currentProject.id === projectId) {
-        currentProject = projects[0] || null;
+        currentProject = projects.length > 0 ? projects[0] : null;
       }
       saveProjects();
-      return removedProject;
+      return { success: true, removedProjectName: removedProject.name, newCurrentProject: currentProject };
     }
-    return null;
+    return { error: "not_found" };
   }
 
   function findProjectById(projectId) {
@@ -227,6 +243,7 @@ const appLogic = (() => {
 
   return {
     addProject,
+    updateProject,
     removeProject,
     findProjectById,
     getAllProjects,
