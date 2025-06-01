@@ -200,7 +200,7 @@ const domController = (() => {
     clearFormErrors(projectForm);
     projectForm.reset();
     projectIdInput.value = ""; // Clear hidden ID field
-    saveProjectBtn.textContent = "Save Project";
+    saveProjectBtn.textContent = "Save";
 
     if (projectToEdit) {
       projectIdInput.value = projectToEdit.id;

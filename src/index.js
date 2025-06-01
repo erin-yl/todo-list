@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", () => {
     // Determine the base list of todos
     if (currentSearchTerm && currentSearchTerm.trim() !== "") {
       // Active global search
-      viewTitle = `Search Results for "${currentSearchTerm}"`;
+      viewTitle = `Search results for "${currentSearchTerm}"`;
       const allTodosWithProjectInfo = appLogic.getAllTodosWithProjectInfo();
       todosToDisplay = appLogic.searchTodosInList(allTodosWithProjectInfo, currentSearchTerm);
 
@@ -41,7 +41,6 @@ document.addEventListener("DOMContentLoaded", () => {
         isGlobalSearch: true
       });
     } else {
-      // If no global search, display current project"s todos
       if (currentProjectFromSidebar) {
         const projectData = appLogic.findProjectById(currentProjectFromSidebar.id);
         if (projectData) {
@@ -115,7 +114,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const projectData = domController.getProjectFormData();
     if (projectData) {
       let result;
-      let action = "created";
+      let action = "added";
       if (projectData.id) { // Editing existing project
         result = appLogic.updateProject(projectData.id, projectData.name);
         action = "updated";
@@ -128,12 +127,12 @@ document.addEventListener("DOMContentLoaded", () => {
       }
 
       if (result && !result.error) {
-        if (action === "created") appLogic.setCurrentProject(result.id);
+        if (action === "added") appLogic.setCurrentProject(result.id);
         refreshProjectsList();
-        updateAndRenderTodos(); // Refresh todos if current project changed or name updated
+        updateAndRenderTodos();
         domController.closeProjectModal();
-        domController.showNotification(`Project "${result.name}" ${action}!`, "success");
-      } else if (action === "created") { // only show generic error if addProject failed without specific error obj
+        domController.showNotification(`Project "${result.name}" ${action}.`, "success");
+      } else if (action === "added") {
         domController.showNotification("Failed to create project. Name might be invalid.", "error");
       }
     }
@@ -145,17 +144,17 @@ document.addEventListener("DOMContentLoaded", () => {
     if (!projectLi) return;
 
     const projectId = projectLi.dataset.projectId;
-    if (e.target.classList.contains('edit-project-btn')) {
+    if (e.target.classList.contains("edit-project-btn")) {
       const projectToEdit = appLogic.findProjectById(projectId);
       if (projectToEdit) {
         domController.openProjectModal(projectToEdit);
       }
-    } else if (e.target.classList.contains('delete-project-btn')) {
+    } else if (e.target.classList.contains("delete-project-btn")) {
       const projectToDelete = appLogic.findProjectById(projectId);
       if (projectToDelete && confirm(`You will permanently delete project "${projectToDelete.name}" and all its tasks.`)) {
         const result = appLogic.removeProject(projectId);
         if (result.success) {
-          domController.showNotification(`Project "${result.removedProjectName}" deleted.`, 'success');
+          domController.showNotification(`Project "${result.removedProjectName}" deleted.`, "success");
           refreshProjectsList();
           // If the current project was deleted, updateAndRenderTodos will handle it based on new currentProject from appLogic
           updateAndRenderTodos();
@@ -165,15 +164,15 @@ document.addEventListener("DOMContentLoaded", () => {
           domController.showNotification("Unable to delete project.", "error");
         }
       }
-    } else if (e.target.closest('.project-name') || e.target === projectLi) { // Click on name or li itself
+    } else if (e.target.closest(".project-name") || e.target === projectLi) { // Click on name or li itself
       if (appLogic.getCurrentProject()?.id !== projectId) {
         appLogic.setCurrentProject(projectId);
         refreshProjectsList();
         // Reset filters when changing project
-        currentSearchTerm = '';
-        if (searchInput) searchInput.value = '';
-        currentPriorityFilter = 'all';
-        if (priorityFilterSelect) priorityFilterSelect.value = 'all';
+        currentSearchTerm = "";
+        if (searchInput) searchInput.value = "";
+        currentPriorityFilter = "all";
+        if (priorityFilterSelect) priorityFilterSelect.value = "all";
         currentTagFilter = null;
         updateAndRenderTodos();
       }
