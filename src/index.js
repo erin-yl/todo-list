@@ -137,7 +137,7 @@ document.addEventListener('DOMContentLoaded', () => {
         result = appLogic.updateProject(projectData.id, projectData.name);
         action = 'updated';
         if (result && result.error === 'duplicate') {
-          domController.showNotification(`Project name '${projectData.name}' already exists.`, 'error');
+          domController.showNotification(`Project name "${projectData.name}" already exists.`, 'error');
           return;
         }
       } else { // Adding new project
@@ -149,9 +149,9 @@ document.addEventListener('DOMContentLoaded', () => {
         refreshProjectsList();
         updateAndRenderTodos();
         domController.closeProjectModal();
-        domController.showNotification(`Project '${result.name}' ${action}.`, 'success');
+        domController.showNotification(`Project "${result.name}" ${action}.`, 'success');
       } else if (action === 'added') {
-        domController.showNotification('Failed to create project. Name might be invalid.', 'error');
+        domController.showNotification('Unable to add project. Name might be invalid.', 'error');
       }
     }
   });
@@ -177,15 +177,15 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else if (e.target.classList.contains('delete-project-btn')) {
       const projectToDelete = appLogic.getProjectById(projectId);
-      if (projectToDelete && confirm(`You will permanently delete project '${projectToDelete.name}' and all its tasks.`)) {
+      if (projectToDelete && confirm(`You will permanently delete project "${projectToDelete.name}" and all its tasks.`)) {
         const result = appLogic.removeProject(projectId);
         if (result.success) {
-          domController.showNotification(`Project '${result.removedProjectName}' deleted.`, 'success');
+          domController.showNotification(`Project "${result.removedProjectName}" deleted.`, 'success');
           refreshProjectsList();
           // If the current project was deleted, updateAndRenderTodos will handle it based on new currentProject from appLogic
           updateAndRenderTodos();
         } else if (result.error === 'last_project') {
-          domController.showNotification('Unable to delete the last project. Create another one or clear its tasks.', 'warning');
+          domController.showNotification('Unable to delete the last project.', 'error');
         } else {
           domController.showNotification('Unable to delete project.', 'error');
         }
@@ -214,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (currentProject) {
       domController.openTodoModal(null, currentProject.id);
     } else {
-      domController.showNotification('Please select a project to add a task.', 'warning');
+      domController.showNotification('Please select project to add task.', 'warning');
     }
   });
 
@@ -269,7 +269,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (target.classList.contains('delete-todo-btn')) {
       const project = appLogic.getProjectById(projectIdForAction);
       const todoToDelete = project.getTodoById(todoId);
-      if (confirm(`You will permanently delete task '${todoToDelete.title}'.`)) {
+      if (confirm(`You will permanently delete task "${todoToDelete.title}".`)) {
         appLogic.removeTodoFromProject(projectIdForAction, todoId);
         domController.showNotification('Task deleted.', 'success');
         updateAndRenderTodos();
