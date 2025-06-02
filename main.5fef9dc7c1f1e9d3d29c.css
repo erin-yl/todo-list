@@ -185,11 +185,9 @@ header h1 {
 
 #todos-list li {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
+  flex-direction: column;
   background: #fdfdfd;
   border: 1px solid #eee;
-  padding: 12px 16px;
   margin-bottom: 8px;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
@@ -200,10 +198,18 @@ header h1 {
   box-shadow: 0 3px 6px rgba(0, 0, 0, 0.08);
 }
 
+.todo-preview-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 16px;
+}
+
 #todos-list li .todo-info {
+  display: flex;
+  align-items: flex-start;
   gap: 12px;
   flex-grow: 1;
-  align-items: flex-start;
 }
 
 #todos-list li .todo-info .todo-checkbox {
@@ -224,6 +230,13 @@ header h1 {
   color: #777;
 }
 
+#todos-list li .todo-actions {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  margin-left: 10px;
+}
+
 #todos-list li .todo-actions button {
   margin-left: 8px;
   padding: 6px 10px;
@@ -239,6 +252,66 @@ header h1 {
 #todos-list li .todo-actions .delete-todo-btn {
   background-color: #dc3545;
   color: white;
+}
+
+#todos-list li .todo-actions .expand-todo-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1em;
+  padding: 5px;
+  margin-left: 0;
+  margin-right: 5px;
+  color: #007bff;
+  line-height: 1;
+}
+
+#todos-list li .todo-actions .expand-todo-btn:hover {
+  color: #0056b3;
+}
+
+.todo-full-details {
+  padding: 12px 16px;
+  background-color: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  border-radius: 0 0 4px 4px;
+  clear: both;
+  box-sizing: border-box;
+}
+
+.todo-full-details.hidden {
+  display: none;
+}
+
+.todo-full-details.visible {
+  display: block;
+}
+
+.todo-full-details p {
+  margin: 6px 0;
+  font-size: 0.9em;
+  color: #343a40;
+  word-wrap: break-word;
+}
+
+.todo-full-details p strong {
+  color: #212529;
+  margin-right: 5px;
+}
+
+.priority-text-high {
+  color: red;
+  font-weight: 500;
+}
+
+.priority-text-medium {
+  color: orange;
+  font-weight: 500;
+}
+
+.priority-text-low {
+  color: green;
+  font-weight: 500;
 }
 
 .priority-low {
@@ -338,8 +411,7 @@ header h1 {
 }
 
 .todo-tags-display {
-  flex-basis: 100%;
-  margin-top: 6px;
+  flex-basis: content;
   display: flex;
   flex-wrap: wrap;
   gap: 6px;
@@ -505,4 +577,4 @@ header h1 {
   }
 }
 
-/*# sourceMappingURL=main.905abb52ea81031a3761.css.map*/
+/*# sourceMappingURL=main.5fef9dc7c1f1e9d3d29c.css.map*/
