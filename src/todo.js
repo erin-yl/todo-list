@@ -51,7 +51,7 @@ class Todo {
     }
 
     if (details.priority) {
-      if (["low", "medium", "high"].includes(details.priority)) {
+      if (['low', 'medium', 'high'].includes(details.priority)) {
         this.priority = details.priority;
       }
     }
@@ -79,14 +79,14 @@ class Todo {
 
   // Helper to get a string representation of tags
   getTagsString() {
-    return this.tags.join(", ");
+    return this.tags.join(', ');
   }
 
   // Helper to set tags from a comma-separated string
   setTagsFromString(tagsString) {
-    if (typeof tagsString === "string") {
+    if (typeof tagsString === 'string') {
       this.tags = tagsString
-        .split(",")
+        .split(',')
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
     }

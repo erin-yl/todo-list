@@ -1,6 +1,6 @@
 // Storage module that uses localStorage mechanism
 
-const STORAGE_KEY = "todoAppProjects";
+const STORAGE_KEY = 'todoAppProjects';
 
 const storage = {
   saveData: function (data) {
@@ -9,7 +9,7 @@ const storage = {
       const serializedData = JSON.stringify(data);
       localStorage.setItem(STORAGE_KEY, serializedData);
     } catch (error) {
-      console.error("Error saving data to localStorage:", error);
+      console.error('Error saving data to localStorage:', error);
     }
   },
 
@@ -21,7 +21,7 @@ const storage = {
       }
       return JSON.parse(serializedData);
     } catch (error) {
-      console.error("Error loading data from localStorage:", error);
+      console.error('Error loading data from localStorage:', error);
       return undefined;
     }
   },
@@ -30,7 +30,7 @@ const storage = {
     try {
       localStorage.removeItem(STORAGE_KEY);
     } catch (error) {
-      console.error("Error clearing data from localStorage:", error);
+      console.error('Error clearing data from localStorage:', error);
     }
   },
 };

@@ -1,6 +1,6 @@
 // Project module that manages a collection of todo items
 
-import Todo from "./todo.js";
+import Todo from './todo.js';
 
 class Project {
   constructor(name) {
@@ -12,10 +12,10 @@ class Project {
   addTodo(todoItem) {
     if (!(todoItem instanceof Todo)) return false;
     if (this.todos.some((todo) => todo.id === todoItem.id)) return false;
-  
+
     this.todos.push(todoItem);
     return true;
-  }  
+  }
 
   removeTodo(todoId) {
     this.todos = this.todos.filter((todo) => todo.id !== todoId);
