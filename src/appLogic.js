@@ -76,7 +76,7 @@ const appLogic = (() => {
   }
 
   function updateProject(projectId, newName) {
-    const projectToUpdate = findProjectById(projectId);
+    const projectToUpdate = getProjectById(projectId);
     if (!projectToUpdate) {
       return null;
     }
@@ -104,7 +104,7 @@ const appLogic = (() => {
     return { error: 'not_found' };
   }
 
-  function findProjectById(projectId) {
+  function getProjectById(projectId) {
     return projects.find((p) => p.id === projectId);
   }
 
@@ -117,7 +117,7 @@ const appLogic = (() => {
   }
 
   function setCurrentProject(projectId) {
-    const project = findProjectById(projectId);
+    const project = getProjectById(projectId);
     if (project) {
       currentProject = project;
       return true;
@@ -127,7 +127,7 @@ const appLogic = (() => {
 
   // To-do management
   function addTodoToProject(projectId, todoDetails) {
-    const project = findProjectById(projectId);
+    const project = getProjectById(projectId);
     if (project) {
       const { title, description, dueDate, priority, tagsString } = todoDetails;
       const newTodo = new Todo(title, description, dueDate, priority);
@@ -142,7 +142,7 @@ const appLogic = (() => {
   }
 
   function removeTodoFromProject(projectId, todoId) {
-    const project = findProjectById(projectId);
+    const project = getProjectById(projectId);
     if (project) {
       project.removeTodo(todoId);
       saveProjects();
@@ -152,7 +152,7 @@ const appLogic = (() => {
   }
 
   function updateTodoInProject(projectId, todoId, updatedDetails) {
-    const project = findProjectById(projectId);
+    const project = getProjectById(projectId);
     if (project) {
       const todo = project.getTodoById(todoId);
       if (todo) {
@@ -173,7 +173,7 @@ const appLogic = (() => {
   }
 
   function toggleTodoComplete(projectId, todoId) {
-    const project = findProjectById(projectId);
+    const project = getProjectById(projectId);
     if (project) {
       const todo = project.getTodoById(todoId);
       if (todo) {
@@ -285,7 +285,7 @@ const appLogic = (() => {
     addProject,
     updateProject,
     removeProject,
-    findProjectById,
+    getProjectById,
     getAllProjects,
     setCurrentProject,
     getCurrentProject,

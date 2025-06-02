@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isGlobalMode) {
       tagsForCloud = appLogic.getAllTagsAcrossProjects();
     } else if (currentProject) {
-      const projectData = appLogic.findProjectById(currentProject.id);
+      const projectData = appLogic.getProjectById(currentProject.id);
       tagsForCloud = projectData ? projectData.getUniqueTags() : [];
     } else {
       tagsForCloud = appLogic.getAllTagsAcrossProjects();
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateAndRenderTodos() {
     let todosToDisplay = [];
     let viewTitle = '';
-    let isGlobalMode = currentSearchTerm && currentSearchTerm.trim() !== '';
+    const isGlobalMode = currentSearchTerm && currentSearchTerm.trim() !== '';
     const currentProjectFromSidebar = appLogic.getCurrentProject();
 
     if (isGlobalMode) {
@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', () => {
       const allTodosWithProjectInfo = appLogic.getAllTodosWithProjectInfo();
       todosToDisplay = appLogic.searchTodosInList(allTodosWithProjectInfo, currentSearchTerm);
     } else if (currentProjectFromSidebar) {
-      const projectData = appLogic.findProjectById(currentProjectFromSidebar.id);
+      const projectData = appLogic.getProjectById(currentProjectFromSidebar.id);
       if (projectData) {
         viewTitle = projectData.name;
         todosToDisplay = projectData.getAllTodos();
@@ -57,13 +57,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     refreshTagCloud();
 
-    // Priority filter
     let filteredTodos = [...todosToDisplay];
     if (currentPriorityFilter !== 'all') {
       filteredTodos = filteredTodos.filter(todo => todo.priority === currentPriorityFilter);
     }
 
-    // Tag filter
     if (currentTagFilter) {
       const lowerTagFilter = currentTagFilter.toLowerCase();
       filteredTodos = filteredTodos.filter(todo =>
@@ -71,10 +69,8 @@ document.addEventListener('DOMContentLoaded', () => {
       );
     }
 
-    // Sorting
     let sortedTodos = appLogic.sortTodos(filteredTodos, currentSortCriteria.field, currentSortCriteria.direction);
 
-    // Render
     const renderData = {
       name: viewTitle,
       todos: sortedTodos,
@@ -83,8 +79,6 @@ document.addEventListener('DOMContentLoaded', () => {
     domController.renderTodos(renderData);
     domController.updateProjectTitle(viewTitle);
     domController.elements.addTodoBtn.style.display = currentProjectFromSidebar ? 'block' : 'none';
-
-    refreshTagCloud();
   }
 
   if (searchInput) {
@@ -177,12 +171,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const projectId = projectLi.dataset.projectId;
     if (e.target.classList.contains('edit-project-btn')) {
-      const projectToEdit = appLogic.findProjectById(projectId);
+      const projectToEdit = appLogic.getProjectById(projectId);
       if (projectToEdit) {
         domController.openProjectModal(projectToEdit);
       }
     } else if (e.target.classList.contains('delete-project-btn')) {
-      const projectToDelete = appLogic.findProjectById(projectId);
+      const projectToDelete = appLogic.getProjectById(projectId);
       if (projectToDelete && confirm(`You will permanently delete project '${projectToDelete.name}' and all its tasks.`)) {
         const result = appLogic.removeProject(projectId);
         if (result.success) {
@@ -273,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!todoId || !projectIdForAction) return;
 
     if (target.classList.contains('delete-todo-btn')) {
-      const project = appLogic.findProjectById(projectIdForAction);
+      const project = appLogic.getProjectById(projectIdForAction);
       const todoToDelete = project.getTodoById(todoId);
       if (confirm(`You will permanently delete task '${todoToDelete.title}'.`)) {
         appLogic.removeTodoFromProject(projectIdForAction, todoId);
@@ -282,7 +276,7 @@ document.addEventListener('DOMContentLoaded', () => {
       }
     } else if (target.classList.contains('edit-todo-btn')) {
       const todoToEdit = appLogic
-        .findProjectById(projectIdForAction)
+        .getProjectById(projectIdForAction)
         ?.getTodoById(todoId);
       if (todoToEdit) {
         domController.openTodoModal(todoToEdit, projectIdForAction);
