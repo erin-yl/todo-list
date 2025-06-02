@@ -10,75 +10,82 @@ document.addEventListener("DOMContentLoaded", () => {
 
   const searchInput = document.getElementById("search-todos-input");
   const priorityFilterSelect = document.getElementById("priority-filter");
+  const tagFilterArea = document.getElementById("tag-filter-area");
+  const tagFilterClearBtn = document.getElementById("tag-filter-clear-btn");
+  // const sortTodosSelect = document.getElementById("sort-todos");
+  
+  function refreshTagCloud() {
+    let tagsForCloud = [];
+    const currentProject = appLogic.getCurrentProject();
+    const isGlobalMode = currentSearchTerm && currentSearchTerm.trim() !== "";
+
+    if (isGlobalMode) {
+        tagsForCloud = appLogic.getAllTagsAcrossProjects();
+    } else if (currentProject) {
+        const projectData = appLogic.findProjectById(currentProject.id);
+        tagsForCloud = projectData ? projectData.getUniqueTags() : [];
+    } else {
+        tagsForCloud = appLogic.getAllTagsAcrossProjects();
+    }
+    domController.renderTagCloud(tagsForCloud, currentTagFilter);
+}
 
   function updateAndRenderTodos() {
     let todosToDisplay = [];
     let viewTitle = "";
-    const currentProjectFromSidebar = appLogic.getCurrentProject(); // Project selected in sidebar
+    let isGlobalMode = currentSearchTerm && currentSearchTerm.trim() !== "";
+    const currentProjectFromSidebar = appLogic.getCurrentProject();
 
-    // Determine the base list of todos
-    if (currentSearchTerm && currentSearchTerm.trim() !== "") {
+    if (isGlobalMode) {
       // Active global search
       viewTitle = `Search results for "${currentSearchTerm}"`;
       const allTodosWithProjectInfo = appLogic.getAllTodosWithProjectInfo();
       todosToDisplay = appLogic.searchTodosInList(allTodosWithProjectInfo, currentSearchTerm);
-
-      // Apply global filters/sort to search results
-      if (currentPriorityFilter !== "all") {
-        todosToDisplay = todosToDisplay.filter(todo => todo.priority === currentPriorityFilter);
-      }
-      if (currentTagFilter) {
-        const lowerTagFilter = currentTagFilter.toLowerCase();
-        todosToDisplay = todosToDisplay.filter(todo =>
-          todo.tags.some(t => t.toLowerCase() === lowerTagFilter)
-        );
-      }
-      // TODO: Apply global sort: todosToDisplay = appLogic.sortTodos(todosToDisplay, ...);
-
-      domController.renderTodos({
-        name: viewTitle,
-        todos: todosToDisplay,
-        isGlobalSearch: true
-      });
-    } else {
-      if (currentProjectFromSidebar) {
-        const projectData = appLogic.findProjectById(currentProjectFromSidebar.id);
-        if (projectData) {
-          viewTitle = projectData.name;
-          todosToDisplay = projectData.getAllTodos();
-
-          // Apply project-specific filters/sort
-          if (currentPriorityFilter !== "all") {
-            todosToDisplay = todosToDisplay.filter(todo => todo.priority === currentPriorityFilter);
-          }
-          if (currentTagFilter) {
-            todosToDisplay = todosToDisplay.filter(todo =>
-              projectData.getTodosByTag(currentTagFilter)
-                .some(t => t.id === todo.id)
-            );
-          }
-          // TODO: Apply project-specific sort: todosToDisplay = appLogic.sortTodos(todosToDisplay, ...);
-
-          domController.renderTodos({ ...projectData, todos: todosToDisplay, isGlobalSearch: false });
-        } else {
-          domController.renderTodos(null);
-          viewTitle = "Project not found";
-        }
+    } else if (currentProjectFromSidebar) {
+      const projectData = appLogic.findProjectById(currentProjectFromSidebar.id);
+      if (projectData) {
+        viewTitle = projectData.name;
+        todosToDisplay = projectData.getAllTodos();
       } else {
-        domController.renderTodos(null);
-        viewTitle = "Select a Project";
+        viewTitle = "Project not found";
+        todosToDisplay = [];
       }
+    } else {
+      viewTitle = "Select a project or search";
+      todosToDisplay = [];
     }
+
+    refreshTagCloud();
+
+    // Priority filter
+    let filteredTodos = [...todosToDisplay];
+    if (currentPriorityFilter !== "all") {
+      filteredTodos = filteredTodos.filter(todo => todo.priority === currentPriorityFilter);
+    }
+
+    // Tag filter
+    if (currentTagFilter) {
+      const lowerTagFilter = currentTagFilter.toLowerCase();
+      filteredTodos = filteredTodos.filter(todo =>
+        todo.tags.some(t => t.toLowerCase() === lowerTagFilter)
+      );
+    }
+
+    // Sorting
+    // let sortedTodos = appLogic.sortTodos(filteredTodos, currentSortCriteria.field, currentSortCriteria.direction);
+
+    // Render
+    const renderData = {
+      name: viewTitle,
+      // todos: sortedTodos,
+      isGlobalSearch: isGlobalMode
+    };
+    domController.renderTodos(renderData);
     domController.updateProjectTitle(viewTitle);
-
-    // addTodoBtn is visible if a project is selected, regardless of search
     domController.elements.addTodoBtn.style.display = currentProjectFromSidebar ? "block" : "none";
-  }
 
-  // Initial Setup
-  domController.initializeUI();
-  refreshProjectsList();
-  updateAndRenderTodos();
+    refreshTagCloud();
+  }
 
   if (searchInput) {
     searchInput.addEventListener("input", (e) => {
@@ -87,17 +94,34 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   }
 
-  // function refreshTodosList() {
-  //   const currentProject = appLogic.getCurrentProject();
-  //   if (currentProject) {
-  //     // Get the project from appLogic to ensure it has the latest todos
-  //     const updatedCurrentProject = appLogic.findProjectById(currentProject.id);
-  //     domController.renderTodos(updatedCurrentProject);
-  //   } else {
-  //     domController.renderTodos(null); // No project selected, clear todos view
-  //     domController.updateProjectTitle("Select a project");
-  //   }
-  // }
+  if (priorityFilterSelect) {
+    priorityFilterSelect.addEventListener("change", (e) => {
+      currentPriorityFilter = e.target.value;
+      updateAndRenderTodos();
+    });
+  }
+  if (tagFilterArea) {
+    tagFilterArea.addEventListener("click", (e) => {
+        if (e.target.classList.contains("tag-filter-item")) {
+            const clickedTag = e.target.dataset.tag;
+            if (currentTagFilter === clickedTag) {
+                currentTagFilter = null; // Toggle off
+            } else {
+                currentTagFilter = clickedTag;
+            }
+            updateAndRenderTodos();
+        }
+    });
+}
+
+if (tagFilterClearBtn) {
+    tagFilterClearBtn.addEventListener("click", () => {
+        if (currentTagFilter !== null) {
+            currentTagFilter = null;
+            updateAndRenderTodos();
+        }
+    });
+}
 
   // Project event listeners
   domController.elements.addProjectBtn.addEventListener("click", () => {
@@ -168,11 +192,14 @@ document.addEventListener("DOMContentLoaded", () => {
       if (appLogic.getCurrentProject()?.id !== projectId) {
         appLogic.setCurrentProject(projectId);
         refreshProjectsList();
-        // Reset filters when changing project
         currentSearchTerm = "";
+
         if (searchInput) searchInput.value = "";
-        currentPriorityFilter = "all";
-        if (priorityFilterSelect) priorityFilterSelect.value = "all";
+        currentPriorityFilter = "all"; // Reset priority filter
+        if (priorityFilterSelect) priorityFilterSelect.value = "all"; // Reset select element
+        currentTagFilter = null;
+        // currentSortCriteria = { field: "dueDate", direction: "asc" }; // Reset sort
+        // // if (sortTodosSelect) sortTodosSelect.value = "dueDate_asc";
         currentTagFilter = null;
         updateAndRenderTodos();
       }
@@ -282,7 +309,7 @@ document.addEventListener("DOMContentLoaded", () => {
     domController.renderTodos(null);
   }
 
-  // Helper functions for refreshing UI
+  // Helper functions to refresh project list
   function refreshProjectsList() {
     const projects = appLogic.getAllProjects();
     const currentProject = appLogic.getCurrentProject();
@@ -292,5 +319,8 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
+  // Initial setup
+  domController.initializeUI();
+  refreshProjectsList();
   updateAndRenderTodos();
 });

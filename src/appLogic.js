@@ -231,7 +231,7 @@ const appLogic = (() => {
     return allTodos.filter((todo) => todo.priority === priorityLevel);
   }
 
-  function getAllUniqueTagsAcrossProjects() {
+  function getAllTagsAcrossProjects() {
     const allTags = new Set();
     projects.forEach((project) => {
       project.getUniqueTags().forEach((tag) => allTags.add(tag));
@@ -258,7 +258,7 @@ const appLogic = (() => {
     getAllTodosWithProjectInfo,
     filterTodosByTagAcrossProjects,
     filterTodosByPriorityAcrossProjects,
-    getAllUniqueTagsAcrossProjects,
+    getAllTagsAcrossProjects,
   };
 })();
 

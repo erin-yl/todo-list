@@ -1,16 +1,15 @@
 <!doctype html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>To-do List App</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link
-    href="https://fonts.googleapis.com/css2?family=Poppins&display=swap"
-    rel="stylesheet"
-  />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins&display=swap" rel="stylesheet" />
 </head>
+
 <body>
   <div id="notification-area" class="notification-area"></div>
   <div class="container">
@@ -27,12 +26,17 @@
         <ul id="projects-list"></ul>
         <button id="add-project-btn" class="primary-btn">Add a project</button>
       </aside>
-
+ 
       <section class="todos-view">
         <h2 id="current-project-title">Select a project</h2>
         <div class="todos-controls">
           <button id="add-todo-btn" class="primary-btn">Add a task</button>
         </div>
+        <div class="filters-row">
+          <div id="tag-filter-area" class="tag-filter-area">
+          </div>
+          <span id="tag-filter-clear-btn" class="tag-filter-clear">Clear tag filter</span>
+        </div>  
         <ul id="todos-list"></ul>
       </section>
     </main>
@@ -47,13 +51,7 @@
         <fieldset>
           <div>
             <label for="todo-title-input">Task name*</label>
-            <input
-              type="text" 
-              id="todo-title-input" 
-              name="title" 
-              required
-              aria-required="true"
-            />
+            <input type="text" id="todo-title-input" name="title" required aria-required="true" />
             <span class="help-message">*Required</span>
             <span class="error-message" aria-live="polite"></span>
           </div>
@@ -63,11 +61,7 @@
           </div>
           <div>
             <label for="todo-dueDate-input">Due date</label>
-            <input
-              type="date"
-              id="todo-dueDate-input"
-              name="dueDate"
-            />
+            <input type="date" id="todo-dueDate-input" name="dueDate" />
           </div>
           <div>
             <label for="todo-priority-input">Priority</label>
@@ -79,12 +73,7 @@
           </div>
           <div>
             <label for="todo-tags-input">Tags</label>
-            <input
-              type="text"
-              id="todo-tags-input"
-              name="tags"
-              placeholder="e.g., learning, health, fun"
-            />
+            <input type="text" id="todo-tags-input" name="tags" placeholder="e.g., learning, health, fun" />
             <span class="help-message">Separate tags with commas</span>
           </div>
         </fieldset>
@@ -103,13 +92,7 @@
         <fieldset>
           <div>
             <label for="project-name-input">Project name*</label>
-            <input
-              type="text"
-              id="project-name-input"
-              name="projectName"
-              required
-              aria-required="true"
-            />
+            <input type="text" id="project-name-input" name="projectName" required aria-required="true" />
             <span class="help-message">*Required</span>
             <span class="error-message" aria-live="polite"></span>
           </div>
@@ -120,4 +103,5 @@
     </div>
   </div>
 </body>
+
 </html>

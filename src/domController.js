@@ -9,6 +9,8 @@ const domController = (() => {
   const currentProjectTitle = document.getElementById("current-project-title");
   const addTodoBtn = document.getElementById("add-todo-btn");
   const todosListUL = document.getElementById("todos-list");
+  const tagFilterArea = document.getElementById("tag-filter-area");
+  const tagFilterClearBtn = document.getElementById("tag-filter-clear-btn");
   const notificationArea = document.getElementById("notification-area");
 
   // Project modal
@@ -315,6 +317,37 @@ const domController = (() => {
     });
   }
 
+  function renderTagCloud(tags, activeTag) {
+    if (!tagFilterArea) return;
+    clearElement(tagFilterArea);
+
+    if (tags && tags.length > 0) {
+        tags.forEach(tag => {
+            const tagElement = document.createElement("span");
+            tagElement.classList.add("tag-filter-item");
+            tagElement.textContent = tag;
+            tagElement.dataset.tag = tag;
+            if (tag === activeTag) {
+                tagElement.classList.add("active");
+            }
+            tagFilterArea.appendChild(tagElement);
+        });
+    } else {
+        const noTagsMsg = document.createElement("span");
+        noTagsMsg.textContent = "No tags available for filtering.";
+        noTagsMsg.style.fontSize = "0.9em";
+        noTagsMsg.style.color = "#666";
+        tagFilterArea.appendChild(noTagsMsg);
+    }
+
+    if (tagFilterClearBtn) {
+         tagFilterClearBtn.style.display = activeTag ? "inline" : "none";
+    }
+    if (tagFilterClearBtn && !tagFilterArea.contains(tagFilterClearBtn) && tags.length > 0) {
+         tagFilterArea.appendChild(tagFilterClearBtn);
+    }
+}
+
   // Initial state
   function initializeUI() {
     updateProjectTitle("Loading projects...");
@@ -337,6 +370,7 @@ const domController = (() => {
     getTodoFormData,
     clearElement,
     showNotification,
+    renderTagCloud,
     initializeUI,
     elements: {
       projectModal,
@@ -349,6 +383,7 @@ const domController = (() => {
       todoForm,
       closeProjectModalBtn,
       closeTodoModalBtn,
+      tagFilterClearBtn,
     },
   };
 })();
