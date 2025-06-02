@@ -1,8 +1,8 @@
 // App controller module that handles the core logic
 
-import Project from "./project.js";
-import Todo from "./todo.js";
-import storage from "./storage.js";
+import Project from './project.js';
+import Todo from './todo.js';
+import storage from './storage.js';
 
 const appLogic = (() => {
   let projects = [];
@@ -10,10 +10,10 @@ const appLogic = (() => {
 
   function rehydrateProjects(plainProjects) {
     return plainProjects.map((plainProject) => {
-      const project = new Project(plainProject.name); // Create new instances of project class
+      const project = new Project(plainProject.name);
       project.id = plainProject.id;
       project.todos = plainProject.todos.map((plainTodo) => {
-        const todo = new Todo( // Create new instances of todo class
+        const todo = new Todo(
           plainTodo.title,
           plainTodo.description,
           plainTodo.dueDate,
@@ -29,18 +29,18 @@ const appLogic = (() => {
   }
 
   function createSampleData() {
-    const workProject = new Project("Work");
-    workProject.addTodo(new Todo("Finish Q2 report", "Compile required data and finalize the conclusion.", new Date(2025, 4, 26), "high", ["report"], false));
-    workProject.addTodo(new Todo("Team meeting prep", "Prepare agenda and slides for Monday's team meeting.", new Date(2025, 5, 6), "medium", ["meeting"], false));
-    workProject.addTodo(new Todo("Client follow-up", "Call John Doe regarding project Alpha.", "", "medium", ["client"], true));
+    const workProject = new Project('Work');
+    workProject.addTodo(new Todo('Finish Q2 report', 'Compile required data and finalize the conclusion.', new Date(2025, 4, 26), 'high', ['report'], false));
+    workProject.addTodo(new Todo('Team meeting prep', `Prepare agenda and slides for Monday's team meeting.`, new Date(2025, 5, 6), 'medium', ['meeting'], false));
+    workProject.addTodo(new Todo('Client follow-up', 'Call John Doe regarding project Alpha.', '', 'medium', ['client'], true));
 
-    const personalProject = new Project("Personal");
-    personalProject.addTodo(new Todo("Grocery shopping", "Milk, eggs, chicken, fruits.", new Date(2025, 4, 20), "low", ["home", "shopping"], false));
-    personalProject.addTodo(new Todo("Book doctor appointment", "Annual check-up.", new Date(2025, 5, 10), "high", ["health"], false));
+    const personalProject = new Project('Personal');
+    personalProject.addTodo(new Todo('Grocery shopping', 'Milk, eggs, chicken, fruits.', new Date(2025, 4, 20), 'low', ['home', 'shopping'], false));
+    personalProject.addTodo(new Todo('Book doctor appointment', 'Annual check-up.', new Date(2025, 5, 10), 'high', ['health'], false));
 
-    const learningProject = new Project("Learning");
-    learningProject.addTodo(new Todo("Webpack Deep Dive", "Understand loaders and plugins.", new Date(2025, 4, 30), "medium", ["dev"], true));
-    learningProject.addTodo(new Todo("Read 'The Pragmatic Programmer'", "Chapter 3-5", "", "low", ["reading", "dev"], false));
+    const learningProject = new Project('Learning');
+    learningProject.addTodo(new Todo('Webpack Deep Dive', 'Understand loaders and plugins.', new Date(2025, 4, 30), 'medium', ['dev'], true));
+    learningProject.addTodo(new Todo('Read "The Pragmatic Programmer"', 'Chapter 3-5', '', 'low', ['reading', 'dev'], false));
 
     projects = [workProject, personalProject, learningProject];
     currentProject = workProject;
@@ -81,7 +81,7 @@ const appLogic = (() => {
       return null;
     }
     if (projects.some(p => p.id !== projectId && p.name.toLowerCase() === newName.toLowerCase())) {
-      return { error: "duplicate", project: projectToUpdate };
+      return { error: 'duplicate', project: projectToUpdate };
     }
     projectToUpdate.name = newName;
     saveProjects();
@@ -92,7 +92,7 @@ const appLogic = (() => {
     const projectIndex = projects.findIndex(p => p.id === projectId);
     if (projectIndex > -1) {
       if (projects.length === 1) {
-        return { error: "last_project" };
+        return { error: 'last_project' };
       }
       const removedProject = projects.splice(projectIndex, 1)[0];
       if (currentProject && currentProject.id === projectId) {
@@ -101,7 +101,7 @@ const appLogic = (() => {
       saveProjects();
       return { success: true, removedProjectName: removedProject.name, newCurrentProject: currentProject };
     }
-    return { error: "not_found" };
+    return { error: 'not_found' };
   }
 
   function findProjectById(projectId) {
@@ -125,7 +125,7 @@ const appLogic = (() => {
     return false;
   }
 
-  // Todo management
+  // To-do management
   function addTodoToProject(projectId, todoDetails) {
     const project = findProjectById(projectId);
     if (project) {
@@ -192,17 +192,6 @@ const appLogic = (() => {
     );
   }
 
-  function searchTodosInList(todos, searchTerm) {
-    if (!searchTerm || searchTerm.trim() === "") {
-      return todos;
-    }
-    const lowerSearchTerm = searchTerm.toLowerCase();
-    return todos.filter(todo =>
-      todo.title.toLowerCase().includes(lowerSearchTerm) ||
-      todo.description.toLowerCase().includes(lowerSearchTerm)
-    );
-  }
-
   function getAllTodosWithProjectInfo() {
     const allTodosWithProjectInfo = [];
     projects.forEach(project => {
@@ -215,6 +204,25 @@ const appLogic = (() => {
       });
     });
     return allTodosWithProjectInfo;
+  }
+
+  function searchTodosInList(todos, searchTerm) {
+    if (!searchTerm || searchTerm.trim() === '') {
+      return todos;
+    }
+    const lowerSearchTerm = searchTerm.toLowerCase();
+    return todos.filter(todo =>
+      todo.title.toLowerCase().includes(lowerSearchTerm) ||
+      todo.description.toLowerCase().includes(lowerSearchTerm)
+    );
+  }
+
+  function getAllTagsAcrossProjects() {
+    const allTags = new Set();
+    projects.forEach((project) => {
+      project.getUniqueTags().forEach((tag) => allTags.add(tag));
+    });
+    return Array.from(allTags).sort();
   }
 
   function filterTodosByTagAcrossProjects(tag) {
@@ -231,12 +239,44 @@ const appLogic = (() => {
     return allTodos.filter((todo) => todo.priority === priorityLevel);
   }
 
-  function getAllTagsAcrossProjects() {
-    const allTags = new Set();
-    projects.forEach((project) => {
-      project.getUniqueTags().forEach((tag) => allTags.add(tag));
+  const priorityOrder = { 'high': 1, 'medium': 2, 'low': 3 };
+
+  function sortTodos(todos, sortField, sortDirection = 'asc') {
+    const sorted = [...todos];
+
+    sorted.sort((a, b) => {
+      let valA, valB;
+
+      switch (sortField) {
+        case 'title':
+          valA = a.title.toLowerCase();
+          valB = b.title.toLowerCase();
+          break;
+        case 'dueDate':
+          // For null due dates, sort them to the end
+          if (a.dueDate === null && b.dueDate === null) return 0;
+          if (a.dueDate === null) return 1; // a comes after b
+          if (b.dueDate === null) return -1; // a comes before b
+          valA = a.dueDate;
+          valB = b.dueDate;
+          break;
+        case 'priority':
+          valA = priorityOrder[a.priority];
+          valB = priorityOrder[b.priority];
+          break;
+        default:
+          return 0; // No sorting for unknown fields
+      }
+
+      let comparison = 0;
+      if (valA > valB) {
+        comparison = 1;
+      } else if (valA < valB) {
+        comparison = -1;
+      }
+      return sortDirection === 'desc' ? comparison * -1 : comparison;
     });
-    return Array.from(allTags).sort();
+    return sorted;
   }
 
   loadProjects();
@@ -254,11 +294,12 @@ const appLogic = (() => {
     updateTodoInProject,
     toggleTodoComplete,
     getAllTodosAcrossProjects,
-    searchTodosInList,
     getAllTodosWithProjectInfo,
+    searchTodosInList,
+    getAllTagsAcrossProjects,
     filterTodosByTagAcrossProjects,
     filterTodosByPriorityAcrossProjects,
-    getAllTagsAcrossProjects,
+    sortTodos,
   };
 })();
 
