@@ -26,21 +26,23 @@ body {
 header {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   margin-bottom: 20px;
   padding-bottom: 20px;
   border-bottom: 1px solid #eee;
+  flex-wrap: wrap;
 }
 
-h1 {
+header h1 {
   font-weight: 600;
   font-size: 1.5em;
   letter-spacing: 0.4px;
-  margin-bottom: 16px;
+  margin-bottom: 0;
+  margin-right: 20px;
 }
 
 .global-search-container {
-  margin-bottom: 16px;
-  width: 100%;
+  flex-grow: 1;
   max-width: 600px;
 }
 
@@ -53,13 +55,15 @@ h1 {
 .app-layout {
   display: flex;
   gap: 24px;
+  flex-wrap: wrap;
 }
 
 .projects-sidebar {
   flex-basis: 250px;
+  flex-grow: 1;
   padding: 16px;
-  background-color: #e9ecef;
-  border-radius: 4px;
+  border: 1px solid #dee2e6;
+  background-color: #f8f9fa;
 }
 
 .projects-sidebar h2 {
@@ -90,19 +94,34 @@ h1 {
 }
 
 #projects-list li {
-  padding: 8px;
-  margin-bottom: 5px;
-  background-color: #f8f9fa;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 12px;
+  margin-bottom: 6px;
+  background-color: #fafafa;
   border: 1px solid #dee2e6;
-  border-radius: 3px;
+  border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s;
+  transition: background-color 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
 }
 
-#projects-list li.active,
 #projects-list li:hover {
+  background-color: #e9ecef;
+}
+
+#projects-list li.active {
   background-color: #007bff;
   color: white;
+  border-color: #0056b3;
+}
+
+.project-name {
+  font-weight: 500;
+}
+.project-actions button {
+  font-size: 1em;
+  padding: 2px 4px;
 }
 
 .primary-btn {
@@ -123,8 +142,10 @@ h1 {
 }
 
 .todos-view {
-  flex-grow: 1; /* Takes remaining space */
-  padding: 15px;
+  flex-basis: 0;
+  flex-grow: 999;
+  min-width: 70%;
+  padding: 0 16px;
 }
 
 .todos-view h2 {
@@ -135,8 +156,13 @@ h1 {
 
 .todo-project-label {
   font-size: 0.8em;
-  color: #666;
-  margin-left: 4px;
+  background-color: #f0f0f0;
+  padding: 2px 6px;
+  border-radius: 4px;
+  margin-left: 0;
+  margin-top: 4px;
+  display: inline-block;
+  flex-basis: 100%;
 }
 
 .todos-controls {
@@ -149,24 +175,33 @@ h1 {
 }
 
 #todos-list li {
-  background: #fdfdfd;
-  border: 1px solid #eee;
-  padding: 10px 15px;
-  margin-bottom: 8px;
-  border-radius: 4px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  background: #fdfdfd;
+  border: 1px solid #eee;
+  padding: 12px 16px;
+  margin-bottom: 8px;
+  border-radius: 4px;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+  transition: box-shadow 0.2s ease-in-out;
+}
+#todos-list li:hover {
+  box-shadow: 0 3px 6px rgba(0,0,0,0.08);
 }
 
 #todos-list li .todo-info {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  gap: 12px;
+  flex-grow: 1;
+  align-items: flex-start;
+}
+
+#todos-list li .todo-info .todo-checkbox {
+  margin-top: 4px;
 }
 
 #todos-list li .todo-title {
-  font-weight: bold;
+  font-weight: 500;
 }
 
 #todos-list li .todo-due-date {
@@ -174,12 +209,17 @@ h1 {
   color: #666;
 }
 
+.todo-completed .todo-title {
+  text-decoration: line-through;
+  color: #777;
+}
+
 #todos-list li .todo-actions button {
   margin-left: 8px;
-  padding: 5px 8px;
+  padding: 6px 10px;
   cursor: pointer;
   border: 1px solid #ccc;
-  border-radius: 3px;
+  border-radius: 4px;
 }
 
 #todos-list li .todo-actions .edit-todo-btn {
@@ -199,11 +239,6 @@ h1 {
 }
 .priority-high {
   border-left: 5px solid red;
-}
-
-.todo-completed .todo-title {
-  text-decoration: line-through;
-  color: #888;
 }
 
 /* Modal Styles */
@@ -289,10 +324,11 @@ h1 {
 }
 
 .todo-tags-display {
-  margin-top: 5px;
+  flex-basis: 100%;
+  margin-top: 6px;
   display: flex;
   flex-wrap: wrap;
-  gap: 5px;
+  gap: 6px;
 }
 
 .tag-label {
@@ -378,5 +414,26 @@ h1 {
   to {
       opacity: 0;
       transform: translateX(100%);
+  }
+}
+
+@media (max-width: 768px) {
+  .app-layout {
+    flex-direction: column;
+  }
+  .projects-sidebar {
+    flex-basis: auto;
+    width: 100%;
+    margin-bottom: 20px;
+  }
+  .todos-view {
+    min-width: 100%;
+  }
+  header {
+    flex-direction: column;
+    align-items: center;
+  }
+  .global-search-container {
+    margin-top:16px;
   }
 }

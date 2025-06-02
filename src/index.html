@@ -26,7 +26,7 @@
         <ul id="projects-list"></ul>
         <button id="add-project-btn" class="primary-btn">Add a project</button>
       </aside>
- 
+
       <section class="todos-view">
         <h2 id="current-project-title">Select a project</h2>
         <div class="todos-controls">
@@ -36,7 +36,27 @@
           <div id="tag-filter-area" class="tag-filter-area">
           </div>
           <span id="tag-filter-clear-btn" class="tag-filter-clear">Clear tag filter</span>
-        </div>  
+        </div>
+        <div class="filter-sort-bar"> <select id="priority-filter" class="form-select">
+            <option value="all">All priorities</option>
+            <option value="high">High</option>
+            <option value="medium">Medium</option>
+            <option value="low">Low</option>
+          </select>
+          <select id="sort-todos" class="form-select">
+            <option value="dueDate_asc">Due date (earliest)</option>
+            <option value="dueDate_desc">Due date (latest)</option>
+            <option value="priority_asc">Priority (lowest)</option>
+            <option value="priority_desc">Priority (highest)</option>
+            <option value="title_asc">Title (A-Z)</option>
+            <option value="title_desc">Title (Z-A)</option>
+          </select>
+        </div>
+        <div class="filters-row">
+          <div id="tag-filter-area" class="tag-filter-area"></div>
+          <span id="tag-filter-clear-btn" class="tag-filter-clear" style="display:none; margin-left:10px;">Clear Tag
+            Filter</span>
+        </div>
         <ul id="todos-list"></ul>
       </section>
     </main>
