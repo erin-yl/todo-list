@@ -284,6 +284,24 @@ document.addEventListener('DOMContentLoaded', () => {
     } else if (target.classList.contains('todo-checkbox')) {
       appLogic.toggleTodoComplete(projectIdForAction, todoId);
       updateAndRenderTodos();
+    } else if (target.classList.contains('expand-todo-btn')) {
+      const detailsDiv = todoLi.querySelector('.todo-full-details');
+      if (detailsDiv) {
+        const isHidden = detailsDiv.classList.contains('hidden');
+        if (isHidden) {
+          detailsDiv.classList.remove('hidden');
+          detailsDiv.classList.add('visible');
+          target.innerHTML = '&#8722;'; // Minus sign (hide)
+          target.title = 'Hide details';
+          todoLi.classList.add('details-expanded');
+        } else {
+          detailsDiv.classList.add('hidden');
+          detailsDiv.classList.remove('visible');
+          target.innerHTML = '&#43;'; // Plus sign (show)
+          target.title = "Show details";
+          todoLi.classList.remove('details-expanded');
+        }
+      }
     }
   });
 

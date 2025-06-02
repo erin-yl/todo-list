@@ -134,6 +134,9 @@ const domController = (() => {
         li.classList.add('todo-completed');
       }
 
+      const todoPreviewContent = document.createElement('div');
+      todoPreviewContent.classList.add('todo-preview-content');
+
       const checkbox = document.createElement('input');
       checkbox.type = 'checkbox';
       checkbox.checked = todo.completed;
@@ -179,6 +182,13 @@ const domController = (() => {
       const actionsDiv = document.createElement('div');
       actionsDiv.classList.add('todo-actions');
 
+      const expandBtn = document.createElement('button');
+      expandBtn.classList.add('expand-todo-btn');
+      expandBtn.innerHTML = '&#43;'; // Plus sign (show)
+      expandBtn.title = 'Show details';
+      expandBtn.dataset.todoId = todo.id;
+      actionsDiv.appendChild(expandBtn);
+
       const editBtn = document.createElement('button');
       editBtn.textContent = 'Edit';
       editBtn.classList.add('edit-todo-btn');
@@ -192,8 +202,25 @@ const domController = (() => {
       actionsDiv.appendChild(editBtn);
       actionsDiv.appendChild(deleteBtn);
 
-      li.appendChild(todoInfoDiv);
-      li.appendChild(actionsDiv);
+      todoPreviewContent.appendChild(todoInfoDiv);
+      todoPreviewContent.appendChild(actionsDiv);
+      li.appendChild(todoPreviewContent);
+
+      const fullDetailsDiv = document.createElement('div');
+      fullDetailsDiv.classList.add('todo-full-details', 'hidden');
+
+      const descriptionP = document.createElement('p');
+      descriptionP.innerHTML = 'Description: ';
+      const descriptionText = document.createTextNode(todo.description || 'No description');
+      descriptionP.appendChild(descriptionText);
+
+      const priorityP = document.createElement('p');
+      const priorityText = todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1);
+      priorityP.innerHTML = `Priority: <span class="priority-text-${todo.priority}">${priorityText}</span>`;
+
+      fullDetailsDiv.appendChild(descriptionP);
+      fullDetailsDiv.appendChild(priorityP);
+      li.appendChild(fullDetailsDiv);
       todosListUL.appendChild(li);
     });
   }
