@@ -1,7 +1,5 @@
 // Todo item module that manages todo objects
 
-import { format, parse } from "date-fns";
-
 class Todo {
   constructor(
     title,
@@ -15,22 +13,19 @@ class Todo {
     this.title = title;
     this.description = description;
 
-    // Handle date as local dates
+    // Standardize dueDate to be a Date object or null
     this.dueDate = null;
-    if (dueDate) {
-      let dateToProcess;
-      if (dueDate instanceof Date) {
-        // For sample data using Date objects
-        dateToProcess = dueDate;
-      } else if (typeof dueDate === "string") {
-        // For HTML form inputs
-        dateToProcess = parse(dueDate.trim(), "yyyy-MM-dd", new Date());
-      } 
-      if (dateToProcess && !isNaN(dateToProcess.valueOf())) {
-        this.dueDate = format(dateToProcess, "yyyy-MM-dd"); // Store consistently
-      }
+    if (dueDate instanceof Date && !isNaN(dueDate.valueOf())) {
+      // For sample data using Date objects
+      this.dueDate = dueDate;
+    } else if (typeof dueDate === 'string' && dueDate.trim() !== '') {
+      // For HTML form inputs
+      const parsedDate = new Date(dueDate.trim());
+      this.dueDate = !isNaN(parsedDate.valueOf()) ? parsedDate : null;
+    } else {
+      this.dueDate = null;
     }
-    
+
     this.priority = priority;
     this.tags = Array.isArray(tags) ? tags : [];
     this.completed = completed;
@@ -41,20 +36,20 @@ class Todo {
   }
 
   updateDetails(details) {
-    if (details.title) this.title = details.title;
-    if (details.description) this.description = details.description;
+    if (details.title !== undefined) this.title = details.title;
+    if (details.description !== undefined) this.description = details.description;
 
     if (details.dueDate !== undefined) {
-      if (details.dueDate && typeof details.dueDate === "string") {
-        const parsedDate = parse(details.dueDate.trim(), "yyyy-MM-dd", new Date());
-        this.dueDate = !isNaN(parsedDate.valueOf())
-          ? format(parsedDate, "yyyy-MM-dd")
-          : null;
+      if (details.dueDate instanceof Date && !isNaN(details.dueDate.valueOf())) {
+        this.dueDate = details.dueDate;
+      } else if (typeof details.dueDate === 'string' && details.dueDate.trim() !== '') {
+        const parsedDate = new Date(details.dueDate.trim());
+        this.dueDate = !isNaN(parsedDate.valueOf()) ? parsedDate : null;
       } else {
         this.dueDate = null;
       }
     }
-    
+
     if (details.priority) {
       if (["low", "medium", "high"].includes(details.priority)) {
         this.priority = details.priority;
@@ -65,6 +60,8 @@ class Todo {
       this.tags = details.tags
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0);
+    } else if (details.tagsString !== undefined) {
+      this.setTagsFromString(details.tagsString);
     }
   }
 
