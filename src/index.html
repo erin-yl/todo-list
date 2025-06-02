@@ -24,18 +24,18 @@
       <aside class="projects-sidebar">
         <h2>Projects</h2>
         <ul id="projects-list"></ul>
-        <button id="add-project-btn" class="primary-btn">Add a project</button>
+        <button id="add-project-btn" class="primary-btn">Add project</button>
       </aside>
 
       <section class="todos-view">
-        <h2 id="current-project-title">Select a project</h2>
+        <h2 id="current-project-title">Select project</h2>
         <div class="todos-controls">
-          <button id="add-todo-btn" class="primary-btn">Add a task</button>
+          <button id="add-todo-btn" class="primary-btn">Add task</button>
         </div>
         <div class="filters-row">
-          <div id="tag-filter-area" class="tag-filter-area">
+          <div id="tag-filter-area">
+            <span id="tag-filter-clear-btn">Clear tag filter</span>
           </div>
-          <span id="tag-filter-clear-btn" class="tag-filter-clear">Clear tag filter</span>
         </div>
         <div class="filter-sort-bar"> <select id="priority-filter" class="form-select">
             <option value="all">All priorities</option>
@@ -51,11 +51,6 @@
             <option value="title_asc">Title (A-Z)</option>
             <option value="title_desc">Title (Z-A)</option>
           </select>
-        </div>
-        <div class="filters-row">
-          <div id="tag-filter-area" class="tag-filter-area"></div>
-          <span id="tag-filter-clear-btn" class="tag-filter-clear" style="display:none; margin-left:10px;">Clear Tag
-            Filter</span>
         </div>
         <ul id="todos-list"></ul>
       </section>
