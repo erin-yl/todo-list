@@ -1,37 +1,37 @@
 // Display controller module that handles DOM manipulations
 
-import { format, parse } from "date-fns";
+import { format, isValid as isValidDate } from 'date-fns';
 
 const domController = (() => {
   // DOM element selectors
-  const projectsListUL = document.getElementById("projects-list");
-  const addProjectBtn = document.getElementById("add-project-btn");
-  const currentProjectTitle = document.getElementById("current-project-title");
-  const addTodoBtn = document.getElementById("add-todo-btn");
-  const todosListUL = document.getElementById("todos-list");
-  const tagFilterArea = document.getElementById("tag-filter-area");
-  const tagFilterClearBtn = document.getElementById("tag-filter-clear-btn");
-  const notificationArea = document.getElementById("notification-area");
+  const projectsListUL = document.getElementById('projects-list');
+  const addProjectBtn = document.getElementById('add-project-btn');
+  const currentProjectTitle = document.getElementById('current-project-title');
+  const addTodoBtn = document.getElementById('add-todo-btn');
+  const todosListUL = document.getElementById('todos-list');
+  const tagFilterArea = document.getElementById('tag-filter-area');
+  const tagFilterClearBtn = document.getElementById('tag-filter-clear-btn');
+  const notificationArea = document.getElementById('notification-area');
 
   // Project modal
-  const projectModal = document.getElementById("project-modal");
-  const projectForm = document.getElementById("project-form");
-  const projectIdInput = document.getElementById("project-id"); // Hidden input for project editing
-  const projectNameInput = document.getElementById("project-name-input");
-  const saveProjectBtn = document.getElementById("save-project-btn");
-  const closeProjectModalBtn = document.getElementById("close-project-modal");
+  const projectModal = document.getElementById('project-modal');
+  const projectForm = document.getElementById('project-form');
+  const projectIdInput = document.getElementById('project-id'); // Hidden input for project editing
+  const projectNameInput = document.getElementById('project-name-input');
+  const saveProjectBtn = document.getElementById('save-project-btn');
+  const closeProjectModalBtn = document.getElementById('close-project-modal');
 
   // Todo modal
-  const todoModal = document.getElementById("todo-modal");
-  const todoForm = document.getElementById("todo-form");
-  const todoIdInput = document.getElementById("todo-id"); // Hidden input for todo editing
-  const todoTitleInput = document.getElementById("todo-title-input");
-  const todoDescriptionInput = document.getElementById("todo-description-input",
+  const todoModal = document.getElementById('todo-modal');
+  const todoForm = document.getElementById('todo-form');
+  const todoIdInput = document.getElementById('todo-id'); // Hidden input for todo editing
+  const todoTitleInput = document.getElementById('todo-title-input');
+  const todoDescriptionInput = document.getElementById('todo-description-input',
   );
-  const todoDueDateInput = document.getElementById("todo-dueDate-input");
-  const todoPriorityInput = document.getElementById("todo-priority-input");
-  const todoTagsInput = document.getElementById("todo-tags-input");
-  const closeTodoModalBtn = document.getElementById("close-todo-modal");
+  const todoDueDateInput = document.getElementById('todo-dueDate-input');
+  const todoPriorityInput = document.getElementById('todo-priority-input');
+  const todoTagsInput = document.getElementById('todo-tags-input');
+  const closeTodoModalBtn = document.getElementById('close-todo-modal');
 
   // Helper functions to remove all child nodes
   function clearElement(element) {
@@ -41,59 +41,60 @@ const domController = (() => {
   }
 
   function formatDateForDisplay(date) {
-    if (!date) return "No date set";
-    const dateObj = parse(date, "yyyy-MM-dd", new Date());
-    return isNaN(dateObj.valueOf()) ? "No date set" : format(dateObj, "MMM dd, yyyy");
+    if (date instanceof Date && isValidDate(date)) { //
+      return format(date, 'MMM dd, yyyy'); //
+    }
+    return 'No date set';
   }
 
   // Project rendering
   function renderProjects(projects, currentProjectId) {
     clearElement(projectsListUL);
     if (!projects || projects.length === 0) {
-      const li = document.createElement("li");
-      li.textContent = "No projects yet.";
-      li.classList.add("no-items");
+      const li = document.createElement('li');
+      li.textContent = 'No projects yet.';
+      li.classList.add('no-items');
       projectsListUL.appendChild(li);
       return;
     }
 
     projects.forEach((project) => {
-      const li = document.createElement("li");
+      const li = document.createElement('li');
       li.dataset.projectId = project.id;
 
-      const nameSpan = document.createElement("span");
-      nameSpan.classList.add("project-name");
+      const nameSpan = document.createElement('span');
+      nameSpan.classList.add('project-name');
       nameSpan.textContent = project.name;
       li.appendChild(nameSpan);
 
-      const actionsDiv = document.createElement("div");
-      actionsDiv.classList.add("project-actions");
+      const actionsDiv = document.createElement('div');
+      actionsDiv.classList.add('project-actions');
 
-      const editBtn = document.createElement("button");
-      editBtn.innerHTML = "Edit";
-      editBtn.classList.add("edit-project-btn");
+      const editBtn = document.createElement('button');
+      editBtn.innerHTML = 'Edit';
+      editBtn.classList.add('edit-project-btn');
       editBtn.dataset.projectId = project.id;
-      editBtn.title = "Edit project";
+      editBtn.title = 'Edit project';
 
-      const deleteBtn = document.createElement("button");
-      deleteBtn.innerHTML = "Delete";
-      deleteBtn.classList.add("delete-project-btn");
+      const deleteBtn = document.createElement('button');
+      deleteBtn.innerHTML = 'Delete';
+      deleteBtn.classList.add('delete-project-btn');
       deleteBtn.dataset.projectId = project.id;
-      deleteBtn.title = "Delete project";
+      deleteBtn.title = 'Delete project';
 
       actionsDiv.appendChild(editBtn);
       actionsDiv.appendChild(deleteBtn);
       li.appendChild(actionsDiv);
 
       if (project.id === currentProjectId) {
-        li.classList.add("active");
+        li.classList.add('active');
       }
       projectsListUL.appendChild(li);
     });
   }
 
   function updateProjectTitle(title) {
-    currentProjectTitle.textContent = title || "No project selected";
+    currentProjectTitle.textContent = title || 'No project selected';
   }
 
   // To-do rendering
@@ -102,27 +103,27 @@ const domController = (() => {
 
     const isGlobalSearch = projectOrSearchResults && projectOrSearchResults.isGlobalSearch === true;
     const todos = projectOrSearchResults ? projectOrSearchResults.todos : [];
-    const displayName = projectOrSearchResults ? projectOrSearchResults.name : "Select a Project";
+    const displayName = projectOrSearchResults ? projectOrSearchResults.name : 'Select a Project';
 
     updateProjectTitle(displayName);
 
     if (!todos || todos.length === 0) {
-      const li = document.createElement("li");
+      const li = document.createElement('li');
       if (isGlobalSearch) {
-        li.textContent = "No tasks found matching your search.";
+        li.textContent = 'No tasks found matching your search.';
       } else if (projectOrSearchResults) {
-        li.textContent = "No tasks in this project yet.";
+        li.textContent = 'No tasks in this project yet.';
       } else {
-        li.textContent = "Select a project or enter a search term.";
+        li.textContent = 'Select a project or enter a search term.';
       }
-      li.classList.add("no-items");
+      li.classList.add('no-items');
       todosListUL.appendChild(li);
 
       return;
     }
 
     todos.forEach(todo => {
-      const li = document.createElement("li");
+      const li = document.createElement('li');
       li.dataset.todoId = todo.id;
 
       if (isGlobalSearch && todo.originalProjectId) {
@@ -130,24 +131,24 @@ const domController = (() => {
       }
       li.classList.add(`priority-${todo.priority}`);
       if (todo.completed) {
-        li.classList.add("todo-completed");
+        li.classList.add('todo-completed');
       }
 
-      const checkbox = document.createElement("input");
-      checkbox.type = "checkbox";
+      const checkbox = document.createElement('input');
+      checkbox.type = 'checkbox';
       checkbox.checked = todo.completed;
-      checkbox.classList.add("todo-checkbox");
+      checkbox.classList.add('todo-checkbox');
       checkbox.dataset.todoId = todo.id;
 
-      const todoInfoDiv = document.createElement("div");
-      todoInfoDiv.classList.add("todo-info");
+      const todoInfoDiv = document.createElement('div');
+      todoInfoDiv.classList.add('todo-info');
 
-      const titleSpan = document.createElement("span");
-      titleSpan.classList.add("todo-title");
+      const titleSpan = document.createElement('span');
+      titleSpan.classList.add('todo-title');
       titleSpan.textContent = todo.title;
 
-      const dueDateSpan = document.createElement("span");
-      dueDateSpan.classList.add("todo-due-date");
+      const dueDateSpan = document.createElement('span');
+      dueDateSpan.classList.add('todo-due-date');
       dueDateSpan.textContent = `Due: ${formatDateForDisplay(todo.dueDate)}`;
 
       todoInfoDiv.appendChild(checkbox);
@@ -156,36 +157,36 @@ const domController = (() => {
 
       // Project name display in global search result
       if (isGlobalSearch && todo.projectName) {
-        const projectLabelSpan = document.createElement("span");
-        projectLabelSpan.classList.add("todo-project-label");
+        const projectLabelSpan = document.createElement('span');
+        projectLabelSpan.classList.add('todo-project-label');
         projectLabelSpan.textContent = `(Project: ${todo.projectName})`;
         todoInfoDiv.appendChild(projectLabelSpan);
       }
 
       // Tags display
       if (todo.tags && todo.tags.length > 0) {
-        const tagsDiv = document.createElement("div");
-        tagsDiv.classList.add("todo-tags-display");
+        const tagsDiv = document.createElement('div');
+        tagsDiv.classList.add('todo-tags-display');
         todo.tags.forEach((tag) => {
-          const tagSpan = document.createElement("span");
-          tagSpan.classList.add("tag-label");
+          const tagSpan = document.createElement('span');
+          tagSpan.classList.add('tag-label');
           tagSpan.textContent = tag;
           tagsDiv.appendChild(tagSpan);
         });
         todoInfoDiv.appendChild(tagsDiv);
       }
 
-      const actionsDiv = document.createElement("div");
-      actionsDiv.classList.add("todo-actions");
+      const actionsDiv = document.createElement('div');
+      actionsDiv.classList.add('todo-actions');
 
-      const editBtn = document.createElement("button");
-      editBtn.textContent = "Edit";
-      editBtn.classList.add("edit-todo-btn");
+      const editBtn = document.createElement('button');
+      editBtn.textContent = 'Edit';
+      editBtn.classList.add('edit-todo-btn');
       editBtn.dataset.todoId = todo.id;
 
-      const deleteBtn = document.createElement("button");
-      deleteBtn.textContent = "Delete";
-      deleteBtn.classList.add("delete-todo-btn");
+      const deleteBtn = document.createElement('button');
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.classList.add('delete-todo-btn');
       deleteBtn.dataset.todoId = todo.id;
 
       actionsDiv.appendChild(editBtn);
@@ -201,41 +202,43 @@ const domController = (() => {
   function openProjectModal(projectToEdit = null) {
     clearFormErrors(projectForm);
     projectForm.reset();
-    projectIdInput.value = ""; // Clear hidden ID field
-    saveProjectBtn.textContent = "Save";
+    projectIdInput.value = ''; // Clear hidden ID field
+    saveProjectBtn.textContent = 'Save';
 
     if (projectToEdit) {
       projectIdInput.value = projectToEdit.id;
       projectNameInput.value = projectToEdit.name;
     }
-    projectModal.style.display = "block";
+    projectModal.style.display = 'block';
     projectNameInput.focus();
   }
 
   function closeProjectModal() {
-    projectModal.style.display = "none";
+    projectModal.style.display = 'none';
   }
 
   function openTodoModal(todoToEdit = null, currentProjectId) {
     clearFormErrors(todoForm);
     todoForm.reset();
-    todoIdInput.value = ""; // Clear hidden ID field
+    todoIdInput.value = ''; // Clear hidden ID field
 
     if (todoToEdit) {
       todoIdInput.value = todoToEdit.id;
       todoTitleInput.value = todoToEdit.title;
       todoDescriptionInput.value = todoToEdit.description;
-      todoDueDateInput.value = todoToEdit.dueDate || "";
+      todoDueDateInput.value = (todoToEdit.dueDate && isValidDate(todoToEdit.dueDate))
+        ? format(todoToEdit.dueDate, 'yyyy-MM-dd') // Format Date obj for input
+        : ''; // Empty string for null or invalid date
       todoPriorityInput.value = todoToEdit.priority;
-      todoTagsInput.value = todoToEdit.tags ? todoToEdit.getTagsString() : "";
+      todoTagsInput.value = todoToEdit.tags ? todoToEdit.getTagsString() : '';
     }
     todoForm.dataset.currentProjectId = currentProjectId;
-    todoModal.style.display = "block";
+    todoModal.style.display = 'block';
     todoTitleInput.focus();
   }
 
   function closeTodoModal() {
-    todoModal.style.display = "none";
+    todoModal.style.display = 'none';
   }
 
   // Form data getters
@@ -246,7 +249,7 @@ const domController = (() => {
     const id = projectIdInput.value;
 
     if (projectNameInput.validity.valueMissing) {
-      showFieldError(projectNameInput, "Project name is required.");
+      showFieldError(projectNameInput, 'Project name is required.');
       isValid = false;
     }
     return isValid ? { id, name } : null;
@@ -264,7 +267,7 @@ const domController = (() => {
     const currentProjectId = todoForm.dataset.currentProjectId;
 
     if (todoTitleInput.validity.valueMissing) {
-      showFieldError(todoTitleInput, "Task name is required.");
+      showFieldError(todoTitleInput, 'Task name is required.');
       isValid = false;
     }
 
@@ -283,17 +286,17 @@ const domController = (() => {
 
   // Form validation
   function clearFormErrors(formElement) {
-    formElement.querySelectorAll(".form-input, .form-select").forEach(input => {
-      input.setCustomValidity("");
+    formElement.querySelectorAll('.form-input, .form-select').forEach(input => {
+      input.setCustomValidity('');
     });
-    formElement.querySelectorAll(".error-message").forEach(span => {
-      span.textContent = "";
+    formElement.querySelectorAll('.error-message').forEach(span => {
+      span.textContent = '';
     });
   }
 
   function showFieldError(inputElement, message) {
-    const helpSpan = inputElement.parentElement.querySelector(".help-message");
-    const errorSpan = inputElement.parentElement.querySelector(".error-message");
+    const helpSpan = inputElement.parentElement.querySelector('.help-message');
+    const errorSpan = inputElement.parentElement.querySelector('.error-message');
 
     inputElement.setCustomValidity(message);
     errorSpan.textContent = message;
@@ -302,16 +305,16 @@ const domController = (() => {
     }
   }
 
-  function showNotification(message, type = "info") { // types: info, success, error, warning
-    const notification = document.createElement("div");
-    notification.classList.add("notification", type);
+  function showNotification(message, type = 'info') { // types: info, success, error, warning
+    const notification = document.createElement('div');
+    notification.classList.add('notification', type);
     notification.textContent = message;
 
     notificationArea.appendChild(notification);
 
     // Remove notification from DOM after animation completes
-    notification.addEventListener("animationend", (e) => {
-      if (e.animationName === "fadeOutNotification") {
+    notification.addEventListener('animationend', (e) => {
+      if (e.animationName === 'fadeOutNotification') {
         notification.remove();
       }
     });
@@ -322,40 +325,40 @@ const domController = (() => {
     clearElement(tagFilterArea);
 
     if (tags && tags.length > 0) {
-        tags.forEach(tag => {
-            const tagElement = document.createElement("span");
-            tagElement.classList.add("tag-filter-item");
-            tagElement.textContent = tag;
-            tagElement.dataset.tag = tag;
-            if (tag === activeTag) {
-                tagElement.classList.add("active");
-            }
-            tagFilterArea.appendChild(tagElement);
-        });
+      tags.forEach(tag => {
+        const tagElement = document.createElement('span');
+        tagElement.classList.add('tag-filter-item');
+        tagElement.textContent = tag;
+        tagElement.dataset.tag = tag;
+        if (tag === activeTag) {
+          tagElement.classList.add('active');
+        }
+        tagFilterArea.appendChild(tagElement);
+      });
     } else {
-        const noTagsMsg = document.createElement("span");
-        noTagsMsg.textContent = "No tags available for filtering.";
-        noTagsMsg.style.fontSize = "0.9em";
-        noTagsMsg.style.color = "#666";
-        tagFilterArea.appendChild(noTagsMsg);
+      const noTagsMsg = document.createElement('span');
+      noTagsMsg.textContent = 'No tags available for filtering.';
+      noTagsMsg.style.fontSize = '0.9em';
+      noTagsMsg.style.color = '#666';
+      tagFilterArea.appendChild(noTagsMsg);
     }
 
     if (tagFilterClearBtn) {
-         tagFilterClearBtn.style.display = activeTag ? "inline" : "none";
+      tagFilterClearBtn.style.display = activeTag ? 'inline' : 'none';
     }
     if (tagFilterClearBtn && !tagFilterArea.contains(tagFilterClearBtn) && tags.length > 0) {
-         tagFilterArea.appendChild(tagFilterClearBtn);
+      tagFilterArea.appendChild(tagFilterClearBtn);
     }
-}
+  }
 
   // Initial state
   function initializeUI() {
-    updateProjectTitle("Loading projects...");
+    updateProjectTitle('Loading projects...');
     clearElement(todosListUL);
-    const li = document.createElement("li");
-    li.textContent = "Select or add a project to see your tasks.";
+    const li = document.createElement('li');
+    li.textContent = 'Select or add a project to see your tasks.';
     todosListUL.appendChild(li);
-    addTodoBtn.style.display = "none";
+    addTodoBtn.style.display = 'none';
   }
 
   return {
