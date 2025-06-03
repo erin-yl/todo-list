@@ -31,7 +31,6 @@
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
-  --spacing-xl: 32px;
 }
 
 body {
@@ -501,19 +500,28 @@ option:last-of-type {
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
+  
 }
 
 .modal-content {
   background: var(--surface);
   margin: 5vh auto;
-  padding: var(--spacing-xl);
+  padding: var(--spacing-lg);
   border-radius: var(--radius-lg);
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
-  overflow-y: auto;
   box-shadow: var(--shadow-2);
   position: relative;
+  overflow: hidden;
+}
+
+.scroller {
+  max-height: calc(90vh - var(--spacing-lg) * 2);
+  overflow-y: auto;
+  padding: var(--spacing-md);
+  scrollbar-width: thin;
+  scrollbar-color: var(--border) var(--surface);
 }
 
 .modal-content h3 {

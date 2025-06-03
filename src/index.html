@@ -60,62 +60,66 @@
 
   <div id="todo-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="todo-modal-title">
     <div class="modal-content">
-      <span class="close-btn" id="close-todo-modal">&times;</span>
-      <h3 id="todo-modal-title">Task details</h3>
-      <form id="todo-form" novalidate>
-        <input type="hidden" id="todo-id" name="todo-id">
-        <fieldset>
-          <div>
-            <label for="todo-title-input">Task name*</label>
-            <input type="text" id="todo-title-input" name="title" required aria-required="true" />
-            <span class="help-message">*Required</span>
-            <span class="error-message" aria-live="polite"></span>
-          </div>
-          <div>
-            <label for="todo-description-input">Description</label>
-            <textarea id="todo-description-input" name="description"></textarea>
-          </div>
-          <div>
-            <label for="todo-dueDate-input">Due date</label>
-            <input type="date" id="todo-dueDate-input" name="dueDate" />
-          </div>
-          <div>
-            <label for="todo-priority-input">Priority</label>
-            <select id="todo-priority-input" name="priority">
-              <option value="low">Low</option>
-              <option value="medium" selected>Medium</option>
-              <option value="high">High</option>
-            </select>
-          </div>
-          <div>
-            <label for="todo-tags-input">Tags</label>
-            <input type="text" id="todo-tags-input" name="tags" placeholder="e.g., learning, health, fun" />
-            <span class="help-message">Separate tags with commas</span>
-          </div>
-        </fieldset>
+      <div class="scroller">
+        <span class="close-btn" id="close-todo-modal">&times;</span>
+        <h3 id="todo-modal-title">Task details</h3>
+        <form id="todo-form" novalidate>
+          <input type="hidden" id="todo-id" name="todo-id">
+          <fieldset>
+            <div>
+              <label for="todo-title-input">Task name*</label>
+              <input type="text" id="todo-title-input" name="title" required aria-required="true" />
+              <span class="help-message">*Required</span>
+              <span class="error-message" aria-live="polite"></span>
+            </div>
+            <div>
+              <label for="todo-description-input">Description</label>
+              <textarea id="todo-description-input" name="description"></textarea>
+            </div>
+            <div>
+              <label for="todo-dueDate-input">Due date</label>
+              <input type="date" id="todo-dueDate-input" name="dueDate" />
+            </div>
+            <div>
+              <label for="todo-priority-input">Priority</label>
+              <select id="todo-priority-input" name="priority">
+                <option value="low">Low</option>
+                <option value="medium" selected>Medium</option>
+                <option value="high">High</option>
+              </select>
+            </div>
+            <div>
+              <label for="todo-tags-input">Tags</label>
+              <input type="text" id="todo-tags-input" name="tags" placeholder="e.g., learning, health, fun" />
+              <span class="help-message">Separate tags with commas</span>
+            </div>
+          </fieldset>
 
-        <button type="submit" id="save-todo-btn">Save</button>
-      </form>
+          <button type="submit" id="save-todo-btn">Save</button>
+        </form>
+      </div>
     </div>
   </div>
 
   <div id="project-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
     <div class="modal-content">
-      <span class="close-btn" id="close-project-modal">&times;</span>
-      <h3 id="project-modal-title">Project details</h3>
-      <form id="project-form" novalidate>
-        <input type="hidden" id="project-id" name="project-id">
-        <fieldset>
-          <div>
-            <label for="project-name-input">Project name*</label>
-            <input type="text" id="project-name-input" name="projectName" required aria-required="true" />
-            <span class="help-message">*Required</span>
-            <span class="error-message" aria-live="polite"></span>
-          </div>
-        </fieldset>
+      <div class="scroller">
+        <span class="close-btn" id="close-project-modal">&times;</span>
+        <h3 id="project-modal-title">Project details</h3>
+        <form id="project-form" novalidate>
+          <input type="hidden" id="project-id" name="project-id">
+          <fieldset>
+            <div>
+              <label for="project-name-input">Project name*</label>
+              <input type="text" id="project-name-input" name="projectName" required aria-required="true" />
+              <span class="help-message">*Required</span>
+              <span class="error-message" aria-live="polite"></span>
+            </div>
+          </fieldset>
 
-        <button type="submit" id="save-project-btn">Save</button>
-      </form>
+          <button type="submit" id="save-project-btn">Save</button>
+        </form>
+      </div>
     </div>
   </div>
 </body>
