@@ -248,10 +248,6 @@ const appLogic = (() => {
       let valA, valB;
 
       switch (sortField) {
-        case 'title':
-          valA = a.title.toLowerCase();
-          valB = b.title.toLowerCase();
-          break;
         case 'dueDate':
           // For null due dates, sort them to the end
           if (a.dueDate === null && b.dueDate === null) return 0;
