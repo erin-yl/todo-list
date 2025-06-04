@@ -90,13 +90,43 @@ header h1 {
 .projects-sidebar h2 {
   font-size: 1.25rem;
   font-weight: 500;
-  margin: 0 0 var(--spacing-md) 0;
+  margin-bottom: var(--spacing-md);
+}
+
+.date-filter-section {
+  margin-bottom: var(--spacing-lg);
+  padding-bottom: var(--spacing-lg);
+  border-bottom: 1px solid var(--border);
+}
+
+.date-filter-section #due-date-filter-input {
+  width: 100%;
+  margin-bottom: var(--spacing-md);
+}
+
+#clear-date-filter-btn {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  background-color: transparent;
+  color: #007bff;
+  border: 1px solid transparent; /* maintain layout */
+  border-radius: 4px;
+  cursor: pointer;
+  text-align: center;
+  font-size: 0.9em;
+  text-decoration: underline;
+    color: var(--primary);
+    cursor: pointer;
+    font-size: 0.875rem;
+    text-decoration: underline;
+    margin-left: var(--spacing-sm);
 }
 
 #projects-list {
   list-style: none;
   padding: 0;
-  margin: 0 0 var(--spacing-lg) 0;
+  margin-bottom: var(--spacing-md);
 }
 
 #projects-list li {
@@ -118,7 +148,6 @@ header h1 {
 }
 
 #projects-list li.active {
-  background: var(--surface-variant);
   border-color: var(--primary);
   box-shadow: var(--shadow-1);
 }
@@ -146,9 +175,26 @@ header h1 {
 }
 
 .primary-btn:hover {
-  background: rgb(36, 100, 136, 0.9);
+  background: #3A7494;
   box-shadow: var(--shadow-1);
-  transform: translateY(-2px);
+}
+
+.secondary-btn {
+  width: 100%;
+  padding: var(--spacing-sm);
+  background: var(--surface-variant);
+  color: var(--on-surface);
+  border: none;
+  border-radius: var(--radius-sm);
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  font-size: 0.875rem;
+}
+
+.secondary-btn:hover {
+  background: #e1eaf5;
+  box-shadow: var(--shadow-1);
 }
 
 /* Main content */
@@ -268,7 +314,7 @@ option:last-of-type {
   border-color: var(--primary);
 }
 
-#tag-filter-clear-btn {
+#clear-tag-filter-btn {
   color: var(--primary);
   cursor: pointer;
   font-size: 0.875rem;
@@ -599,7 +645,6 @@ option:last-of-type {
 
 .modal-content button[type="submit"]:hover {
   background: var(--primary-dark);
-  transform: translateY(-2px);
   box-shadow: var(--shadow-1);
 }
 

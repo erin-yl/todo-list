@@ -10,7 +10,7 @@ const domController = (() => {
   const addTodoBtn = document.getElementById('add-todo-btn');
   const todosListUL = document.getElementById('todos-list');
   const tagFilterArea = document.getElementById('tag-filter-area');
-  const tagFilterClearBtn = document.getElementById('tag-filter-clear-btn');
+  const clearTagFilterBtn = document.getElementById('clear-tag-filter-btn');
   const notificationArea = document.getElementById('notification-area');
 
   // Project modal
@@ -390,11 +390,11 @@ const domController = (() => {
       tagFilterArea.appendChild(noTagsMsg);
     }
 
-    if (tagFilterClearBtn) {
-      tagFilterClearBtn.style.display = activeTag ? 'inline' : 'none';
+    if (clearTagFilterBtn) {
+      clearTagFilterBtn.style.display = activeTag ? 'inline' : 'none';
     }
-    if (tagFilterClearBtn && !tagFilterArea.contains(tagFilterClearBtn) && tags.length > 0) {
-      tagFilterArea.appendChild(tagFilterClearBtn);
+    if (clearTagFilterBtn && !tagFilterArea.contains(clearTagFilterBtn) && tags.length > 0) {
+      tagFilterArea.appendChild(clearTagFilterBtn);
     }
   }
 
@@ -433,7 +433,7 @@ const domController = (() => {
       todoForm,
       closeProjectModalBtn,
       closeTodoModalBtn,
-      tagFilterClearBtn,
+      clearTagFilterBtn,
     },
   };
 })();

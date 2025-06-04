@@ -22,9 +22,16 @@
 
     <main class="app-layout">
       <aside class="projects-sidebar">
+        <div class="date-filter-section">
+          <h2>Filter by due date</h2>
+          <input type="date" id="due-date-filter-input" class="form-input">
+          <button id="show-today-tasks-btn" class="secondary-btn">See today's tasks</button>
+          <button id="clear-date-filter-btn">Show all tasks</button>
+        </div>
+
         <h2>Projects</h2>
         <ul id="projects-list"></ul>
-        <button id="add-project-btn" class="primary-btn">Add project</button>
+        <button id="add-project-btn" class="secondary-btn">Add project</button>
       </aside>
 
       <section class="todos-view">
@@ -34,7 +41,7 @@
         </div>
         <div class="filters-row">
           <div id="tag-filter-area">
-            <span id="tag-filter-clear-btn">Clear tag filter</span>
+            <span id="clear-tag-filter-btn">Clear tag filter</span>
           </div>
         </div>
         <div class="filter-sort-bar">

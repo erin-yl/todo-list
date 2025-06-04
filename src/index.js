@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const searchInput = document.getElementById('search-todos-input');
   const priorityFilterSelect = document.getElementById('priority-filter');
   const tagFilterArea = document.getElementById('tag-filter-area');
-  const tagFilterClearBtn = document.getElementById('tag-filter-clear-btn');
+  const clearTagFilterBtn = document.getElementById('clear-tag-filter-btn');
   const sortTodosSelect = document.getElementById('sort-todos');
 
   function refreshTagCloud() {
@@ -20,12 +20,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const isGlobalMode = currentSearchTerm && currentSearchTerm.trim() !== '';
 
     if (isGlobalMode) {
-      tagsForCloud = appLogic.getAllTagsAcrossProjects();
+      tagsForCloud = appLogic.getTagsAcrossProjects();
     } else if (currentProject) {
       const projectData = appLogic.getProjectById(currentProject.id);
       tagsForCloud = projectData ? projectData.getUniqueTags() : [];
     } else {
-      tagsForCloud = appLogic.getAllTagsAcrossProjects();
+      tagsForCloud = appLogic.getTagsAcrossProjects();
     }
     domController.renderTagCloud(tagsForCloud, currentTagFilter);
   }
@@ -39,7 +39,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (isGlobalMode) {
       // Active global search
       viewTitle = `Search results for '${currentSearchTerm}'`;
-      const allTodosWithProjectInfo = appLogic.getAllTodosWithProjectInfo();
+      const allTodosWithProjectInfo = appLogic.getTodosWithProjectInfo();
       todosToDisplay = appLogic.searchTodosInList(allTodosWithProjectInfo, currentSearchTerm);
     } else if (currentProjectFromSidebar) {
       const projectData = appLogic.getProjectById(currentProjectFromSidebar.id);
@@ -108,8 +108,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  if (tagFilterClearBtn) {
-    tagFilterClearBtn.addEventListener('click', () => {
+  if (clearTagFilterBtn) {
+    clearTagFilterBtn.addEventListener('click', () => {
       if (currentTagFilter !== null) {
         currentTagFilter = null;
         updateAndRenderTodos();

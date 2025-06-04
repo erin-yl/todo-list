@@ -3,6 +3,7 @@
 import Project from './project.js';
 import Todo from './todo.js';
 import storage from './storage.js';
+import { parse, isEqual, startOfDay } from 'date-fns';
 
 const appLogic = (() => {
   let projects = [];
@@ -185,14 +186,14 @@ const appLogic = (() => {
     return null;
   }
 
-  function getAllTodosAcrossProjects() {
+  function getTodosAcrossProjects() {
     return projects.reduce(
       (acc, project) => acc.concat(project.getAllTodos()),
       [],
     );
   }
 
-  function getAllTodosWithProjectInfo() {
+  function getTodosWithProjectInfo() {
     const allTodosWithProjectInfo = [];
     projects.forEach(project => {
       project.getAllTodos().forEach(todo => {
@@ -206,6 +207,29 @@ const appLogic = (() => {
     return allTodosWithProjectInfo;
   }
 
+  function getTodosDueOnDate(targetDateString) {
+    if (!targetDateString) return [];
+
+    const targetDate = startOfDay(parse(targetDateString, 'yyyy-MM-dd', new Date()));
+    if (isNaN(targetDate.valueOf())) return [];
+
+    const dueTodosWithProjectInfo = [];
+    projects.forEach(project => {
+        project.getAllTodos().forEach(todo => {
+            if (todo.dueDate) { // todo.dueDate is a Date object or null
+                if (isEqual(startOfDay(todo.dueDate), targetDate)) {
+                    dueTodosWithProjectInfo.push({
+                        ...todo,
+                        originalProjectId: project.id,
+                        projectName: project.name
+                    });
+                }
+            }
+        });
+    });
+    return dueTodosWithProjectInfo;
+}
+
   function searchTodosInList(todos, searchTerm) {
     if (!searchTerm || searchTerm.trim() === '') {
       return todos;
@@ -217,7 +241,7 @@ const appLogic = (() => {
     );
   }
 
-  function getAllTagsAcrossProjects() {
+  function getTagsAcrossProjects() {
     const allTags = new Set();
     projects.forEach((project) => {
       project.getUniqueTags().forEach((tag) => allTags.add(tag));
@@ -226,7 +250,7 @@ const appLogic = (() => {
   }
 
   function filterTodosByTagAcrossProjects(tag) {
-    const allTodos = getAllTodosAcrossProjects();
+    const allTodos = getTodosAcrossProjects();
     const trimmedTag = tag.trim().toLowerCase();
     if (!trimmedTag) return allTodos;
     return allTodos.filter((todo) =>
@@ -235,7 +259,7 @@ const appLogic = (() => {
   }
 
   function filterTodosByPriorityAcrossProjects(priorityLevel) {
-    const allTodos = getAllTodosAcrossProjects();
+    const allTodos = getTodosAcrossProjects();
     return allTodos.filter((todo) => todo.priority === priorityLevel);
   }
 
@@ -289,10 +313,11 @@ const appLogic = (() => {
     removeTodoFromProject,
     updateTodoInProject,
     toggleTodoComplete,
-    getAllTodosAcrossProjects,
-    getAllTodosWithProjectInfo,
+    getTodosAcrossProjects,
+    getTodosWithProjectInfo,
+    getTodosDueOnDate,
     searchTodosInList,
-    getAllTagsAcrossProjects,
+    getTagsAcrossProjects,
     filterTodosByTagAcrossProjects,
     filterTodosByPriorityAcrossProjects,
     sortTodos,
