@@ -19,7 +19,6 @@ document.addEventListener('DOMContentLoaded', () => {
   const clearDateFilterBtn = document.getElementById('clear-date-filter-btn');
   const showTodayTasksBtn = document.getElementById('show-today-tasks-btn');
 
-
   function refreshTagCloud(isGlobalMode = false) {
     let tagsForCloud = [];
     const currentProject = appLogic.getCurrentProject();
@@ -72,7 +71,8 @@ document.addEventListener('DOMContentLoaded', () => {
       if (clearDateFilterBtn) clearDateFilterBtn.style.display = 'none';
       refreshProjectsList(currentProjectFromSidebar.id);
 
-    } else { // Default or when all cleared
+      // Default or no selection
+    } else {
       viewTitle = 'Select a date, project, or search';
       todosToDisplay = [];
       isGlobalMode = false;
@@ -101,10 +101,12 @@ document.addEventListener('DOMContentLoaded', () => {
       todos: sortedTodos,
       isGlobalSearch: isGlobalMode
     };
+
     domController.renderTodos(renderData);
     domController.updateProjectTitle(viewTitle);
     domController.elements.addTodoBtn.style.display = currentProjectFromSidebar ? 'block' : 'none';
   }
+
   if (dueDateFilterInput) {
     dueDateFilterInput.addEventListener('change', (e) => {
       currentDueDateFilter = e.target.value;
@@ -152,6 +154,7 @@ document.addEventListener('DOMContentLoaded', () => {
       updateAndRenderTodos();
     });
   }
+
   if (tagFilterArea) {
     tagFilterArea.addEventListener('click', (e) => {
       if (e.target.classList.contains('tag-filter-item')) {
@@ -363,6 +366,7 @@ document.addEventListener('DOMContentLoaded', () => {
         closeAllDropdowns(dropdown);
         dropdown.classList.toggle('visible');
       }
+
     } else if (target.classList.contains('delete-todo')) {
       closeAllDropdowns();
       const project = appLogic.getProjectById(projectIdForAction);
@@ -372,6 +376,7 @@ document.addEventListener('DOMContentLoaded', () => {
         domController.showNotification('Task deleted.', 'success');
         updateAndRenderTodos();
       }
+
     } else if (target.classList.contains('edit-todo')) {
       closeAllDropdowns();
       const todoToEdit = appLogic
@@ -380,10 +385,12 @@ document.addEventListener('DOMContentLoaded', () => {
       if (todoToEdit) {
         domController.openTodoModal(todoToEdit, projectIdForAction);
       }
+
     } else if (target.classList.contains('todo-checkbox')) {
       closeAllDropdowns();
       appLogic.toggleTodoComplete(projectIdForAction, todoId);
       updateAndRenderTodos();
+      
     } else if (target.classList.contains('expand-todo-btn')) {
       closeAllDropdowns();
       const detailsDiv = todoLi.querySelector('.todo-full-details');
