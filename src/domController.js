@@ -51,10 +51,9 @@ const domController = (() => {
   function renderProjects(projects, currentProjectId) {
     clearElement(projectsListUL);
     if (!projects || projects.length === 0) {
-      const li = document.createElement('li');
-      li.textContent = 'No projects yet.';
-      li.classList.add('no-items');
-      projectsListUL.appendChild(li);
+      const span = document.createElement('span');
+      span.textContent = 'No projects yet.';
+      projectsListUL.appendChild(span);
       return;
     }
 
@@ -117,16 +116,15 @@ const domController = (() => {
     updateProjectTitle(displayName);
 
     if (!todos || todos.length === 0) {
-      const li = document.createElement('li');
+      const span = document.createElement('span');
       if (isGlobalSearch) {
-        li.textContent = 'No tasks found matching your search.';
+        span.textContent = 'No tasks found matching your search.';
       } else if (projectOrSearchResults) {
-        li.textContent = 'No tasks in this project yet.';
+        span.textContent = 'No tasks in this project yet.';
       } else {
-        li.textContent = 'Select a project or enter a search term.';
+        span.textContent = 'Select a project or enter a search term.';
       }
-      li.classList.add('no-items');
-      todosListUL.appendChild(li);
+      todosListUL.appendChild(span);
 
       return;
     }

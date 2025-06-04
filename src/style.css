@@ -81,13 +81,13 @@ header h1 {
 }
 
 /* Sidebar */
-.projects-sidebar {
+.sidebar {
   width: 300px;
   border-right: 1px solid var(--border);
   padding: var(--spacing-lg);
 }
 
-.projects-sidebar h2 {
+.sidebar h3 {
   font-size: 1.25rem;
   font-weight: 500;
   margin-bottom: var(--spacing-md);
@@ -105,7 +105,7 @@ header h1 {
 }
 
 #clear-date-filter-btn {
-  display: block;
+  display: none;
   width: 100%;
   padding: var(--spacing-sm);
   color: var(--primary);
@@ -757,11 +757,6 @@ option:last-of-type {
     flex-direction: column;
   }
 
-  .projects-sidebar {
-    width: 100%;
-    margin-bottom: var(--spacing-lg);
-  }
-
   header {
     flex-direction: column;
     align-items: stretch;
@@ -770,6 +765,16 @@ option:last-of-type {
 
   header h1 {
     text-align: center;
+  }
+
+  .sidebar {
+    width: 100%;
+    border: none;
+  }
+
+  .projects-section {
+    padding-bottom: var(--spacing-lg);
+    border-bottom: 1px solid var(--border);
   }
 
   .modal-content {

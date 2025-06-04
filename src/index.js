@@ -1,5 +1,6 @@
 import appLogic from './appLogic.js';
 import domController from './domController.js';
+import { format as formatDateFns, startOfDay as startOfDayFns } from 'date-fns';
 import './style.css';
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -7,19 +8,23 @@ document.addEventListener('DOMContentLoaded', () => {
   let currentPriorityFilter = 'all';
   let currentTagFilter = null;
   let currentSortCriteria = { field: 'dueDate', direction: 'asc' };
+  let currentDueDateFilter = null;
 
   const searchInput = document.getElementById('search-todos-input');
   const priorityFilterSelect = document.getElementById('priority-filter');
   const tagFilterArea = document.getElementById('tag-filter-area');
   const clearTagFilterBtn = document.getElementById('clear-tag-filter-btn');
   const sortTodosSelect = document.getElementById('sort-todos');
+  const dueDateFilterInput = document.getElementById('due-date-filter-input');
+  const clearDateFilterBtn = document.getElementById('clear-date-filter-btn');
+  const showTodayTasksBtn = document.getElementById('show-today-tasks-btn');
 
-  function refreshTagCloud() {
+
+  function refreshTagCloud(isGlobalMode = false) {
     let tagsForCloud = [];
     const currentProject = appLogic.getCurrentProject();
-    const isGlobalMode = currentSearchTerm && currentSearchTerm.trim() !== '';
 
-    if (isGlobalMode) {
+    if (isGlobalMode) { // True if date filter or global search is active
       tagsForCloud = appLogic.getTagsAcrossProjects();
     } else if (currentProject) {
       const projectData = appLogic.getProjectById(currentProject.id);
@@ -33,29 +38,49 @@ document.addEventListener('DOMContentLoaded', () => {
   function updateAndRenderTodos() {
     let todosToDisplay = [];
     let viewTitle = '';
-    const isGlobalMode = currentSearchTerm && currentSearchTerm.trim() !== '';
+    let isGlobalMode = false;
     const currentProjectFromSidebar = appLogic.getCurrentProject();
 
-    if (isGlobalMode) {
-      // Active global search
+    // Global due date mode
+    if (currentDueDateFilter) {
+      viewTitle = `Tasks due on ${formatDateFns(new Date(currentDueDateFilter + 'T00:00:00'), 'MMM dd, yyyy')}`;
+      todosToDisplay = appLogic.getTodosDueOnDate(currentDueDateFilter);
+      isGlobalMode = true;
+      if (clearDateFilterBtn) clearDateFilterBtn.style.display = 'block';
+      // Clear search when date filter is active
+      if (searchInput) searchInput.value = '';
+      currentSearchTerm = '';
+      // Deselect project in sidebar visually
+      refreshProjectsList(null);
+
+      // Global search mode
+    } else if (currentSearchTerm && currentSearchTerm.trim() !== '') {
       viewTitle = `Search results for '${currentSearchTerm}'`;
       const allTodosWithProjectInfo = appLogic.getTodosWithProjectInfo();
       todosToDisplay = appLogic.searchTodosInList(allTodosWithProjectInfo, currentSearchTerm);
+      isGlobalMode = true;
+      if (clearDateFilterBtn) clearDateFilterBtn.style.display = 'none';
+      // Deselect project in sidebar visually
+      refreshProjectsList(null);
+
+      // Project mode
     } else if (currentProjectFromSidebar) {
       const projectData = appLogic.getProjectById(currentProjectFromSidebar.id);
-      if (projectData) {
-        viewTitle = projectData.name;
-        todosToDisplay = projectData.getAllTodos();
-      } else {
-        viewTitle = 'Project not found';
-        todosToDisplay = [];
-      }
-    } else {
-      viewTitle = 'Select a project or search';
+      todosToDisplay = projectData ? projectData.getAllTodos() : [];
+      viewTitle = projectData ? projectData.name : 'Project not found';
+      refreshProjectsList(currentProjectFromSidebar.id);
+      if (clearDateFilterBtn) clearDateFilterBtn.style.display = 'none';
+      refreshProjectsList(currentProjectFromSidebar.id);
+
+    } else { // Default or when all cleared
+      viewTitle = 'Select a date, project, or search';
       todosToDisplay = [];
+      isGlobalMode = false;
+      if (clearDateFilterBtn) clearDateFilterBtn.style.display = 'none';
+      refreshProjectsList(null);
     }
 
-    refreshTagCloud();
+    refreshTagCloud(isGlobalMode || !currentProjectFromSidebar);
 
     let filteredTodos = [...todosToDisplay];
     if (currentPriorityFilter !== 'all') {
@@ -80,10 +105,43 @@ document.addEventListener('DOMContentLoaded', () => {
     domController.updateProjectTitle(viewTitle);
     domController.elements.addTodoBtn.style.display = currentProjectFromSidebar ? 'block' : 'none';
   }
+  if (dueDateFilterInput) {
+    dueDateFilterInput.addEventListener('change', (e) => {
+      currentDueDateFilter = e.target.value;
+      currentSearchTerm = '';
+      if (searchInput) searchInput.value = '';
+      updateAndRenderTodos();
+    });
+  }
+
+  if (clearDateFilterBtn) {
+    clearDateFilterBtn.addEventListener('click', () => {
+      currentDueDateFilter = null;
+      if (dueDateFilterInput) dueDateFilterInput.value = '';
+      clearDateFilterBtn.style.display = 'none';
+      updateAndRenderTodos();
+    });
+  }
+
+  if (showTodayTasksBtn) {
+    showTodayTasksBtn.addEventListener('click', () => {
+      const today = formatDateFns(startOfDayFns(new Date()), 'yyyy-MM-dd');
+      currentDueDateFilter = today;
+      if (dueDateFilterInput) dueDateFilterInput.value = today;
+      currentSearchTerm = '';
+      if (searchInput) searchInput.value = '';
+      updateAndRenderTodos();
+    });
+  }
 
   if (searchInput) {
     searchInput.addEventListener('input', (e) => {
       currentSearchTerm = e.target.value;
+      if (currentSearchTerm.trim() !== '') {
+        currentDueDateFilter = null;
+        if (dueDateFilterInput) dueDateFilterInput.value = '';
+        if (clearDateFilterBtn) clearDateFilterBtn.style.display = 'none';
+      }
       updateAndRenderTodos();
     });
   }
@@ -220,18 +278,20 @@ document.addEventListener('DOMContentLoaded', () => {
       if (!e.target.closest('.actions-dropdown') && !e.target.closest('.more-actions-btn')) {
         closeAllDropdowns();
 
-        if (appLogic.getCurrentProject()?.id !== projectId) {
+        const selectedProjectId = appLogic.getCurrentProject()?.id;
+        if (selectedProjectId !== projectId || currentDueDateFilter || currentSearchTerm) {
           appLogic.setCurrentProject(projectId);
-          refreshProjectsList();
           currentSearchTerm = '';
 
           if (searchInput) searchInput.value = '';
-          currentPriorityFilter = 'all'; // Reset priority filter
-          if (priorityFilterSelect) priorityFilterSelect.value = 'all'; // Reset select element
+          currentPriorityFilter = 'all';
+          if (priorityFilterSelect) priorityFilterSelect.value = 'all';
           currentTagFilter = null;
-          currentSortCriteria = { field: 'dueDate', direction: 'asc' }; // Reset sort
+          currentSortCriteria = { field: 'dueDate', direction: 'asc' };
           if (sortTodosSelect) sortTodosSelect.value = 'dueDate_asc';
-          currentTagFilter = null;
+          currentDueDateFilter = null;
+          if (dueDateFilterInput) dueDateFilterInput.value = '';
+          if (clearDateFilterBtn) clearDateFilterBtn.style.display = 'none';
           updateAndRenderTodos();
         }
       }
@@ -339,7 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
           detailsDiv.classList.add('hidden');
           detailsDiv.classList.remove('visible');
           target.innerHTML = '&#43;'; // Plus sign (show)
-          target.title = "Show details";
+          target.title = 'Show details';
           todoLi.classList.remove('details-expanded');
         }
       }
@@ -371,17 +431,20 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Helper function to refresh project list
-  function refreshProjectsList() {
+  function refreshProjectsList(currentProjectId = null) {
     const projects = appLogic.getAllProjects();
-    const currentProject = appLogic.getCurrentProject();
-    domController.renderProjects(
-      projects,
-      currentProject ? currentProject.id : null,
-    );
+    domController.renderProjects(projects, currentProjectId);
   }
 
   // Initial setup
   domController.initializeUI();
-  refreshProjectsList();
-  updateAndRenderTodos();
+  refreshProjectsList(appLogic.getCurrentProject()?.id); // Initially highlight selected project
+
+  // Default to today's tasks
+  const todayDefault = formatDateFns(startOfDayFns(new Date()), 'yyyy-MM-dd');
+  currentDueDateFilter = todayDefault;
+  if (dueDateFilterInput) dueDateFilterInput.value = todayDefault;
+  if (clearDateFilterBtn) clearDateFilterBtn.style.display = 'block';
+
+  updateAndRenderTodos(); //
 });

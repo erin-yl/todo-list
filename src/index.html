@@ -21,17 +21,19 @@
     </header>
 
     <main class="app-layout">
-      <aside class="projects-sidebar">
+      <aside class="sidebar">
         <div class="date-filter-section">
-          <h2>Filter by due date</h2>
+          <h3>Filter by due date</h3>
           <input type="date" id="due-date-filter-input" class="form-input">
-          <button id="show-today-tasks-btn" class="secondary-btn">See today's tasks</button>
+          <button id="show-today-tasks-btn" class="secondary-btn">Show today's tasks</button>
           <span id="clear-date-filter-btn">Show all tasks</span>
         </div>
 
-        <h2>Projects</h2>
-        <ul id="projects-list"></ul>
-        <button id="add-project-btn" class="secondary-btn">Add project</button>
+        <div class="projects-section">
+          <h3>Projects</h3>
+          <ul id="projects-list"></ul>
+          <button id="add-project-btn" class="secondary-btn">Add project</button>
+        </div>
       </aside>
 
       <section class="todos-view">
