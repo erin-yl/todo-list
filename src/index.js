@@ -164,18 +164,43 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Helper function to manage multiple dropdowns
+  function closeAllDropdowns(exceptThisOne = null) {
+    document.querySelectorAll('.actions-dropdown.visible').forEach(dropdown => {
+      if (dropdown !== exceptThisOne) {
+        dropdown.classList.remove('visible');
+      }
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    // If click is not on a more button or inside a dropdown, close all dropdowns
+    if (!e.target.closest('.more-actions-btn') && !e.target.closest('.actions-dropdown')) {
+      closeAllDropdowns();
+    }
+  });
+
   // Actions on a project
   domController.elements.projectsListUL.addEventListener('click', (e) => {
     const projectLi = e.target.closest('li[data-project-id]');
     if (!projectLi) return;
 
     const projectId = projectLi.dataset.projectId;
-    if (e.target.classList.contains('edit-project-btn')) {
+    if (e.target.classList.contains('more-actions-btn')) {
+      e.stopPropagation(); // Prevent project selection click when opening dropdown
+      const dropdown = e.target.nextElementSibling;
+      if (dropdown && dropdown.classList.contains('actions-dropdown')) {
+        closeAllDropdowns(dropdown);
+        dropdown.classList.toggle('visible');
+      }
+    } else if (e.target.classList.contains('edit-project')) {
+      closeAllDropdowns();
       const projectToEdit = appLogic.getProjectById(projectId);
       if (projectToEdit) {
         domController.openProjectModal(projectToEdit);
       }
-    } else if (e.target.classList.contains('delete-project-btn')) {
+    } else if (e.target.classList.contains('delete-project')) {
+      closeAllDropdowns();
       const projectToDelete = appLogic.getProjectById(projectId);
       if (projectToDelete && confirm(`You will permanently delete project "${projectToDelete.name}" and all its tasks.`)) {
         const result = appLogic.removeProject(projectId);
@@ -191,19 +216,24 @@ document.addEventListener('DOMContentLoaded', () => {
         }
       }
     } else if (e.target.closest('.project-name') || e.target === projectLi) { // Click on name or li itself
-      if (appLogic.getCurrentProject()?.id !== projectId) {
-        appLogic.setCurrentProject(projectId);
-        refreshProjectsList();
-        currentSearchTerm = '';
+      // Ensure dropdown clicks don't trigger project selection
+      if (!e.target.closest('.actions-dropdown') && !e.target.closest('.more-actions-btn')) {
+        closeAllDropdowns();
 
-        if (searchInput) searchInput.value = '';
-        currentPriorityFilter = 'all'; // Reset priority filter
-        if (priorityFilterSelect) priorityFilterSelect.value = 'all'; // Reset select element
-        currentTagFilter = null;
-        currentSortCriteria = { field: 'dueDate', direction: 'asc' }; // Reset sort
-        if (sortTodosSelect) sortTodosSelect.value = 'dueDate_asc';
-        currentTagFilter = null;
-        updateAndRenderTodos();
+        if (appLogic.getCurrentProject()?.id !== projectId) {
+          appLogic.setCurrentProject(projectId);
+          refreshProjectsList();
+          currentSearchTerm = '';
+
+          if (searchInput) searchInput.value = '';
+          currentPriorityFilter = 'all'; // Reset priority filter
+          if (priorityFilterSelect) priorityFilterSelect.value = 'all'; // Reset select element
+          currentTagFilter = null;
+          currentSortCriteria = { field: 'dueDate', direction: 'asc' }; // Reset sort
+          if (sortTodosSelect) sortTodosSelect.value = 'dueDate_asc';
+          currentTagFilter = null;
+          updateAndRenderTodos();
+        }
       }
     }
   });
@@ -266,7 +296,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (!todoId || !projectIdForAction) return;
 
-    if (target.classList.contains('delete-todo-btn')) {
+    if (e.target.classList.contains('more-actions-btn')) {
+      e.stopPropagation();
+      const dropdown = e.target.nextElementSibling;
+      if (dropdown && dropdown.classList.contains('actions-dropdown')) {
+        closeAllDropdowns(dropdown);
+        dropdown.classList.toggle('visible');
+      }
+    } else if (target.classList.contains('delete-todo')) {
+      closeAllDropdowns();
       const project = appLogic.getProjectById(projectIdForAction);
       const todoToDelete = project.getTodoById(todoId);
       if (confirm(`You will permanently delete task "${todoToDelete.title}".`)) {
@@ -274,7 +312,8 @@ document.addEventListener('DOMContentLoaded', () => {
         domController.showNotification('Task deleted.', 'success');
         updateAndRenderTodos();
       }
-    } else if (target.classList.contains('edit-todo-btn')) {
+    } else if (target.classList.contains('edit-todo')) {
+      closeAllDropdowns();
       const todoToEdit = appLogic
         .getProjectById(projectIdForAction)
         ?.getTodoById(todoId);
@@ -282,9 +321,11 @@ document.addEventListener('DOMContentLoaded', () => {
         domController.openTodoModal(todoToEdit, projectIdForAction);
       }
     } else if (target.classList.contains('todo-checkbox')) {
+      closeAllDropdowns();
       appLogic.toggleTodoComplete(projectIdForAction, todoId);
       updateAndRenderTodos();
     } else if (target.classList.contains('expand-todo-btn')) {
+      closeAllDropdowns();
       const detailsDiv = todoLi.querySelector('.todo-full-details');
       if (detailsDiv) {
         const isHidden = detailsDiv.classList.contains('hidden');
@@ -329,7 +370,7 @@ document.addEventListener('DOMContentLoaded', () => {
     domController.renderTodos(null);
   }
 
-  // Helper functions to refresh project list
+  // Helper function to refresh project list
   function refreshProjectsList() {
     const projects = appLogic.getAllProjects();
     const currentProject = appLogic.getCurrentProject();

@@ -70,24 +70,33 @@ const domController = (() => {
       const actionsDiv = document.createElement('div');
       actionsDiv.classList.add('project-actions');
 
-      const editBtn = document.createElement('button');
-      editBtn.innerHTML = 'Edit';
-      editBtn.classList.add('edit-project-btn');
-      editBtn.dataset.projectId = project.id;
-      editBtn.title = 'Edit project';
+      const moreBtn = document.createElement('button');
+      moreBtn.classList.add('more-actions-btn');
+      moreBtn.innerHTML = '&#x22EE;'; // Vertical ellipsis
+      moreBtn.title = 'More options';
+      moreBtn.dataset.projectId = project.id;
+      actionsDiv.appendChild(moreBtn);
 
-      const deleteBtn = document.createElement('button');
-      deleteBtn.innerHTML = 'Delete';
-      deleteBtn.classList.add('delete-project-btn');
-      deleteBtn.dataset.projectId = project.id;
-      deleteBtn.title = 'Delete project';
+      const dropdown = document.createElement('ul');
+      dropdown.classList.add('actions-dropdown');
+      // Edit option
+      const editLi = document.createElement('li');
+      editLi.textContent = 'Edit';
+      editLi.classList.add('edit-project');
+      editLi.dataset.projectId = project.id;
+      dropdown.appendChild(editLi);
+      // Delete option
+      const deleteLi = document.createElement('li');
+      deleteLi.textContent = 'Delete';
+      deleteLi.classList.add('delete-project');
+      deleteLi.dataset.projectId = project.id;
+      dropdown.appendChild(deleteLi);
 
-      actionsDiv.appendChild(editBtn);
-      actionsDiv.appendChild(deleteBtn);
+      actionsDiv.appendChild(dropdown);
       li.appendChild(actionsDiv);
 
       if (project.id === currentProjectId) {
-        li.classList.add('active');
+        li.classList.add("active");
       }
       projectsListUL.appendChild(li);
     });
@@ -189,18 +198,29 @@ const domController = (() => {
       expandBtn.dataset.todoId = todo.id;
       actionsDiv.appendChild(expandBtn);
 
-      const editBtn = document.createElement('button');
-      editBtn.textContent = 'Edit';
-      editBtn.classList.add('edit-todo-btn');
-      editBtn.dataset.todoId = todo.id;
+      const moreBtn = document.createElement('button');
+      moreBtn.classList.add('more-actions-btn');
+      moreBtn.innerHTML = '&#x22EE;'; // Vertical ellipsis
+      moreBtn.title = "More options";
+      moreBtn.dataset.todoId = todo.id;
+      actionsDiv.appendChild(moreBtn);
 
-      const deleteBtn = document.createElement('button');
-      deleteBtn.textContent = 'Delete';
-      deleteBtn.classList.add('delete-todo-btn');
-      deleteBtn.dataset.todoId = todo.id;
+      const dropdown = document.createElement('ul');
+      dropdown.classList.add('actions-dropdown');
+      // Edit option
+      const editLi = document.createElement('li');
+      editLi.textContent = 'Edit';
+      editLi.classList.add('edit-todo');
+      editLi.dataset.todoId = todo.id;
+      dropdown.appendChild(editLi);
+      // Delete option
+      const deleteLi = document.createElement('li');
+      deleteLi.textContent = 'Delete';
+      deleteLi.classList.add('delete-todo');
+      deleteLi.dataset.todoId = todo.id;
+      dropdown.appendChild(deleteLi);
 
-      actionsDiv.appendChild(editBtn);
-      actionsDiv.appendChild(deleteBtn);
+      actionsDiv.appendChild(dropdown);
 
       todoPreviewContent.appendChild(todoInfoDiv);
       todoPreviewContent.appendChild(actionsDiv);

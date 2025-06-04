@@ -103,13 +103,13 @@ header h1 {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
   margin-bottom: var(--spacing-sm);
   background: var(--surface);
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
 }
 
 #projects-list li:hover {
@@ -140,7 +140,7 @@ header h1 {
   border: none;
   border-radius: var(--radius-sm);
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
   font-family: "Poppins", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   font-size: 0.875rem;
 }
@@ -256,7 +256,7 @@ option:last-of-type {
   font-size: 0.875rem;
   cursor: pointer;
   border: 1px solid var(--border);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
 }
 
 .tag-filter-item:hover {
@@ -285,14 +285,13 @@ option:last-of-type {
   border-radius: var(--radius-sm);
   background: var(--surface);
   font-size: 1rem;
-  transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 0.2s;
 }
 
 .form-input:focus,
 .form-select:focus {
   outline: none;
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 2px rgba(25, 118, 210, 0.12);
+  border-color: var(--border-variant);
 }
 
 .form-select {
@@ -311,14 +310,11 @@ option:last-of-type {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   margin-bottom: var(--spacing-md);
-  box-shadow: var(--shadow-1);
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
+  transition: all 0.2s;
 }
 
 #todos-list li:hover {
   box-shadow: var(--shadow-1);
-  transform: translateY(-2px);
 }
 
 .todo-preview-content {
@@ -336,7 +332,6 @@ option:last-of-type {
 }
 
 .todo-checkbox {
-  margin-top: 2px;
   transform: scale(1.2);
 }
 
@@ -421,50 +416,75 @@ option:last-of-type {
   gap: var(--spacing-sm);
 }
 
-.expand-todo-btn {
+.expand-todo-btn,
+.more-actions-btn {
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
   background: none;
   border: none;
   cursor: pointer;
-  color: var(--primary);
-  font-size: 1.2rem;
-  padding: var(--spacing-xs);
-  border-radius: var(--radius-sm);
-  transition: background-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 1.5rem;
+  height: 2.25rem;
+  width: 2.25rem;
+  border-radius: 50%;
+  transition: background-color 0.2s;
 }
 
-.expand-todo-btn:hover {
-  background: var(--primary-light);
+.expand-todo-btn:hover,
+.more-actions-btn:hover {
+  background: var(--surface-variant);
 }
 
-.edit-todo-btn,
-.delete-todo-btn {
-  padding: var(--spacing-sm) var(--spacing-md);
-  border: none;
-  border-radius: var(--radius-sm);
+/* Dropdown Menu */
+.actions-dropdown {
+  display: none; /* Hidden by default */
+  position: absolute;
+  right: 0; /* Align to the right of the parent */
+  top: 100%; /* Position below the button, adjust as needed */
+  background-color: white;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+  z-index: 100; /* Ensure it's above other items */
+  min-width: 100px; /* Minimum width for dropdown items */
+  list-style: none;
+  padding: 5px 0;
+  margin: 2px 0 0 0; /* Small margin from the button */
+}
+
+.actions-dropdown.visible {
+  display: block;
+}
+
+.actions-dropdown li {
+  padding: 8px 12px;
   cursor: pointer;
-  font-size: 0.875rem;
-  font-weight: 500;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  font-size: 0.9em;
+  background-color: transparent !important; /* Override li background */
+  color: #333 !important; /* Override li color */
+  border: none !important; /* Override li border */
+  margin-bottom: 0 !important; /* Override li margin */
+  display: block !important; /* Override li display if it was flex */
+}
+#projects-list li .actions-dropdown li:hover,
+#todos-list li .actions-dropdown li:hover {
+  background-color: #f0f0f0 !important; /* Hover for dropdown items */
 }
 
-.edit-todo-btn {
-  background: var(--warning);
-  color: white;
-}
 
-.edit-todo-btn:hover {
-  background: #e65100;
-  transform: translateY(-1px);
+/* Relative positioning for parent of dropdown */
+#projects-list li .project-actions,
+#todos-list li .todo-actions {
+  position: relative; /* Needed for absolute positioning of dropdown */
 }
-
-.delete-todo-btn {
-  background: var(--error);
-  color: white;
+/* Adjust padding on project list items if more icon looks cramped */
+#projects-list li {
+  padding-right: 5px; /* Ensure space for dropdown toggle */
 }
-
-.delete-todo-btn:hover {
-  background: #c62828;
-  transform: translateY(-1px);
+#projects-list li .project-actions {
+  margin-left: 5px; /* Space out the actions block slightly */
 }
 
 /* Todo details */
@@ -548,7 +568,7 @@ option:last-of-type {
   border: 1px solid var(--border);
   border-radius: var(--radius-sm);
   font-size: 1rem;
-  transition: border-color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: border-color 0.2s;
 }
 
 .modal-content input:focus,
@@ -574,7 +594,7 @@ option:last-of-type {
   cursor: pointer;
   font-weight: 500;
   font-size: 1rem;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.2s;
 }
 
 .modal-content button[type="submit"]:hover {
@@ -592,7 +612,7 @@ option:last-of-type {
   font-size: 2rem;
   cursor: pointer;
   color: var(--on-surface-variant);
-  transition: color 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 0.2s;
 }
 
 .close-btn:hover {
@@ -632,7 +652,7 @@ option:last-of-type {
   box-shadow: var(--shadow-1);
   opacity: 0;
   transform: translateX(100%);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: all 0.3s;
   animation: slideInNotification 0.3s forwards, fadeOutNotification 0.3s 4.7s forwards;
 }
 
