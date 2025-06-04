@@ -793,10 +793,6 @@ header h1 {
 
 /* Responsive design */
 @media (max-width: 768px) {
-  body {
-    padding: var(--spacing-md);
-  }
-
   .app-layout {
     flex-direction: column;
   }
