@@ -30,11 +30,11 @@
   --shadow-sm: 0 1px 2px 0 rgb(195 206 213 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(195 206 213 / 0.2), 0 2px 4px -2px rgb(195 206 213/ 0.2);
   --shadow-lg: 0 10px 15px -3px rgb(195 206 213 / 0.2), 0 4px 6px -4px rgb(195 206 213 / 0.2);
-  --radius-sm: 6px;
-  --radius-md: 8px;
-  --radius-lg: 12px;
-  --radius-xl: 16px;
-  --spacing-xs: 4px;
+  --radius-sm: 0.375rem;
+  --radius-md: 0.5rem;
+  --radius-lg: 0.75rem;
+  --radius-xl: 1rem;
+  --spacing-xs: clamp(0.25rem, 0.2083rem + 0.0868vw, 0.3125rem);
   --spacing-sm: 8px;
   --spacing-md: 16px;
   --spacing-lg: 24px;
@@ -179,8 +179,8 @@ header h1 {
 }
 
 /* Buttons */
-.primary-btn {
-  width: 100%;
+.primary-btn,
+.modal-content button[type="submit"] {
   padding: var(--spacing-sm) var(--spacing-md);
   background: var(--primary);
   color: var(--on-primary);
@@ -193,7 +193,8 @@ header h1 {
   box-shadow: var(--shadow-sm);
 }
 
-.primary-btn:hover {
+.primary-btn:hover,
+.modal-content button[type="submit"]:hover {
   background: var(--primary-hover);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
@@ -201,7 +202,7 @@ header h1 {
 
 .secondary-btn {
   width: 100%;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
   background: var(--surface);
   color: var(--on-surface);
   border: 1px solid var(--border);
@@ -210,7 +211,6 @@ header h1 {
   transition: all 0.2s;
   font-family: inherit;
   font-size: 1rem;
-  font-weight: 500;
   box-shadow: var(--shadow-sm);
 }
 
@@ -268,7 +268,7 @@ header h1 {
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--surface);
-  font-size: 1rem;
+  font-size: 0.875rem;
   font-family: inherit;
   color: var(--on-surface);
   cursor: pointer;
@@ -317,8 +317,8 @@ header h1 {
 .actions-dropdown li {
   padding: var(--spacing-sm) var(--spacing-md);
   cursor: pointer;
-  font-size: 1rem;
-  background: transparent !important;
+  font-size: 0.875rem;
+  background: var(--surface) !important;
   color: var(--on-surface) !important;
   border: none !important;
   margin: 0 !important;
@@ -350,7 +350,7 @@ header h1 {
   color: var(--on-surface-variant);
   padding: var(--spacing-xs) var(--spacing-md);
   border-radius: var(--radius-lg);
-  font-size: 1rem;
+  font-size: 0.875rem;
   cursor: pointer;
   border: 1px solid var(--border);
   transition: all 0.2s;
@@ -371,7 +371,7 @@ header h1 {
 #clear-tag-filter-btn {
   color: var(--primary);
   cursor: pointer;
-  font-size: 1rem;
+  font-size: 0.875rem;
   text-decoration: underline;
   margin-left: var(--spacing-sm);
   padding: var(--spacing-xs);
@@ -451,13 +451,12 @@ header h1 {
 .todo-title {
   font-weight: 500;
   font-size: 1rem;
-  margin-bottom: var(--spacing-xs);
   color: var(--on-surface);
   word-wrap: break-word;
 }
 
 .todo-due-date {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: var(--on-surface-variant);
 }
 
@@ -470,73 +469,43 @@ header h1 {
   display: flex;
   flex-wrap: wrap;
   gap: var(--spacing-xs);
-  margin-top: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
 }
 
 .tag-label {
   background: var(--secondary);
   color: var(--on-primary);
-  padding: 2px var(--spacing-sm);
-  font-size: 0.75rem;
+  padding: 0.125rem var(--spacing-sm);
+  font-size: 0.875rem;
   border-radius: var(--radius-sm);
-  font-weight: 500;
 }
 
 .todo-project-label {
   background: var(--secondary-light);
   color: var(--on-surface-variant);
-  padding: 2px var(--spacing-sm);
-  font-size: 0.75rem;
+  padding: 0.125rem var(--spacing-sm);
+  font-size: 0.875rem;
   border-radius: var(--radius-sm);
-  margin-top: var(--spacing-xs);
   display: inline-block;
 }
 
-/* Priority flag icons */
-.priority-flag {
-  width: 20px;
-  height: 20px;
+.priority-label {
+  color: var(--on-primary);
+  padding: 0.125rem var(--spacing-sm);
+  font-size: 0.875rem;
   border-radius: var(--radius-sm);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 12px;
-  font-weight: bold;
-  flex-shrink: 0;
 }
 
-.priority-flag-low {
+.priority-low {
   background: var(--success);
-  color: white;
 }
 
-.priority-flag-medium {
+.priority-medium {
   background: var(--warning);
-  color: white;
 }
 
-.priority-flag-high {
+.priority-high {
   background: var(--error);
-  color: white;
-}
-
-.priority-flag::before {
-  content: "!";
-}
-
-.priority-text-low {
-  color: var(--success);
-  font-weight: 600;
-}
-
-.priority-text-medium {
-  color: var(--warning);
-  font-weight: 600;
-}
-
-.priority-text-high {
-  color: var(--error);
-  font-weight: 600;
 }
 
 /* Todo actions */
@@ -592,10 +561,10 @@ header h1 {
   line-height: 1.6;
 }
 
-.todo-full-details p strong {
+/* .todo-full-details p strong {
   color: var(--on-surface);
   font-weight: 600;
-}
+} */
 
 /* Modals */
 .modal {
@@ -641,7 +610,6 @@ header h1 {
 .modal-content label {
   display: block;
   margin: var(--spacing-md) 0 var(--spacing-xs) 0;
-  font-weight: 500;
   color: var(--on-surface);
 }
 
@@ -650,7 +618,7 @@ header h1 {
 .modal-content textarea,
 .modal-content select {
   width: 100%;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   font-size: 1rem;
@@ -664,32 +632,12 @@ header h1 {
 .modal-content select:focus {
   outline: none;
   border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 .modal-content textarea {
   min-height: 100px;
   resize: vertical;
   font-family: inherit;
-}
-
-.modal-content button[type="submit"] {
-  background: var(--primary);
-  color: white;
-  padding: var(--spacing-md) var(--spacing-xl);
-  border: none;
-  border-radius: var(--radius-md);
-  cursor: pointer;
-  font-weight: 600;
-  font-size: 1rem;
-  font-family: inherit;
-  transition: all 0.2s;
-  box-shadow: var(--shadow-sm);
-}
-
-.modal-content button[type="submit"]:hover {
-  box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
 }
 
 .close-btn {
@@ -716,14 +664,14 @@ header h1 {
 }
 
 .help-message {
-  font-size: 0.75rem;
+  font-size: 0.875rem;
   color: var(--on-surface-variant);
   margin-top: var(--spacing-xs);
   margin-bottom: var(--spacing-md);
 }
 
 .error-message {
-  font-size: 1rem;
+  font-size: 0.875rem;
   color: var(--error);
   margin-top: var(--spacing-xs);
   margin-bottom: var(--spacing-md);
@@ -745,7 +693,6 @@ header h1 {
   border-radius: var(--radius-md);
   color: white;
   font-size: 1rem;
-  font-weight: 500;
   box-shadow: var(--shadow-lg);
   opacity: 0;
   transform: translateX(100%);
@@ -833,16 +780,7 @@ header h1 {
   }
 
   .todo-preview-content {
-    align-items: flex-start;
     padding: var(--spacing-md);
-  }
-
-  .todo-info {
-    align-items: flex-start;
-  }
-
-  .todo-checkbox {
-    margin-top: 2px;
   }
 
   .modal-content {

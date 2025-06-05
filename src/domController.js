@@ -136,7 +136,7 @@ const domController = (() => {
       if (isGlobalSearch && todo.originalProjectId) {
         li.dataset.originalProjectId = todo.originalProjectId;
       }
-      li.classList.add(`priority-${todo.priority}`);
+      // li.classList.add('priority-label', `priority-${todo.priority}`);
       if (todo.completed) {
         li.classList.add('todo-completed');
       }
@@ -161,29 +161,22 @@ const domController = (() => {
       dueDateSpan.classList.add('todo-due-date');
       dueDateSpan.textContent = `Due: ${formatDateForDisplay(todo.dueDate)}`;
 
+      const prioritySpan = document.createElement('span');
+      prioritySpan.classList.add('priority-label', `priority-${todo.priority}`);
+      const priorityText = todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1);
+      prioritySpan.textContent = `${priorityText}`;
+
       todoInfoDiv.appendChild(checkbox);
       todoInfoDiv.appendChild(titleSpan);
       todoInfoDiv.appendChild(dueDateSpan);
+      todoInfoDiv.appendChild(prioritySpan);
 
       // Project name display in global search result
       if (isGlobalSearch && todo.projectName) {
         const projectLabelSpan = document.createElement('span');
         projectLabelSpan.classList.add('todo-project-label');
-        projectLabelSpan.textContent = `(Project: ${todo.projectName})`;
+        projectLabelSpan.textContent = `Project: ${todo.projectName}`;
         todoInfoDiv.appendChild(projectLabelSpan);
-      }
-
-      // Tags display
-      if (todo.tags && todo.tags.length > 0) {
-        const tagsDiv = document.createElement('div');
-        tagsDiv.classList.add('todo-tags-display');
-        todo.tags.forEach((tag) => {
-          const tagSpan = document.createElement('span');
-          tagSpan.classList.add('tag-label');
-          tagSpan.textContent = tag;
-          tagsDiv.appendChild(tagSpan);
-        });
-        todoInfoDiv.appendChild(tagsDiv);
       }
 
       const actionsDiv = document.createElement('div');
@@ -231,13 +224,21 @@ const domController = (() => {
       descriptionP.innerHTML = 'Description: ';
       const descriptionText = document.createTextNode(todo.description || 'No description');
       descriptionP.appendChild(descriptionText);
-
-      const priorityP = document.createElement('p');
-      const priorityText = todo.priority.charAt(0).toUpperCase() + todo.priority.slice(1);
-      priorityP.innerHTML = `Priority: <span class="priority-text-${todo.priority}">${priorityText}</span>`;
-
       fullDetailsDiv.appendChild(descriptionP);
-      fullDetailsDiv.appendChild(priorityP);
+
+      // Tags display
+      if (todo.tags && todo.tags.length > 0) {
+        const tagsDiv = document.createElement('div');
+        tagsDiv.classList.add('todo-tags-display');
+        todo.tags.forEach((tag) => {
+          const tagSpan = document.createElement('span');
+          tagSpan.classList.add('tag-label');
+          tagSpan.textContent = tag;
+          tagsDiv.appendChild(tagSpan);
+        });
+        fullDetailsDiv.appendChild(tagsDiv);
+      }
+
       li.appendChild(fullDetailsDiv);
       todosListUL.appendChild(li);
     });
