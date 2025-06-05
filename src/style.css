@@ -21,9 +21,9 @@
   --on-surface-variant: #465364;
   --on-surface-muted: #919daf;
   --error: #dc2626;
-  --warning: #f59e0b;
-  --success: #16a34a;
-  --info: #0ea5e9;
+  --priority-high: #fed5d5;
+  --priority-medium: #fef296;
+  --priority-low: #c8ead3;
   --border: #e2e8f0;
   --border-variant: #ced5de;
   --border-focus: #008fff;
@@ -485,22 +485,22 @@ header h1 {
 }
 
 .priority-label {
-  color: var(--on-primary);
+  color: var(--on-surface);
   padding: 0.125rem var(--spacing-sm);
   font-size: 0.875rem;
   border-radius: var(--radius-sm);
 }
 
 .priority-low {
-  background: var(--success);
+  background: var(--priority-low);
 }
 
 .priority-medium {
-  background: var(--warning);
+  background: var(--priority-medium);
 }
 
 .priority-high {
-  background: var(--error);
+  background: var(--priority-high);
 }
 
 /* Todo actions */
@@ -673,10 +673,10 @@ header h1 {
 }
 
 /* Notifications */
-.notification-area {
+#notification-area {
   position: fixed;
-  top: var(--spacing-lg);
-  right: var(--spacing-lg);
+  bottom: var(--spacing-lg);
+  left: 50%;
   z-index: 2000;
   display: flex;
   flex-direction: column;
@@ -684,50 +684,32 @@ header h1 {
 }
 
 .notification {
-  padding: var(--spacing-md) var(--spacing-lg);
+  padding: var(--spacing-sm) var(--spacing-md);
   border-radius: var(--radius-md);
-  color: white;
-  font-size: 1rem;
-  box-shadow: var(--shadow-lg);
+  color: var(--surface);
+  background: var(--on-surface-variant);
+  font-size: 0.875rem;
   opacity: 0;
-  transform: translateX(100%);
+  transform: translateX(-50%);
   transition: all 0.3s;
-  animation: slideInNotification 0.3s forwards, fadeOutNotification 0.3s 4.7s forwards;
+  animation: 
+    fadeInNotification 0.3s ease-in forwards,
+    fadeOutNotification 0.3s ease-out 3s forwards;
 }
 
-.notification.info {
-  background: var(--info);
-}
-
-.notification.success {
-  background: var(--success);
-}
-
-.notification.error {
-  background: var(--error);
-}
-
-.notification.warning {
-  background: var(--warning);
-  color: white;
-}
-
-@keyframes slideInNotification {
+@keyframes fadeInNotification {
   to {
     opacity: 1;
-    transform: translateX(0);
   }
 }
 
 @keyframes fadeOutNotification {
   from {
     opacity: 1;
-    transform: translateX(0);
   }
 
   to {
     opacity: 0;
-    transform: translateX(100%);
   }
 }
 
@@ -796,33 +778,8 @@ header h1 {
   .form-select {
     min-width: auto;
   }
-
-  .notification-area {
-    left: var(--spacing-md);
-    right: var(--spacing-md);
-  }
-
-  .notification {
-    transform: translateY(-100%);
-    animation: slideInNotificationMobile 0.3s forwards, fadeOutNotificationMobile 0.3s 4.7s forwards;
-  }
-
-  @keyframes slideInNotificationMobile {
-    to {
-      opacity: 1;
-      transform: translateY(0);
-    }
-  }
-
-  @keyframes fadeOutNotificationMobile {
-    from {
-      opacity: 1;
-      transform: translateY(0);
-    }
-
-    to {
-      opacity: 0;
-      transform: translateY(-100%);
-    }
+  
+  #notification-area {
+    bottom: var(--spacing-md);
   }
 }

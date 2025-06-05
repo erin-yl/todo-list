@@ -351,9 +351,9 @@ const domController = (() => {
     }
   }
 
-  function showNotification(message, type = 'info') { // types: info, success, error, warning
+  function showNotification(message) {
     const notification = document.createElement('div');
-    notification.classList.add('notification', type);
+    notification.classList.add('notification');
     notification.textContent = message;
 
     notificationArea.appendChild(notification);
