@@ -93,7 +93,6 @@ header h1 {
 
 .app-layout {
   display: flex;
-  min-height: 700px;
   flex-grow: 1;
 }
 
@@ -102,6 +101,7 @@ header h1 {
   width: 320px;
   padding: var(--spacing-lg);
   background: var(--surface-variant);
+  overflow-y: auto;
 }
 
 .sidebar h3 {
@@ -162,7 +162,6 @@ header h1 {
 #projects-list li:hover {
   border-color: var(--border-variant);
   box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
 }
 
 #projects-list li.active {
@@ -226,6 +225,8 @@ header h1 {
   flex: 1;
   padding: var(--spacing-lg);
   background: var(--surface);
+  display: flex;
+  flex-direction: column;
 }
 
 .todos-view h2 {
@@ -354,7 +355,6 @@ header h1 {
 
 .tag-filter-item:hover {
   border-color: var(--border-variant);
-  transform: translateY(-1px);
 }
 
 .tag-filter-item.active {
@@ -402,6 +402,8 @@ header h1 {
   list-style: none;
   padding: 0;
   margin: 0;
+  flex-grow: 1;
+  overflow-y: auto;
 }
 
 #todos-list li {
@@ -411,12 +413,10 @@ header h1 {
   margin-bottom: var(--spacing-md);
   transition: all 0.2s;
   box-shadow: var(--shadow-sm);
-  overflow: hidden;
 }
 
 #todos-list li:hover {
   box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
 }
 
 .todo-preview-content {
@@ -589,10 +589,10 @@ header h1 {
 
 .scroller {
   max-height: calc(90vh - var(--spacing-lg) * 2);
-  overflow-y: auto;
   padding: var(--spacing-xl);
   scrollbar-width: thin;
   scrollbar-color: var(--border) var(--surface);
+  overflow-y: auto;
 }
 
 .modal-content h3 {
