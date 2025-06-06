@@ -406,7 +406,6 @@ header h1 {
   color: var(--primary);
   cursor: pointer;
   font-size: 0.875rem;
-  text-decoration: underline;
   margin-left: var(--spacing-sm);
   padding: var(--spacing-xs);
   border-radius: var(--radius-sm);
