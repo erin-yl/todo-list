@@ -581,7 +581,7 @@ header h1 {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 
@@ -595,6 +595,7 @@ header h1 {
   position: relative;
   background: var(--surface);
   border-radius: var(--radius-xl);
+  width: 100%;
   max-width: 500px;
   max-height: 90vh;
   margin: auto;
@@ -646,7 +647,7 @@ header h1 {
 .close-btn {
   position: absolute;
   top: var(--spacing-md);
-  right: var(--spacing-lg);
+  right: var(--spacing-md);
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -670,14 +671,12 @@ header h1 {
   font-size: 0.875rem;
   color: var(--on-surface-variant);
   margin-top: var(--spacing-xs);
-  margin-bottom: var(--spacing-md);
 }
 
 .error-message {
   font-size: 0.875rem;
   color: var(--error);
   margin-top: var(--spacing-xs);
-  margin-bottom: var(--spacing-md);
 }
 
 fieldset {

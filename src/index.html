@@ -27,7 +27,7 @@
           <h3>Filter by due date</h3>
           <input type="date" id="due-date-filter-input" class="entry-input">
           <button id="show-today-tasks-btn" class="secondary-btn">Show today's tasks</button>
-          <span id="clear-date-filter-btn">Show all tasks</span>
+          <button id="clear-date-filter-btn" class="secondary-btn">Show all tasks</button>
         </div>
 
         <div class="projects-section">
@@ -69,7 +69,7 @@
   <div id="todo-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="todo-modal-title">
     <div class="modal-content">
       <div class="scroller">
-        <span class="close-btn" id="close-todo-modal">&times;</span>
+        <span class="close-btn material-symbols-outlined" id="close-todo-modal">close</span>
         <h3 id="todo-modal-title">Task details</h3>
         <form id="todo-form" novalidate>
           <input type="hidden" id="todo-id" name="todo-id">
@@ -77,8 +77,8 @@
             <div>
               <label for="todo-title-input">Task name*</label>
               <input type="text" id="todo-title-input" name="title" required aria-required="true" />
-              <span class="help-message">*Required</span>
-              <span class="error-message" aria-live="polite"></span>
+              <p class="help-message">*Required</p>
+              <p class="error-message" aria-live="polite"></p>
             </div>
             <div>
               <label for="todo-description-input">Description</label>
@@ -99,7 +99,7 @@
             <div>
               <label for="todo-tags-input">Tags</label>
               <input type="text" id="todo-tags-input" name="tags" placeholder="e.g., learning, health, fun" />
-              <span class="help-message">Separate tags with commas</span>
+              <p class="help-message">Separate tags with commas</p>
             </div>
           </fieldset>
 
@@ -112,7 +112,7 @@
   <div id="project-modal" class="modal" role="dialog" aria-modal="true" aria-labelledby="project-modal-title">
     <div class="modal-content">
       <div class="scroller">
-        <span class="close-btn" id="close-project-modal">&times;</span>
+        <span class="close-btn material-symbols-outlined" id="close-project-modal">close</span>
         <h3 id="project-modal-title">Project details</h3>
         <form id="project-form" novalidate>
           <input type="hidden" id="project-id" name="project-id">
@@ -120,8 +120,8 @@
             <div>
               <label for="project-name-input">Project name*</label>
               <input type="text" id="project-name-input" name="projectName" required aria-required="true" />
-              <span class="help-message">*Required</span>
-              <span class="error-message" aria-live="polite"></span>
+              <p class="help-message">*Required</p>
+              <p class="error-message" aria-live="polite"></p>
             </div>
           </fieldset>
 
