@@ -71,9 +71,8 @@ const domController = (() => {
 
       const moreBtn = document.createElement('button');
       moreBtn.classList.add('more-actions-btn');
-      moreBtn.innerHTML = '&#x22EE;'; // Vertical ellipsis
-      moreBtn.title = 'More options';
-      moreBtn.dataset.projectId = project.id;
+      moreBtn.innerHTML = '<span class="material-symbols-outlined">more_vert</span>';
+      moreBtn.title = "More options";
       actionsDiv.appendChild(moreBtn);
 
       const dropdown = document.createElement('ul');
@@ -82,13 +81,11 @@ const domController = (() => {
       const editLi = document.createElement('li');
       editLi.textContent = 'Edit';
       editLi.classList.add('edit-project');
-      editLi.dataset.projectId = project.id;
       dropdown.appendChild(editLi);
       // Delete option
       const deleteLi = document.createElement('li');
       deleteLi.textContent = 'Delete';
       deleteLi.classList.add('delete-project');
-      deleteLi.dataset.projectId = project.id;
       dropdown.appendChild(deleteLi);
 
       actionsDiv.appendChild(dropdown);
@@ -136,7 +133,6 @@ const domController = (() => {
       if (isGlobalSearch && todo.originalProjectId) {
         li.dataset.originalProjectId = todo.originalProjectId;
       }
-      // li.classList.add('priority-label', `priority-${todo.priority}`);
       if (todo.completed) {
         li.classList.add('todo-completed');
       }
@@ -184,16 +180,14 @@ const domController = (() => {
 
       const expandBtn = document.createElement('button');
       expandBtn.classList.add('expand-todo-btn');
-      expandBtn.innerHTML = '&#43;'; // Plus sign (show)
+      expandBtn.innerHTML = '<span class="material-symbols-outlined">expand_circle_down</span>';
       expandBtn.title = 'Show details';
-      expandBtn.dataset.todoId = todo.id;
       actionsDiv.appendChild(expandBtn);
 
       const moreBtn = document.createElement('button');
       moreBtn.classList.add('more-actions-btn');
-      moreBtn.innerHTML = '&#x22EE;'; // Vertical ellipsis
+      moreBtn.innerHTML = '<span class="material-symbols-outlined">more_vert</span>';
       moreBtn.title = "More options";
-      moreBtn.dataset.todoId = todo.id;
       actionsDiv.appendChild(moreBtn);
 
       const dropdown = document.createElement('ul');
@@ -202,13 +196,11 @@ const domController = (() => {
       const editLi = document.createElement('li');
       editLi.textContent = 'Edit';
       editLi.classList.add('edit-todo');
-      editLi.dataset.todoId = todo.id;
       dropdown.appendChild(editLi);
       // Delete option
       const deleteLi = document.createElement('li');
       deleteLi.textContent = 'Delete';
       deleteLi.classList.add('delete-todo');
-      deleteLi.dataset.todoId = todo.id;
       dropdown.appendChild(deleteLi);
 
       actionsDiv.appendChild(dropdown);

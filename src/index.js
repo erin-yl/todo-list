@@ -178,6 +178,15 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // Helper function to manage multiple dropdowns
+  function closeAllDropdowns(exceptThisOne = null) {
+    document.querySelectorAll('.actions-dropdown.visible').forEach(dropdown => {
+      if (dropdown !== exceptThisOne) {
+        dropdown.classList.remove('visible');
+      }
+    });
+  }
+
   // Project event listeners
   domController.elements.addProjectBtn.addEventListener('click', () => {
     domController.openProjectModal();
@@ -225,17 +234,8 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  // Helper function to manage multiple dropdowns
-  function closeAllDropdowns(exceptThisOne = null) {
-    document.querySelectorAll('.actions-dropdown.visible').forEach(dropdown => {
-      if (dropdown !== exceptThisOne) {
-        dropdown.classList.remove('visible');
-      }
-    });
-  }
-
   document.addEventListener('click', (e) => {
-    // If click is not on a more button or inside a dropdown, close all dropdowns
+    // Close dropdowns when clicking outside
     if (!e.target.closest('.more-actions-btn') && !e.target.closest('.actions-dropdown')) {
       closeAllDropdowns();
     }
@@ -247,20 +247,26 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!projectLi) return;
 
     const projectId = projectLi.dataset.projectId;
-    if (e.target.classList.contains('more-actions-btn')) {
+    if (e.target.closest('.more-actions-btn')) {
       e.stopPropagation(); // Prevent project selection click when opening dropdown
-      const dropdown = e.target.nextElementSibling;
+      const dropdown = e.target.closest('.more-actions-btn').nextElementSibling;
       if (dropdown && dropdown.classList.contains('actions-dropdown')) {
+        const isVisible = dropdown.classList.contains('visible');
         closeAllDropdowns(dropdown);
-        dropdown.classList.toggle('visible');
+        if (!isVisible) {
+          dropdown.classList.add('visible');
+          projectLi.style.zIndex = '2';
+        } else {
+          projectLi.style.zIndex = '';
+        }
       }
-    } else if (e.target.classList.contains('edit-project')) {
+    } else if (e.target.closest('.edit-project')) {
       closeAllDropdowns();
       const projectToEdit = appLogic.getProjectById(projectId);
       if (projectToEdit) {
         domController.openProjectModal(projectToEdit);
       }
-    } else if (e.target.classList.contains('delete-project')) {
+    } else if (e.target.closest('.delete-project')) {
       closeAllDropdowns();
       const projectToDelete = appLogic.getProjectById(projectId);
       if (projectToDelete && confirm(`You will permanently delete project "${projectToDelete.name}" and all its tasks.`)) {
@@ -348,26 +354,25 @@ document.addEventListener('DOMContentLoaded', () => {
     if (!todoLi) return;
 
     const todoId = todoLi.dataset.todoId;
-    // Determine the project ID
-    let projectIdForAction = todoLi.dataset.originalProjectId; // From global search
-    if (!projectIdForAction) {
-      const currentProject = appLogic.getCurrentProject();
-      if (currentProject) {
-        projectIdForAction = currentProject.id;
-      }
-    }
+    let projectIdForAction = todoLi.dataset.originalProjectId || appLogic.getCurrentProject()?.id;
 
     if (!todoId || !projectIdForAction) return;
 
-    if (e.target.classList.contains('more-actions-btn')) {
+    if (target.closest('.more-actions-btn')) {
       e.stopPropagation();
-      const dropdown = e.target.nextElementSibling;
+      const dropdown = target.closest('.more-actions-btn').nextElementSibling;
       if (dropdown && dropdown.classList.contains('actions-dropdown')) {
+        const isVisible = dropdown.classList.contains('visible');
         closeAllDropdowns(dropdown);
-        dropdown.classList.toggle('visible');
+        if (!isVisible) {
+          dropdown.classList.add('visible');
+          todoLi.style.zIndex = '2';
+        } else {
+          todoLi.style.zIndex = '';
+        }
       }
 
-    } else if (target.classList.contains('delete-todo')) {
+    } else if (target.closest('.delete-todo')) {
       closeAllDropdowns();
       const project = appLogic.getProjectById(projectIdForAction);
       const todoToDelete = project.getTodoById(todoId);
@@ -377,7 +382,7 @@ document.addEventListener('DOMContentLoaded', () => {
         updateAndRenderTodos();
       }
 
-    } else if (target.classList.contains('edit-todo')) {
+    } else if (target.closest('.edit-todo')) {
       closeAllDropdowns();
       const todoToEdit = appLogic
         .getProjectById(projectIdForAction)
@@ -386,27 +391,28 @@ document.addEventListener('DOMContentLoaded', () => {
         domController.openTodoModal(todoToEdit, projectIdForAction);
       }
 
-    } else if (target.classList.contains('todo-checkbox')) {
+    } else if (target.closest('.todo-checkbox')) {
       closeAllDropdowns();
       appLogic.toggleTodoComplete(projectIdForAction, todoId);
       updateAndRenderTodos();
-      
-    } else if (target.classList.contains('expand-todo-btn')) {
+
+    } else if (target.closest('.expand-todo-btn')) {
       closeAllDropdowns();
+      const btn = target.closest('.expand-todo-btn');
       const detailsDiv = todoLi.querySelector('.todo-full-details');
       if (detailsDiv) {
         const isHidden = detailsDiv.classList.contains('hidden');
         if (isHidden) {
           detailsDiv.classList.remove('hidden');
           detailsDiv.classList.add('visible');
-          target.innerHTML = '&#8722;'; // Minus sign (hide)
-          target.title = 'Hide details';
+          btn.innerHTML = '<span class="material-symbols-outlined">expand_circle_up</span>';
+          btn.title = 'Hide details';
           todoLi.classList.add('details-expanded');
         } else {
           detailsDiv.classList.add('hidden');
           detailsDiv.classList.remove('visible');
-          target.innerHTML = '&#43;'; // Plus sign (show)
-          target.title = 'Show details';
+          btn.innerHTML = '<span class="material-symbols-outlined">expand_circle_down</span>';
+          btn.title = 'Show details';
           todoLi.classList.remove('details-expanded');
         }
       }

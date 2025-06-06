@@ -1,3 +1,5 @@
+@import '@material-symbols/font-400/outlined.css';
+
 *,
 *::before,
 *::after {
@@ -39,6 +41,7 @@
   --spacing-md: clamp(0.875rem, 0.71rem + 0.35vw, 1.125rem);
   --spacing-lg: clamp(1.31rem, 1.06rem + 0.52vw, 1.69rem);
   --spacing-xl: clamp(1.75rem, 1.42rem + 0.69vw, 2.25rem);
+  --spacing-2xl: clamp(2.625rem, 2.13rem + 1.04vw, 3.375rem);
   font-size: clamp(0.875rem, 0.70rem + 0.34vw, 1.125rem);
 }
 
@@ -72,21 +75,33 @@ header h1 {
 }
 
 .global-search-container {
+  position: relative;
+  display: flex;
   flex: 1;
   max-width: 500px;
 }
 
-.global-search-container .form-input {
+.global-search-container .material-symbols-outlined {
+  position: absolute;
+  left: var(--spacing-md);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--on-primary);
+  pointer-events: none;
+}
+
+#search-todos-input {
   background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.2);
   color: var(--on-primary);
+  padding-left: var(--spacing-2xl);
 }
 
-.global-search-container .form-input::placeholder {
+#search-todos-input::placeholder {
   color: rgba(255, 255, 255, 0.8);
 }
 
-.global-search-container .form-input:focus {
+#search-todos-input:focus {
   background: rgba(255, 255, 255, 0.15);
   border-color: rgba(255, 255, 255, 0.4);
 }
@@ -111,15 +126,33 @@ header h1 {
   color: var(--on-surface);
 }
 
+/* Calendar */
 .date-filter-section {
   margin-bottom: var(--spacing-xl);
   padding-bottom: var(--spacing-lg);
   border-bottom: 1px solid var(--border);
 }
 
-.date-filter-section #due-date-filter-input {
+#due-date-filter-input {
   width: 100%;
   margin-bottom: var(--spacing-md);
+}
+
+.entry-input {
+  width: 100%;
+  padding: var(--spacing-sm) var(--spacing-md);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  font-size: 1rem;
+  font-family: inherit;
+  transition: all 0.2s;
+  box-shadow: var(--shadow-sm);
+}
+
+.entry-input:focus {
+  outline: none;
+  border-color: var(--border-focus);
 }
 
 #clear-date-filter-btn {
@@ -378,25 +411,6 @@ header h1 {
   background: var(--primary-light);
 }
 
-/* Form inputs */
-.form-input {
-  width: 100%;
-  padding: var(--spacing-md);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-  font-size: 1rem;
-  font-family: inherit;
-  transition: all 0.2s;
-  box-shadow: var(--shadow-sm);
-}
-
-.form-input:focus {
-  outline: none;
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
-}
-
 /* Todo list */
 #todos-list {
   list-style: none;
@@ -556,11 +570,6 @@ header h1 {
   line-height: 1.6;
 }
 
-/* .todo-full-details p strong {
-  color: var(--on-surface);
-  font-weight: 600;
-} */
-
 /* Modals */
 .modal {
   display: none;
@@ -692,7 +701,7 @@ header h1 {
   opacity: 0;
   transform: translateX(-50%);
   transition: all 0.3s;
-  animation: 
+  animation:
     fadeInNotification 0.3s ease-in forwards,
     fadeOutNotification 0.3s ease-out 3s forwards;
 }
@@ -778,7 +787,7 @@ header h1 {
   .form-select {
     min-width: auto;
   }
-  
+
   #notification-area {
     bottom: var(--spacing-md);
   }
