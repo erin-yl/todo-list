@@ -247,12 +247,12 @@ const domController = (() => {
       projectIdInput.value = projectToEdit.id;
       projectNameInput.value = projectToEdit.name;
     }
-    projectModal.style.display = 'block';
+    projectModal.classList.add('show');
     projectNameInput.focus();
   }
 
   function closeProjectModal() {
-    projectModal.style.display = 'none';
+    projectModal.classList.remove('show');
   }
 
   function openTodoModal(todoToEdit = null, currentProjectId) {
@@ -271,12 +271,12 @@ const domController = (() => {
       todoTagsInput.value = todoToEdit.tags ? todoToEdit.getTagsString() : '';
     }
     todoForm.dataset.currentProjectId = currentProjectId;
-    todoModal.style.display = 'block';
+    todoModal.classList.add('show');
     todoTitleInput.focus();
   }
 
   function closeTodoModal() {
-    todoModal.style.display = 'none';
+    todoModal.classList.remove('show');
   }
 
   // Form data getters
