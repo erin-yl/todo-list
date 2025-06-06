@@ -74,7 +74,6 @@ body {
   line-height: calc(1em + 0.6rem);
 }
 
-/* Layout */
 .container {
   background: var(--surface);
   display: flex;
@@ -82,6 +81,7 @@ body {
   min-height: 100dvh;
 }
 
+/* Header */
 header {
   display: flex;
   justify-content: space-between;
@@ -126,7 +126,7 @@ header h1 {
 
 #search-todos-input:focus {
   background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.4);
 }
 
 .app-layout {
@@ -173,11 +173,6 @@ header h1 {
   box-shadow: var(--shadow-sm);
 }
 
-.entry-input:focus {
-  outline: none;
-  border-color: var(--border-focus);
-}
-
 #clear-date-filter-btn {
   display: none;
   width: 100%;
@@ -195,6 +190,7 @@ header h1 {
   background: var(--secondary-light);
 }
 
+/* Project list */
 #projects-list {
   list-style: none;
   padding: 0;
@@ -276,6 +272,21 @@ header h1 {
   transform: translateY(-1px);
 }
 
+/* Focus state styling */
+.entry-input:focus,
+.primary-btn:focus,
+.secondary-btn:focus,
+.modal-content button[type="submit"]:focus,
+.form-select:focus,
+.actions-dropdown li:focus,
+.tag-filter-item:focus,
+.modal-content input:focus,
+.modal-content textarea:focus,
+.modal-content select:focus {
+  outline: none;
+  border: 2px solid var(--border-focus);
+}
+
 /* Main content */
 .todos-view {
   flex: 1;
@@ -313,10 +324,10 @@ header h1 {
   margin-bottom: var(--spacing-lg);
 }
 
-/* Consistent dropdown styling */
+/* Dropdown styling */
 .form-select {
   min-width: 180px;
-  padding: var(--spacing-md);
+  padding: var(--spacing-sm) var(--spacing-md);
   border: 1px solid var(--border);
   border-radius: var(--radius-md);
   background: var(--surface);
@@ -337,12 +348,6 @@ header h1 {
 .form-select:hover {
   border-color: var(--border-variant);
   box-shadow: var(--shadow-md);
-}
-
-.form-select:focus {
-  outline: none;
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 /* Dropdown menu styling */
@@ -390,6 +395,7 @@ header h1 {
   border-radius: 0 0 var(--radius-md) var(--radius-md);
 }
 
+/* Tags */
 #tag-filter-area {
   display: flex;
   flex-wrap: wrap;
@@ -423,9 +429,8 @@ header h1 {
   color: var(--primary);
   cursor: pointer;
   font-size: 0.875rem;
-  text-decoration: underline;
-  margin-left: var(--spacing-sm);
-  padding: var(--spacing-xs);
+  margin-left: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
   transition: all 0.2s;
 }
@@ -597,24 +602,26 @@ header h1 {
 .modal {
   display: none;
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(0, 0, 0, 0.6);
+  inset: 0;
+  background: rgba(0, 0, 0, 0.2);
   z-index: 1000;
 }
 
+.modal.show {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .modal-content {
+  position: relative;
   background: var(--surface);
-  margin: 5vh auto;
-  padding: 0;
   border-radius: var(--radius-xl);
-  width: 90%;
+  width: 100%;
   max-width: 500px;
   max-height: 90vh;
+  margin: auto;
   box-shadow: var(--shadow-lg);
-  position: relative;
   overflow: hidden;
   border: 1px solid var(--border);
 }
@@ -628,7 +635,6 @@ header h1 {
 }
 
 .modal-content h3 {
-  margin: 0 0 var(--spacing-lg) 0;
   color: var(--on-surface);
   font-size: 1.25rem;
   font-weight: 600;
@@ -654,13 +660,6 @@ header h1 {
   box-shadow: var(--shadow-sm);
 }
 
-.modal-content input:focus,
-.modal-content textarea:focus,
-.modal-content select:focus {
-  outline: none;
-  border-color: var(--border-focus);
-}
-
 .modal-content textarea {
   min-height: 100px;
   resize: vertical;
@@ -670,7 +669,7 @@ header h1 {
 .close-btn {
   position: absolute;
   top: var(--spacing-md);
-  right: var(--spacing-lg);
+  right: var(--spacing-md);
   background: none;
   border: none;
   font-size: 1.5rem;
@@ -694,14 +693,18 @@ header h1 {
   font-size: 0.875rem;
   color: var(--on-surface-variant);
   margin-top: var(--spacing-xs);
-  margin-bottom: var(--spacing-md);
 }
 
 .error-message {
   font-size: 0.875rem;
   color: var(--error);
   margin-top: var(--spacing-xs);
-  margin-bottom: var(--spacing-md);
+}
+
+fieldset {
+  margin: var(--spacing-md) 0 var(--spacing-lg) 0;
+  padding: 0;
+  border: none;
 }
 
 /* Notifications */
@@ -816,4 +819,4 @@ header h1 {
   }
 }
 
-/*# sourceMappingURL=main.2e7f231c3d143b37b220.css.map*/
+/*# sourceMappingURL=main.6616c5a1f7829593eeeb.css.map*/
