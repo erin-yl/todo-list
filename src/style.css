@@ -406,8 +406,8 @@ header h1 {
   color: var(--primary);
   cursor: pointer;
   font-size: 0.875rem;
-  margin-left: var(--spacing-sm);
-  padding: var(--spacing-xs);
+  margin-left: var(--spacing-xs);
+  padding: var(--spacing-xs) var(--spacing-sm);
   border-radius: var(--radius-sm);
   transition: all 0.2s;
 }
