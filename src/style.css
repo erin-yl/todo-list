@@ -74,6 +74,7 @@ header h1 {
   font-size: 1.75rem;
 }
 
+/* Search */
 .global-search-container {
   position: relative;
   display: flex;
@@ -103,7 +104,7 @@ header h1 {
 
 #search-todos-input:focus {
   background: rgba(255, 255, 255, 0.15);
-  border-color: rgba(255, 255, 255, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.4);
 }
 
 .app-layout {
@@ -148,11 +149,6 @@ header h1 {
   font-family: inherit;
   transition: all 0.2s;
   box-shadow: var(--shadow-sm);
-}
-
-.entry-input:focus {
-  outline: none;
-  border-color: var(--border-focus);
 }
 
 #clear-date-filter-btn {
@@ -253,6 +249,21 @@ header h1 {
   transform: translateY(-1px);
 }
 
+/* Focus state styling */
+.entry-input:focus,
+.primary-btn:focus,
+.secondary-btn:focus,
+.modal-content button[type="submit"]:focus,
+.form-select:focus,
+.actions-dropdown li:focus,
+.tag-filter-item:focus,
+.modal-content input:focus,
+.modal-content textarea:focus,
+.modal-content select:focus {
+  outline: none;
+  border: 2px solid var(--border-focus);
+}
+
 /* Main content */
 .todos-view {
   flex: 1;
@@ -290,7 +301,7 @@ header h1 {
   margin-bottom: var(--spacing-lg);
 }
 
-/* Consistent dropdown styling */
+/* Dropdown styling */
 .form-select {
   min-width: 180px;
   padding: var(--spacing-md);
@@ -314,12 +325,6 @@ header h1 {
 .form-select:hover {
   border-color: var(--border-variant);
   box-shadow: var(--shadow-md);
-}
-
-.form-select:focus {
-  outline: none;
-  border-color: var(--border-focus);
-  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
 }
 
 /* Dropdown menu styling */
@@ -629,13 +634,6 @@ header h1 {
   font-family: inherit;
   transition: all 0.2s;
   box-shadow: var(--shadow-sm);
-}
-
-.modal-content input:focus,
-.modal-content textarea:focus,
-.modal-content select:focus {
-  outline: none;
-  border-color: var(--border-focus);
 }
 
 .modal-content textarea {
