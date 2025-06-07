@@ -273,7 +273,7 @@ const appLogic = (() => {
 
       switch (sortField) {
         case 'dueDate':
-          // For null due dates, sort them to the end
+          // Sort null due dates to the end
           if (a.dueDate === null && b.dueDate === null) return 0;
           if (a.dueDate === null) return 1; // a comes after b
           if (b.dueDate === null) return -1; // a comes before b
