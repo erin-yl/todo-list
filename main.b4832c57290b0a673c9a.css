@@ -592,7 +592,7 @@ header h1 {
 }
 
 .todo-full-details p {
-  margin: var(--spacing-sm) 0;
+  margin-bottom: var(--spacing-sm);
   font-size: 1rem;
   color: var(--on-surface);
   line-height: 1.6;
@@ -819,4 +819,4 @@ fieldset {
   }
 }
 
-/*# sourceMappingURL=main.6616c5a1f7829593eeeb.css.map*/
+/*# sourceMappingURL=main.b4832c57290b0a673c9a.css.map*/
