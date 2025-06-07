@@ -324,22 +324,37 @@ const domController = (() => {
 
   // Form validation
   function clearFormErrors(formElement) {
-    formElement.querySelectorAll('.form-input, .form-select').forEach(input => {
-      input.setCustomValidity('');
-    });
-    formElement.querySelectorAll('.error-message').forEach(span => {
-      span.textContent = '';
+    formElement.querySelectorAll('div').forEach(fieldContainer => {
+      const input = fieldContainer.querySelector('.form-input, .form-select');
+      const helpSpan = fieldContainer.querySelector('.help-message');
+      const errorSpan = fieldContainer.querySelector('.error-message');
+
+      if (input) {
+        input.setCustomValidity('');
+      }
+      if (errorSpan) {
+        errorSpan.textContent = '';
+        errorSpan.style.display = 'none';
+      }
+      if (helpSpan) {
+        helpSpan.style.display = 'block';
+      }
     });
   }
 
   function showFieldError(inputElement, message) {
-    const helpSpan = inputElement.parentElement.querySelector('.help-message');
-    const errorSpan = inputElement.parentElement.querySelector('.error-message');
+    const fieldContainer = inputElement.parentElement;
+    const helpSpan = fieldContainer.querySelector('.help-message');
+    const errorSpan = fieldContainer.querySelector('.error-message');
 
     inputElement.setCustomValidity(message);
-    errorSpan.textContent = message;
+
+    if (errorSpan) {
+      errorSpan.textContent = message;
+      errorSpan.style.display = 'block';
+    }
     if (helpSpan) {
-      helpSpan.remove();
+      helpSpan.style.display = 'none';
     }
   }
 
@@ -376,8 +391,7 @@ const domController = (() => {
     } else {
       const noTagsMsg = document.createElement('span');
       noTagsMsg.textContent = 'No tags available for filtering.';
-      noTagsMsg.style.fontSize = '0.9em';
-      noTagsMsg.style.color = '#666';
+      noTagsMsg.style.fontSize = '0.875rem';
       tagFilterArea.appendChild(noTagsMsg);
     }
 

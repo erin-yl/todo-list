@@ -17,7 +17,7 @@
       <h1>To-do list</h1>
       <div class="global-search-container">
         <span class="material-symbols-outlined">search</span>
-        <input type="search" id="search-todos-input" class="entry-input" placeholder="Search all tasks">
+        <input type="search" id="search-todos-input" class="form-input" placeholder="Search all tasks">
       </div>
     </header>
 
@@ -25,7 +25,7 @@
       <aside class="sidebar">
         <div class="date-filter-section">
           <h3>Filter by due date</h3>
-          <input type="date" id="due-date-filter-input" class="entry-input">
+          <input type="date" id="due-date-filter-input" class="form-input">
           <button id="show-today-tasks-btn" class="secondary-btn">Show today's tasks</button>
           <button id="clear-date-filter-btn" class="secondary-btn">Show all tasks</button>
         </div>
@@ -76,21 +76,21 @@
           <fieldset>
             <div>
               <label for="todo-title-input">Task name*</label>
-              <input type="text" id="todo-title-input" name="title" required aria-required="true" />
+              <input type="text" id="todo-title-input" name="title" class="form-input" required aria-required="true" />
               <p class="help-message">*Required</p>
               <p class="error-message" aria-live="polite"></p>
             </div>
             <div>
               <label for="todo-description-input">Description</label>
-              <textarea id="todo-description-input" name="description"></textarea>
+              <textarea id="todo-description-input" name="description" class="form-input"></textarea>
             </div>
             <div>
               <label for="todo-dueDate-input">Due date</label>
-              <input type="date" id="todo-dueDate-input" name="dueDate" />
+              <input type="date" id="todo-dueDate-input" name="dueDate" class="form-input" />
             </div>
             <div>
               <label for="todo-priority-input">Priority</label>
-              <select id="todo-priority-input" name="priority">
+              <select id="todo-priority-input" name="priority" class="form-select">
                 <option value="low">Low</option>
                 <option value="medium" selected>Medium</option>
                 <option value="high">High</option>
@@ -98,7 +98,7 @@
             </div>
             <div>
               <label for="todo-tags-input">Tags</label>
-              <input type="text" id="todo-tags-input" name="tags" placeholder="e.g., learning, health, fun" />
+              <input type="text" id="todo-tags-input" name="tags" class="form-input" placeholder="e.g., learning, health, fun" />
               <p class="help-message">Separate tags with commas</p>
             </div>
           </fieldset>
@@ -119,7 +119,7 @@
           <fieldset>
             <div>
               <label for="project-name-input">Project name*</label>
-              <input type="text" id="project-name-input" name="projectName" required aria-required="true" />
+              <input type="text" id="project-name-input" name="projectName" class="form-input" required aria-required="true" />
               <p class="help-message">*Required</p>
               <p class="error-message" aria-live="polite"></p>
             </div>
