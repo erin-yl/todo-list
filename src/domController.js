@@ -113,15 +113,15 @@ const domController = (() => {
     updateProjectTitle(displayName);
 
     if (!todos || todos.length === 0) {
-      const p = document.createElement('p');
+      const resultsP = document.createElement('p');
       if (isGlobalSearch) {
-        p.textContent = 'No tasks found matching your search.';
+        resultsP.textContent = 'No tasks found matching your search.';
       } else if (projectOrSearchResults) {
-        p.textContent = 'No tasks in this project yet.';
+        resultsP.textContent = 'No tasks in this project yet.';
       } else {
-        p.textContent = 'Select a project or enter a search term.';
+        resultsP.textContent = 'Select a project or enter a search term.';
       }
-      todosListUL.appendChild(p);
+      todosListUL.appendChild(resultsP);
 
       return;
     }
@@ -212,11 +212,8 @@ const domController = (() => {
       const fullDetailsDiv = document.createElement('div');
       fullDetailsDiv.classList.add('todo-full-details', 'hidden');
 
-      const descriptionP = document.createElement('p');
-      descriptionP.innerHTML = 'Description: ';
       const descriptionText = document.createTextNode(todo.description || 'No description');
-      descriptionP.appendChild(descriptionText);
-      fullDetailsDiv.appendChild(descriptionP);
+      fullDetailsDiv.appendChild(descriptionText);
 
       // Tags display
       if (todo.tags && todo.tags.length > 0) {
