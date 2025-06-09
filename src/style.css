@@ -551,7 +551,6 @@ button:focus,
 .more-actions-btn:hover {
   background: var(--surface-variant);
   color: var(--on-surface);
-  transform: scale(1.1);
 }
 
 .project-actions {
@@ -635,7 +634,6 @@ button:focus,
   font-size: 1rem;
   font-family: inherit;
   transition: all 0.2s;
-  box-shadow: var(--shadow-sm);
 }
 
 .modal-content textarea {
@@ -677,6 +675,10 @@ button:focus,
   font-size: 0.875rem;
   color: var(--error);
   margin-top: var(--spacing-xs);
+}
+
+.modal-content input[type="text"].is-invalid {
+  border-color: var(--error);
 }
 
 fieldset {

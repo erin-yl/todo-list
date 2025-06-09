@@ -113,15 +113,15 @@ const domController = (() => {
     updateProjectTitle(displayName);
 
     if (!todos || todos.length === 0) {
-      const span = document.createElement('span');
+      const p = document.createElement('p');
       if (isGlobalSearch) {
-        span.textContent = 'No tasks found matching your search.';
+        p.textContent = 'No tasks found matching your search.';
       } else if (projectOrSearchResults) {
-        span.textContent = 'No tasks in this project yet.';
+        p.textContent = 'No tasks in this project yet.';
       } else {
-        span.textContent = 'Select a project or enter a search term.';
+        p.textContent = 'Select a project or enter a search term.';
       }
-      todosListUL.appendChild(span);
+      todosListUL.appendChild(p);
 
       return;
     }
@@ -325,11 +325,12 @@ const domController = (() => {
   // Form validation
   function clearFormErrors(formElement) {
     formElement.querySelectorAll('div').forEach(fieldContainer => {
-      const input = fieldContainer.querySelector('.form-input, .form-select');
+      const input = fieldContainer.querySelector('.form-input');
       const helpSpan = fieldContainer.querySelector('.help-message');
       const errorSpan = fieldContainer.querySelector('.error-message');
 
       if (input) {
+        input.classList.remove('is-invalid');
         input.setCustomValidity('');
       }
       if (errorSpan) {
@@ -347,6 +348,7 @@ const domController = (() => {
     const helpSpan = fieldContainer.querySelector('.help-message');
     const errorSpan = fieldContainer.querySelector('.error-message');
 
+    inputElement.classList.add('is-invalid');
     inputElement.setCustomValidity(message);
 
     if (errorSpan) {
