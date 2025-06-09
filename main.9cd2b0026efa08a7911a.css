@@ -176,19 +176,7 @@ header h1 {
 
 #clear-date-filter-btn {
   display: none;
-  width: 100%;
-  padding: var(--spacing-sm);
-  margin: var(--spacing-sm) 0;
-  color: var(--on-surface);
-  cursor: pointer;
-  font-size: 1rem;
-  text-align: center;
-  border-radius: var(--radius-sm);
-  transition: all 0.2s;
-}
-
-#clear-date-filter-btn:hover {
-  background: var(--secondary-light);
+  margin: var(--spacing-xs) 0;
 }
 
 /* Project list */
@@ -255,22 +243,27 @@ header h1 {
 .secondary-btn {
   width: 100%;
   padding: var(--spacing-sm) var(--spacing-md);
-  background: var(--surface);
+  background: none;
   color: var(--on-surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
+  text-align: left;
+  border: none;
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
   font-size: 1rem;
-  box-shadow: var(--shadow-sm);
 }
 
 .secondary-btn:hover {
-  background: var(--surface-variant);
-  border-color: var(--border-variant);
-  box-shadow: var(--shadow-md);
+  background: var(--secondary-light);
+  border-radius: var(--radius-md);
   transform: translateY(-1px);
+}
+
+.primary-btn .material-symbols-outlined,
+.secondary-btn .material-symbols-outlined {
+  font-size: 1.25em;
+  margin-right: var(--spacing-xs);
+  vertical-align: sub;
 }
 
 /* Focus state styling */
@@ -326,7 +319,7 @@ button:focus,
   margin-bottom: var(--spacing-lg);
 }
 
-/* Dropdown styling */
+/* Filter/sorting dropdown styling */
 .form-select {
   min-width: 180px;
   padding: var(--spacing-sm) var(--spacing-md);
@@ -340,11 +333,7 @@ button:focus,
   transition: all 0.2s;
   box-shadow: var(--shadow-sm);
   appearance: none;
-  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27currentColor%27 stroke-width=%272%27 stroke-linecap=%27round%27 stroke-linejoin=%27round%27%3e%3cpolyline points=%276,9 12,15 18,9%27%3e%3c/polyline%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right 12px center;
-  background-size: 16px;
-  padding-right: 40px;
+  padding-right: var(--spacing-2xl);
 }
 
 .form-select:hover {
@@ -352,7 +341,27 @@ button:focus,
   box-shadow: var(--shadow-md);
 }
 
-/* Dropdown menu styling */
+.input-with-icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.input-with-icon > .material-symbols-outlined {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 1.25rem;
+  pointer-events: none;
+  color: var(--on-surface);
+  transition: color 0.2s;
+}
+
+.input-with-icon > .material-symbols-outlined:last-child {
+  right: var(--spacing-md);
+}
+
+/* Project dropdown styling */
 .actions-dropdown {
   display: none;
   position: absolute;
@@ -574,7 +583,6 @@ button:focus,
 .more-actions-btn:hover {
   background: var(--surface-variant);
   color: var(--on-surface);
-  transform: scale(1.1);
 }
 
 .project-actions {
@@ -658,7 +666,6 @@ button:focus,
   font-size: 1rem;
   font-family: inherit;
   transition: all 0.2s;
-  box-shadow: var(--shadow-sm);
 }
 
 .modal-content textarea {
@@ -700,6 +707,10 @@ button:focus,
   font-size: 0.875rem;
   color: var(--error);
   margin-top: var(--spacing-xs);
+}
+
+.modal-content input[type="text"].is-invalid {
+  border-color: var(--error);
 }
 
 fieldset {
@@ -820,4 +831,4 @@ fieldset {
   }
 }
 
-/*# sourceMappingURL=main.59eb90759dac2045af6b.css.map*/
+/*# sourceMappingURL=main.9cd2b0026efa08a7911a.css.map*/
