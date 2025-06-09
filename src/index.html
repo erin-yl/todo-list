@@ -26,21 +26,33 @@
         <div class="date-filter-section">
           <h3>Filter by due date</h3>
           <input type="date" id="due-date-filter-input" class="form-input">
-          <button id="show-today-tasks-btn" class="secondary-btn">Show today's tasks</button>
-          <button id="clear-date-filter-btn" class="secondary-btn">Show all tasks</button>
+          <button id="show-today-tasks-btn" class="secondary-btn">
+            <span class="material-symbols-outlined">task</span>
+            Show today's tasks
+          </button>
+          <button id="clear-date-filter-btn" class="secondary-btn">
+            <span class="material-symbols-outlined">checklist</span>
+            Show all tasks
+          </button>
         </div>
 
         <div class="projects-section">
           <h3>Projects</h3>
           <ul id="projects-list"></ul>
-          <button id="add-project-btn" class="secondary-btn">Add project</button>
+          <button id="add-project-btn" class="secondary-btn">
+            <span class="material-symbols-outlined">add</span>
+            Add project
+          </button>
         </div>
       </aside>
 
       <section class="todos-view">
         <h2 id="current-project-title">Select project</h2>
         <div class="todos-controls">
-          <button id="add-todo-btn" class="primary-btn">Add task</button>
+          <button id="add-todo-btn" class="primary-btn">
+            <span class="material-symbols-outlined">add</span>
+            Add task
+          </button>
         </div>
         <div class="filters-row">
           <div id="tag-filter-area">
@@ -48,18 +60,24 @@
           </div>
         </div>
         <div class="filter-sort-bar">
-          <select id="priority-filter" class="form-select">
-            <option value="all">All priorities</option>
-            <option value="high">High priority</option>
-            <option value="medium">Medium priority</option>
-            <option value="low">Low priority</option>
-          </select>
-          <select id="sort-todos" class="form-select">
-            <option value="dueDate_asc">Due date (earliest)</option>
-            <option value="dueDate_desc">Due date (latest)</option>
-            <option value="priority_asc">Priority (highest)</option>
-            <option value="priority_desc">Priority (lowest)</option>
-          </select>
+          <div class="input-with-icon">
+            <select id="priority-filter" class="form-select">
+              <option value="all">All priorities</option>
+              <option value="high">High priority</option>
+              <option value="medium">Medium priority</option>
+              <option value="low">Low priority</option>
+            </select>
+            <span class="material-symbols-outlined">expand_more</span>
+          </div>
+          <div class="input-with-icon">
+            <select id="sort-todos" class="form-select">
+              <option value="dueDate_asc">Due date (earliest)</option>
+              <option value="dueDate_desc">Due date (latest)</option>
+              <option value="priority_asc">Priority (highest)</option>
+              <option value="priority_desc">Priority (lowest)</option>
+            </select>
+            <span class="material-symbols-outlined">expand_more</span>
+          </div>
         </div>
         <ul id="todos-list"></ul>
       </section>
@@ -90,15 +108,19 @@
             </div>
             <div>
               <label for="todo-priority-input">Priority</label>
-              <select id="todo-priority-input" name="priority" class="form-select">
-                <option value="low">Low</option>
-                <option value="medium" selected>Medium</option>
-                <option value="high">High</option>
-              </select>
+              <div class="input-with-icon">
+                <select id="todo-priority-input" name="priority" class="form-select">
+                  <option value="low">Low</option>
+                  <option value="medium" selected>Medium</option>
+                  <option value="high">High</option>
+                </select>
+                <span class="material-symbols-outlined">expand_more</span>
+              </div>
             </div>
             <div>
               <label for="todo-tags-input">Tags</label>
-              <input type="text" id="todo-tags-input" name="tags" class="form-input" placeholder="e.g., learning, health, fun" />
+              <input type="text" id="todo-tags-input" name="tags" class="form-input"
+                placeholder="e.g., learning, health, fun" />
               <p class="help-message">Separate tags with commas</p>
             </div>
           </fieldset>
@@ -119,7 +141,8 @@
           <fieldset>
             <div>
               <label for="project-name-input">Project name*</label>
-              <input type="text" id="project-name-input" name="projectName" class="form-input" required aria-required="true" />
+              <input type="text" id="project-name-input" name="projectName" class="form-input" required
+                aria-required="true" />
               <p class="help-message">*Required</p>
               <p class="error-message" aria-live="polite"></p>
             </div>
