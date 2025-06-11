@@ -51,7 +51,6 @@
   --priority-low: #c8ead3;
   --border: #e2e8f0;
   --border-variant: #ced5de;
-  --border-focus: #008fff;
   --shadow-sm: 0 1px 2px 0 rgb(195 206 213 / 0.1);
   --shadow-md: 0 4px 6px -1px rgb(195 206 213 / 0.2), 0 2px 4px -2px rgb(195 206 213/ 0.2);
   --shadow-lg: 0 10px 15px -3px rgb(195 206 213 / 0.2), 0 4px 6px -4px rgb(195 206 213 / 0.2);
@@ -224,7 +223,7 @@ header h1 {
   padding: var(--spacing-sm) var(--spacing-md);
   background: var(--primary);
   color: var(--on-primary);
-  border: none;
+  border: 1px solid var(--primary);
   border-radius: var(--radius-md);
   cursor: pointer;
   transition: all 0.2s;
@@ -236,6 +235,7 @@ header h1 {
 .primary-btn:hover,
 .modal-content button[type="submit"]:hover {
   background: var(--primary-hover);
+  border: var(--primary-hover);
   box-shadow: var(--shadow-md);
   transform: translateY(-1px);
 }
@@ -245,8 +245,9 @@ header h1 {
   padding: var(--spacing-sm) var(--spacing-md);
   background: none;
   color: var(--on-surface);
+  border: 1px solid transparent;
+  border-radius: var(--radius-md);
   text-align: left;
-  border: none;
   cursor: pointer;
   transition: all 0.2s;
   font-family: inherit;
@@ -255,7 +256,7 @@ header h1 {
 
 .secondary-btn:hover {
   background: var(--secondary-light);
-  border-radius: var(--radius-md);
+  border: 1px solid var(--secondary-light);
   transform: translateY(-1px);
 }
 
@@ -264,22 +265,6 @@ header h1 {
   font-size: 1.25em;
   margin-right: var(--spacing-xs);
   vertical-align: sub;
-}
-
-/* Focus state styling */
-.date-filter-section input[type="date"]:focus,
-.filter-sort-bar select:focus,
-.modal-content input[type="text"]:focus,
-.modal-content input[type="date"]:focus,
-.modal-content textarea:focus,
-.modal-content select:focus,
-button:focus,
-.close-btn:focus,
-.actions-dropdown li:focus-within,
-.tag-filter-item:focus,
-.todo-checkbox:focus {
-  outline: none;
-  border: 1px solid var(--border-focus);
 }
 
 /* Main content */
@@ -347,7 +332,7 @@ button:focus,
   align-items: center;
 }
 
-.input-with-icon > .material-symbols-outlined {
+.input-with-icon>.material-symbols-outlined {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -357,7 +342,7 @@ button:focus,
   transition: color 0.2s;
 }
 
-.input-with-icon > .material-symbols-outlined:last-child {
+.input-with-icon>.material-symbols-outlined:last-child {
   right: var(--spacing-md);
 }
 
@@ -798,7 +783,8 @@ fieldset {
     justify-content: stretch;
   }
 
-  .todos-controls .primary-btn {
+  .todos-controls .primary-btn,
+  .form-select {
     width: 100%;
     min-width: auto;
   }
@@ -822,13 +808,9 @@ fieldset {
     align-items: stretch;
   }
 
-  .form-select {
-    min-width: auto;
-  }
-
   #notification-area {
     bottom: var(--spacing-md);
   }
 }
 
-/*# sourceMappingURL=main.9cd2b0026efa08a7911a.css.map*/
+/*# sourceMappingURL=main.6b31e2ce723c7285e8a1.css.map*/
