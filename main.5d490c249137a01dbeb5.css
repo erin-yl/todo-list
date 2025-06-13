@@ -665,8 +665,8 @@ header h1 {
 }
 
 .close-btn:hover {
-  color: var(--on-surface);
   background: var(--surface-variant);
+  color: var(--on-surface);
 }
 
 .help-message {
@@ -800,4 +800,4 @@ fieldset {
   }
 }
 
-/*# sourceMappingURL=main.531d461f20be16d191cd.css.map*/
+/*# sourceMappingURL=main.5d490c249137a01dbeb5.css.map*/
