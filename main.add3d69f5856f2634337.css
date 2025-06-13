@@ -228,7 +228,6 @@ header h1 {
   background: var(--primary-hover);
   border: var(--primary-hover);
   box-shadow: var(--shadow-md);
-  transform: translateY(-1px);
 }
 
 .secondary-btn {
@@ -248,7 +247,6 @@ header h1 {
 .secondary-btn:hover {
   background: var(--secondary-light);
   border: 1px solid var(--secondary-light);
-  transform: translateY(-1px);
 }
 
 .primary-btn .material-symbols-outlined,
@@ -802,4 +800,4 @@ fieldset {
   }
 }
 
-/*# sourceMappingURL=main.87b43f52985b1b11c6ee.css.map*/
+/*# sourceMappingURL=main.add3d69f5856f2634337.css.map*/
