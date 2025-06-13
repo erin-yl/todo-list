@@ -226,7 +226,7 @@ header h1 {
 .primary-btn:hover,
 .modal-content button[type="submit"]:hover {
   background: var(--primary-hover);
-  border: var(--primary-hover);
+  border-color: var(--primary-hover);
   box-shadow: var(--shadow-md);
 }
 
@@ -246,7 +246,7 @@ header h1 {
 
 .secondary-btn:hover {
   background: var(--secondary-light);
-  border: 1px solid var(--secondary-light);
+  border-color: var(--secondary-light);
 }
 
 .primary-btn .material-symbols-outlined,
@@ -800,4 +800,4 @@ fieldset {
   }
 }
 
-/*# sourceMappingURL=main.add3d69f5856f2634337.css.map*/
+/*# sourceMappingURL=main.531d461f20be16d191cd.css.map*/
