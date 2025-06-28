@@ -33,7 +33,7 @@ const appLogic = (() => {
     const workProject = new Project('Work');
     workProject.addTodo(new Todo('Finish Q2 report', 'Compile required data and finalize the conclusion.', new Date(2025, 6, 26), 'high', ['report'], false));
     workProject.addTodo(new Todo('Team meeting prep', `Prepare agenda and slides for Monday's team meeting.`, new Date(2025, 7, 6), 'medium', ['meeting'], false));
-    workProject.addTodo(new Todo('Client follow-up', 'Call John Doe regarding project Alpha.', '', 'medium', ['client'], true));
+    workProject.addTodo(new Todo('Client follow-up', 'Call John Doe regarding project Alpha.', null, 'medium', ['client'], true));
 
     const personalProject = new Project('Personal');
     personalProject.addTodo(new Todo('Grocery shopping', 'Milk, eggs, chicken, fruits.', new Date(2025, 6, 20), 'low', ['home', 'shopping'], false));
@@ -41,7 +41,7 @@ const appLogic = (() => {
 
     const learningProject = new Project('Learning');
     learningProject.addTodo(new Todo('Webpack Deep Dive', 'Understand loaders and plugins.', new Date(2025, 6, 30), 'medium', ['dev'], true));
-    learningProject.addTodo(new Todo('Read "The Pragmatic Programmer"', 'Chapter 3-5', '', 'low', ['reading', 'dev'], false));
+    learningProject.addTodo(new Todo('Read "The Pragmatic Programmer"', 'Chapter 3-5', null, 'low', ['reading', 'dev'], false));
 
     projects = [workProject, personalProject, learningProject];
     currentProject = workProject;
@@ -157,15 +157,7 @@ const appLogic = (() => {
     if (project) {
       const todo = project.getTodoById(todoId);
       if (todo) {
-        if (updatedDetails.tagsString !== undefined) {
-          todo.setTagsFromString(updatedDetails.tagsString);
-          // Avoid passing tagsString since todo.updateDetails expects tags as an array
-          // eslint-disable-next-line no-unused-vars
-          const { tagsString, ...otherDetails } = updatedDetails;
-          todo.updateDetails(otherDetails);
-        } else {
-          todo.updateDetails(updatedDetails);
-        }
+        todo.updateDetails(updatedDetails);
         saveProjects();
         return todo;
       }

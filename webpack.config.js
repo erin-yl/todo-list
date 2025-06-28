@@ -12,6 +12,7 @@ module.exports = (env, argv) => {
       filename: "[name].[contenthash].js",
       path: path.resolve(__dirname, "dist"),
       clean: true,
+      publicPath: '/todo-list/'
     },
     devtool: isProd ? "source-map" : "inline-source-map",
     devServer: {

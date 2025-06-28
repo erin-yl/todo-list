@@ -7,7 +7,8 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "webpack --mode production",
-    "start": "webpack serve --mode development"
+    "start": "webpack serve --mode development",
+    "deploy": "npm run build && gh-pages -d dist"
   },
   "repository": {
     "type": "git",
@@ -19,7 +20,7 @@
   "bugs": {
     "url": "https://github.com/erin-yl/todo-list/issues"
   },
-  "homepage": "https://github.com/erin-yl/todo-list#readme",
+  "homepage": "https://erin-yl.github.io/todo-list/",
   "devDependencies": {
     "@babel/core": "^7.27.1",
     "@babel/preset-env": "^7.27.2",
@@ -28,6 +29,7 @@
     "css-loader": "^7.1.2",
     "eslint": "^9.27.0",
     "eslint-config-prettier": "^10.1.5",
+    "gh-pages": "^6.3.0",
     "globals": "^16.1.0",
     "html-webpack-plugin": "^5.6.3",
     "mini-css-extract-plugin": "^2.9.2",

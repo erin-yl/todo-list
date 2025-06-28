@@ -265,7 +265,7 @@ const domController = (() => {
         ? format(todoToEdit.dueDate, 'yyyy-MM-dd') // Format Date obj for input
         : ''; // Empty string for null or invalid date
       todoPriorityInput.value = todoToEdit.priority;
-      todoTagsInput.value = todoToEdit.tags ? todoToEdit.getTagsString() : '';
+      todoTagsInput.value = todoToEdit.getTagsString();
     }
     todoForm.dataset.currentProjectId = currentProjectId;
     todoModal.classList.add('show');
