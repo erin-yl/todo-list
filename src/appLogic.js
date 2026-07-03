@@ -31,17 +31,17 @@ const appLogic = (() => {
 
   function createSampleData() {
     const workProject = new Project('Work');
-    workProject.addTodo(new Todo('Finish Q2 report', 'Compile required data and finalize the conclusion.', new Date(2026, 8, 26), 'high', ['report'], false));
-    workProject.addTodo(new Todo('Team meeting prep', `Prepare agenda and slides for Monday's team meeting.`, new Date(2026, 9, 6), 'medium', ['meeting'], false));
-    workProject.addTodo(new Todo('Client follow-up', 'Call John Doe regarding project Alpha.', '', 'medium', ['client'], true));
+    workProject.addTodo(new Todo('Finish Q2 report', 'Compile required data and finalize the conclusion.', new Date(2026, 9, 26), 'high', ['report'], false));
+    workProject.addTodo(new Todo('Team meeting prep', `Prepare agenda and slides for Monday's team meeting.`, new Date(2026, 10, 6), 'medium', ['meeting'], false));
+    workProject.addTodo(new Todo('Client follow-up', 'Call John Doe regarding project Alpha.', new Date(2026, 8, 12), 'medium', ['client'], true));
 
     const personalProject = new Project('Personal');
-    personalProject.addTodo(new Todo('Grocery shopping', 'Milk, eggs, chicken, fruits.', new Date(2026, 8, 20), 'low', ['home', 'shopping'], false));
-    personalProject.addTodo(new Todo('Book doctor appointment', 'Annual check-up.', new Date(2026, 9, 10), 'high', ['health'], false));
+    personalProject.addTodo(new Todo('Grocery shopping', 'Milk, eggs, chicken, fruits.', new Date(2026, 9, 20), 'low', ['home', 'shopping'], false));
+    personalProject.addTodo(new Todo('Book doctor appointment', 'Annual check-up.', new Date(2026, 10, 10), 'high', ['health'], false));
 
     const learningProject = new Project('Learning');
-    learningProject.addTodo(new Todo('Webpack Deep Dive', 'Understand loaders and plugins.', new Date(2026, 10, 3), 'medium', ['dev'], true));
-    learningProject.addTodo(new Todo('Read "The Pragmatic Programmer"', 'Chapter 3-5', '', 'low', ['reading', 'dev'], false));
+    learningProject.addTodo(new Todo('Webpack Deep Dive', 'Understand loaders and plugins.', new Date(2026, 11, 3), 'medium', ['dev'], true));
+    learningProject.addTodo(new Todo('Read "The Pragmatic Programmer"', 'Chapter 3-5', new Date(2026, 11, 17), 'low', ['reading', 'dev'], false));
 
     projects = [workProject, personalProject, learningProject];
     currentProject = workProject;
