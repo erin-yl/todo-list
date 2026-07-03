@@ -157,15 +157,7 @@ const appLogic = (() => {
     if (project) {
       const todo = project.getTodoById(todoId);
       if (todo) {
-        if (updatedDetails.tagsString !== undefined) {
-          todo.setTagsFromString(updatedDetails.tagsString);
-          // Avoid passing tagsString since todo.updateDetails expects tags as an array
-          // eslint-disable-next-line no-unused-vars
-          const { tagsString, ...otherDetails } = updatedDetails;
-          todo.updateDetails(otherDetails);
-        } else {
-          todo.updateDetails(updatedDetails);
-        }
+        todo.updateDetails(updatedDetails);
         saveProjects();
         return todo;
       }
